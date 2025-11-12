@@ -1,0 +1,84 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Archivo analizado: algoritmos_prueba/algoritmo_samir.dart
+ Usuario Git: Sam-24-dev
+ Fecha y hora: 12/11/2025 01:40:36
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | DUMMY                | 10     | void
+2      | DUMMY                | 10     | main()
+3      | DUMMY                | 10     | {
+4      | DUMMY                | 12     | var
+5      | DUMMY                | 12     | nombre
+6      | DUMMY                | 12     | =
+7      | DUMMY                | 12     | "Samir";
+8      | DUMMY                | 13     | int
+9      | DUMMY                | 13     | edad
+10     | DUMMY                | 13     | =
+11     | DUMMY                | 13     | 20;
+12     | DUMMY                | 14     | double
+13     | DUMMY                | 14     | promedio
+14     | DUMMY                | 14     | =
+15     | DUMMY                | 14     | 8.5;
+16     | DUMMY                | 19     | int
+17     | DUMMY                | 19     | suma
+18     | DUMMY                | 19     | =
+19     | DUMMY                | 19     | 10
+20     | DUMMY                | 19     | +
+21     | DUMMY                | 19     | 5;
+22     | DUMMY                | 20     | int
+23     | DUMMY                | 20     | resta
+24     | DUMMY                | 20     | =
+25     | DUMMY                | 20     | 10
+26     | DUMMY                | 20     | -
+27     | DUMMY                | 20     | 5;
+28     | DUMMY                | 23     | if
+29     | DUMMY                | 23     | (edad
+30     | DUMMY                | 23     | >=
+31     | DUMMY                | 23     | 18)
+32     | DUMMY                | 23     | {
+33     | DUMMY                | 24     | print("Es
+34     | DUMMY                | 24     | mayor
+35     | DUMMY                | 24     | de
+36     | DUMMY                | 24     | edad");
+37     | DUMMY                | 25     | }
+38     | DUMMY                | 25     | else
+39     | DUMMY                | 25     | {
+40     | DUMMY                | 26     | print("Es
+41     | DUMMY                | 26     | menor
+42     | DUMMY                | 26     | de
+43     | DUMMY                | 26     | edad");
+44     | DUMMY                | 27     | }
+45     | DUMMY                | 30     | for
+46     | DUMMY                | 30     | (int
+47     | DUMMY                | 30     | i
+48     | DUMMY                | 30     | =
+49     | DUMMY                | 30     | 0;
+50     | DUMMY                | 30     | i
+51     | DUMMY                | 30     | <
+52     | DUMMY                | 30     | 5;
+53     | DUMMY                | 30     | i++)
+54     | DUMMY                | 30     | {
+55     | DUMMY                | 31     | print(i);
+56     | DUMMY                | 32     | }
+57     | DUMMY                | 35     | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 57
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: Sam-24-dev
+  Analizador Léxico para Dart - TokenMasters
+================================================================================
