@@ -1,0 +1,76 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Archivo analizado: algoritmos_prueba/algoritmo_mateo.dart
+ Usuario Git: bironmanusa
+ Fecha y hora: 12/11/2025 13:20:19
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | DUMMY                | 5      | int
+2      | DUMMY                | 5      | fibonacci(int
+3      | DUMMY                | 5      | n)
+4      | DUMMY                | 5      | {
+5      | DUMMY                | 6      | if
+6      | DUMMY                | 6      | (n
+7      | DUMMY                | 6      | <=
+8      | NUMBER               | 6      | 0
+9      | DUMMY                | 6      | ){
+10     | DUMMY                | 7      | return
+11     | NUMBER               | 7      | 0
+12     | DUMMY                | 7      | ;
+13     | DUMMY                | 8      | }
+14     | DUMMY                | 10     | if
+15     | DUMMY                | 10     | (n
+16     | DUMMY                | 10     | ==
+17     | NUMBER               | 10     | 1
+18     | DUMMY                | 10     | ){
+19     | DUMMY                | 11     | return
+20     | NUMBER               | 11     | 1
+21     | DUMMY                | 11     | ;
+22     | DUMMY                | 12     | }
+23     | DUMMY                | 14     | return
+24     | DUMMY                | 14     | fibonacci(n-1)
+25     | DUMMY                | 14     | +
+26     | DUMMY                | 14     | fibonacci(n-2);
+27     | DUMMY                | 15     | }
+28     | DUMMY                | 17     | void
+29     | DUMMY                | 17     | main()
+30     | DUMMY                | 17     | {
+31     | DUMMY                | 18     | int
+32     | DUMMY                | 18     | n
+33     | DUMMY                | 18     | =
+34     | NUMBER               | 18     | 9
+35     | DUMMY                | 19     | print("El
+36     | DUMMY                | 19     | numero
+37     | DUMMY                | 19     | de
+38     | DUMMY                | 19     | la
+39     | DUMMY                | 19     | sucesion
+40     | DUMMY                | 19     | de
+41     | DUMMY                | 19     | fibonacci
+42     | DUMMY                | 19     | en
+43     | DUMMY                | 19     | la
+44     | DUMMY                | 19     | posicion
+45     | NUMBER               | 19     | 9
+46     | DUMMY                | 19     | es:
+47     | DUMMY                | 19     | ");
+48     | DUMMY                | 20     | pritn(fibonacci(n));
+49     | DUMMY                | 21     | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 49
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: bironmanusa
+  Analizador Léxico para Dart - TokenMasters
+================================================================================

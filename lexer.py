@@ -51,12 +51,11 @@ reserved = {}  # Andrés llenará esto
 # TODO: Agregar aquí los tokens de operadores y delimitadores
 # ============================================================================
 
-# Lista de tokens (PENDIENTE - ivandresalin y bironmanusa completarán)
+# Lista de tokens (PENDIENTE - ivandresalin completará)
 # Andrés debe agregar: operadores aritméticos (+, -, *, /, %), 
 #                      operadores de comparación (==, !=, <, >, <=, >=),
 #                      operadores lógicos (&&, ||, !),
 #                      delimitadores (, ), {, }, [, ], ;, ,, ., :, =>
-# Mateo debe agregar: NUMBER, STRING, ID (identificadores)
 
 tokens = [
     # Tokens de Andrés (ivandresalin) - PENDIENTE
@@ -87,11 +86,11 @@ tokens = [
     # 'COLON',          # :
     # 'ARROW',          # =>
     
-    # Tokens de Mateo (bironmanusa) - PENDIENTE
-    # 'NUMBER',         # Números enteros y decimales
-    # 'STRING',         # Cadenas de texto
-    # 'ID',             # Identificadores
-    
+    # Tokens de Mateo (bironmanusa)
+    'NUMBER',         # Números enteros y decimales
+    'STRING',         # Cadenas de texto
+    'ID',             # Identificadores
+
     # Token temporal para que el lexer funcione (Samir)
     # Tus compañeros reemplazarán esto con sus tokens reales
     'DUMMY',  # Token temporal - ELIMINAR cuando se agreguen los tokens reales
@@ -137,26 +136,29 @@ t_DUMMY = r'[a-zA-Z0-9_{}();\[\]=+\-*/<>!,.:"]+'  # Reconoce cualquier cosa temp
 
 
 # ============================================================================
-# SECCIÓN PARA MATEO MAYORGA (bironmanusa)
-# TODO: Agregar aquí las reglas para números, strings e identificadores
+# INICIO APORTE: Mateo Mayorga (bironmanusa)
+# Responsable: Literales (números, strings, identificadores)
 # ============================================================================
 
 # Mateo debe agregar funciones como:
-# def t_NUMBER(t):
-#     r'\d+(\.\d+)?'
-#     t.value = float(t.value) if '.' in t.value else int(t.value)
-#     return t
-#
-# def t_STRING(t):
-#     r'\"([^\\\n]|(\\.))*?\"'
-#     t.value = t.value[1:-1]  # Remover comillas
-#     return t
-#
-# def t_ID(t):
-#     r'[a-zA-Z_][a-zA-Z_0-9]*'
-#     t.type = reserved.get(t.value, 'ID')  # Verificar si es palabra reservada
-#     return t
+def t_NUMBER(t):
+    r'\d+(\.\d+)?'
+    t.value = float(t.value) if '.' in t.value else int(t.value)
+    return t
 
+def t_STRING(t):
+    r'\[^"\\]*(\.[^"\\]*)*'
+    t.value = t.value[1:-1]  # Remover comillas
+    return t
+
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value, 'ID')  # Verificar si es palabra reservada
+    return t
+
+# ============================================================================
+# FIN APORTE: Mateo Mayorga (bironmanusa)
+# ============================================================================
 
 # ============================================================================
 # INICIO APORTE: Samir Caizapasto (Sam-24-dev)
