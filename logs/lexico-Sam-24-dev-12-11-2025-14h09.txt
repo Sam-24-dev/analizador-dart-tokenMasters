@@ -1,0 +1,99 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Archivo analizado: algoritmos_prueba/algoritmo_samir.dart
+ Usuario Git: Sam-24-dev
+ Fecha y hora: 12/11/2025 14:09:23
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | ID                   | 10     | void
+2      | ID                   | 10     | main
+3      | DUMMY                | 10     | ()
+4      | DUMMY                | 10     | {
+5      | ID                   | 12     | var
+6      | ID                   | 12     | nombre
+7      | DUMMY                | 12     | =
+8      | STRING               | 12     | Samir
+9      | DUMMY                | 12     | ;
+10     | ID                   | 13     | int
+11     | ID                   | 13     | edad
+12     | DUMMY                | 13     | =
+13     | NUMBER               | 13     | 20
+14     | DUMMY                | 13     | ;
+15     | ID                   | 14     | double
+16     | ID                   | 14     | promedio
+17     | DUMMY                | 14     | =
+18     | NUMBER               | 14     | 8.5
+19     | DUMMY                | 14     | ;
+20     | ID                   | 19     | int
+21     | ID                   | 19     | suma
+22     | DUMMY                | 19     | =
+23     | NUMBER               | 19     | 10
+24     | DUMMY                | 19     | +
+25     | NUMBER               | 19     | 5
+26     | DUMMY                | 19     | ;
+27     | ID                   | 20     | int
+28     | ID                   | 20     | resta
+29     | DUMMY                | 20     | =
+30     | NUMBER               | 20     | 10
+31     | DUMMY                | 20     | -
+32     | NUMBER               | 20     | 5
+33     | DUMMY                | 20     | ;
+34     | ID                   | 23     | if
+35     | DUMMY                | 23     | (edad
+36     | DUMMY                | 23     | >=
+37     | NUMBER               | 23     | 18
+38     | DUMMY                | 23     | )
+39     | DUMMY                | 23     | {
+40     | ID                   | 24     | print
+41     | DUMMY                | 24     | ("Es
+42     | ID                   | 24     | mayor
+43     | ID                   | 24     | de
+44     | ID                   | 24     | edad
+45     | DUMMY                | 24     | ");
+46     | DUMMY                | 25     | }
+47     | ID                   | 25     | else
+48     | DUMMY                | 25     | {
+49     | ID                   | 26     | print
+50     | DUMMY                | 26     | ("Es
+51     | ID                   | 26     | menor
+52     | ID                   | 26     | de
+53     | ID                   | 26     | edad
+54     | DUMMY                | 26     | ");
+55     | DUMMY                | 27     | }
+56     | ID                   | 30     | for
+57     | DUMMY                | 30     | (int
+58     | ID                   | 30     | i
+59     | DUMMY                | 30     | =
+60     | NUMBER               | 30     | 0
+61     | DUMMY                | 30     | ;
+62     | ID                   | 30     | i
+63     | DUMMY                | 30     | <
+64     | NUMBER               | 30     | 5
+65     | DUMMY                | 30     | ;
+66     | ID                   | 30     | i
+67     | DUMMY                | 30     | ++)
+68     | DUMMY                | 30     | {
+69     | ID                   | 31     | print
+70     | DUMMY                | 31     | (i);
+71     | DUMMY                | 32     | }
+72     | DUMMY                | 35     | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 72
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: Sam-24-dev
+  Analizador Léxico para Dart - TokenMasters
+================================================================================

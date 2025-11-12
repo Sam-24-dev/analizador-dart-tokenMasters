@@ -1,0 +1,193 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Archivo analizado: algoritmos_prueba/algoritmo_andres.dart
+ Usuario Git: ivandresalin
+ Fecha y hora: 12/11/2025 15:48:34
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | IMPORT               | 3      | import
+2      | STRING               | 3      | dart:async
+3      | SHOW                 | 3      | show
+4      | HIDE                 | 3      | hide
+5      | SEMICOLON            | 3      | ;
+6      | ABSTRACT             | 5      | abstract
+7      | CLASS                | 5      | class
+8      | ID                   | 5      | TestClass
+9      | WITH                 | 5      | with
+10     | ID                   | 5      | Mixin
+11     | LBRACE               | 5      | {
+12     | FINAL                | 6      | final
+13     | ID                   | 6      | int
+14     | ID                   | 6      | baseValue
+15     | ASSIGN               | 6      | =
+16     | NUMBER               | 6      | 100
+17     | SEMICOLON            | 6      | ;
+18     | ID                   | 7      | int
+19     | QUESTION             | 7      | ?
+20     | ID                   | 7      | count
+21     | ASSIGN               | 7      | =
+22     | NUMBER               | 7      | 1
+23     | SEMICOLON            | 7      | ;
+24     | VOID                 | 9      | void
+25     | ID                   | 9      | testOperators
+26     | LPAREN               | 9      | (
+27     | VAR                  | 9      | var
+28     | ID                   | 9      | a
+29     | COMMA                | 9      | ,
+30     | VAR                  | 9      | var
+31     | ID                   | 9      | b
+32     | RPAREN               | 9      | )
+33     | LBRACE               | 9      | {
+34     | IF                   | 10     | if
+35     | LPAREN               | 10     | (
+36     | ID                   | 10     | a
+37     | IS                   | 10     | is
+38     | NOT                  | 10     | !
+39     | DYNAMIC_TYPE         | 10     | dynamic
+40     | AND                  | 10     | &&
+41     | ID                   | 10     | b
+42     | EQUALS               | 10     | ==
+43     | ID                   | 10     | baseValue
+44     | RPAREN               | 10     | )
+45     | LBRACE               | 10     | {
+46     | ID                   | 11     | count
+47     | INCREMENT            | 11     | ++
+48     | SEMICOLON            | 11     | ;
+49     | ID                   | 14     | a
+50     | PLUSEQUAL            | 14     | +=
+51     | NUMBER               | 14     | 5
+52     | SEMICOLON            | 14     | ;
+53     | IF                   | 15     | if
+54     | LPAREN               | 15     | (
+55     | ID                   | 15     | b
+56     | NOTEQUAL             | 15     | !=
+57     | NULL                 | 15     | null
+58     | OR                   | 15     | ||
+59     | ID                   | 15     | a
+60     | LESSTHAN             | 15     | <
+61     | NUMBER               | 15     | 10
+62     | RPAREN               | 15     | )
+63     | LBRACE               | 15     | {
+64     | ID                   | 16     | b
+65     | ASSIGN               | 16     | =
+66     | ID                   | 16     | a
+67     | SHIFT_RIGHT          | 16     | >>
+68     | NUMBER               | 16     | 1
+69     | SEMICOLON            | 16     | ;
+70     | RBRACE               | 17     | }
+71     | RBRACE               | 18     | }
+72     | ELSE                 | 18     | else
+73     | LBRACE               | 18     | {
+74     | ID                   | 19     | a
+75     | ASSIGN               | 19     | =
+76     | BITWISE_NOT          | 19     | ~
+77     | ID                   | 19     | b
+78     | SEMICOLON            | 19     | ;
+79     | RBRACE               | 20     | }
+80     | RBRACE               | 21     | }
+81     | VAR                  | 24     | var
+82     | ID                   | 24     | result
+83     | ASSIGN               | 24     | =
+84     | LPAREN               | 24     | (
+85     | ID                   | 24     | a
+86     | GREATERTHAN          | 24     | >
+87     | NUMBER               | 24     | 0
+88     | RPAREN               | 24     | )
+89     | QUESTION             | 24     | ?
+90     | ID                   | 24     | a
+91     | COLON                | 24     | :
+92     | NULL                 | 24     | null
+93     | SEMICOLON            | 24     | ;
+94     | VAR                  | 25     | var
+95     | ID                   | 25     | list
+96     | ASSIGN               | 25     | =
+97     | LBRACKET             | 25     | [
+98     | NUMBER               | 25     | 1
+99     | COMMA                | 25     | ,
+100    | NUMBER               | 25     | 2
+101    | COMMA                | 25     | ,
+102    | NULL_AWARE_SPREAD    | 25     | ...?
+103    | ID                   | 25     | count
+104    | RBRACKET             | 25     | ]
+105    | SEMICOLON            | 25     | ;
+106    | VAR                  | 28     | var
+107    | ID                   | 28     | obj
+108    | ASSIGN               | 28     | =
+109    | ID                   | 28     | TestClass
+110    | LPAREN               | 28     | (
+111    | RPAREN               | 28     | )
+112    | CASCADE              | 28     | ..
+113    | ID                   | 28     | count
+114    | ASSIGN               | 28     | =
+115    | NUMBER               | 28     | 5
+116    | CASCADE              | 29     | ..
+117    | ID                   | 29     | baseValue
+118    | TIMESEQUAL           | 29     | *=
+119    | NUMBER               | 29     | 2
+120    | SEMICOLON            | 29     | ;
+121    | ID                   | 32     | String
+122    | ID                   | 32     | getName
+123    | LPAREN               | 32     | (
+124    | RPAREN               | 32     | )
+125    | ARROW                | 32     | =>
+126    | STRING               | 32     | Andres
+127    | SEMICOLON            | 32     | ;
+128    | ID                   | 34     | int
+129    | GET                  | 34     | get
+130    | ID                   | 34     | area
+131    | ARROW                | 34     | =>
+132    | ID                   | 34     | count
+133    | DOUBLE_QUESTION      | 34     | ??
+134    | NUMBER               | 34     | 0
+135    | SEMICOLON            | 34     | ;
+136    | RBRACE               | 35     | }
+137    | VOID                 | 38     | void
+138    | ID                   | 38     | main
+139    | LPAREN               | 38     | (
+140    | RPAREN               | 38     | )
+141    | LBRACE               | 38     | {
+142    | TRY                  | 39     | try
+143    | LBRACE               | 39     | {
+144    | THROW                | 40     | throw
+145    | STRING               | 40     | Error
+146    | SEMICOLON            | 40     | ;
+147    | RBRACE               | 41     | }
+148    | ON                   | 41     | on
+149    | ID                   | 41     | Exception
+150    | CATCH                | 41     | catch
+151    | LPAREN               | 41     | (
+152    | ID                   | 41     | e
+153    | RPAREN               | 41     | )
+154    | LBRACE               | 41     | {
+155    | RETURN               | 42     | return
+156    | SEMICOLON            | 42     | ;
+157    | RBRACE               | 43     | }
+158    | FINALLY              | 43     | finally
+159    | LBRACE               | 43     | {
+160    | ASSERT               | 44     | assert
+161    | LPAREN               | 44     | (
+162    | TRUE                 | 44     | true
+163    | RPAREN               | 44     | )
+164    | SEMICOLON            | 44     | ;
+165    | RBRACE               | 45     | }
+166    | RBRACE               | 46     | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 166
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: ivandresalin
+  Analizador Léxico para Dart - TokenMasters
+================================================================================

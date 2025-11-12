@@ -16,35 +16,42 @@ import sys
 # TODO: Agregar aquí las palabras reservadas de Dart
 # ============================================================================
 
-# Palabras reservadas de Dart (PENDIENTE - ivandresalin)
-# Ejemplo de estructura que debe seguir Andrés:
-# reserved = {
-#     'if': 'IF',
-#     'else': 'ELSE',
-#     'for': 'FOR',
-#     'while': 'WHILE',
-#     'var': 'VAR',
-#     'const': 'CONST',
-#     'final': 'FINAL',
-#     'void': 'VOID',
-#     'return': 'RETURN',
-#     'class': 'CLASS',
-#     'int': 'INT',
-#     'double': 'DOUBLE',
-#     'String': 'STRING_TYPE',
-#     'bool': 'BOOL',
-#     'true': 'TRUE',
-#     'false': 'FALSE',
-#     'null': 'NULL',
-#     'print': 'PRINT',
-#     'import': 'IMPORT',
-#     'as': 'AS',
-#     'break': 'BREAK',
-#     'continue': 'CONTINUE',
-#     # ... agregar todas las palabras reservadas de Dart
-# }
+# Palabras reservadas de Dart (COMPLETO - ivandresalin)
+reserved = {
+    # Tipos, Variables, y Estructura Básica
+    'var': 'VAR', 'final': 'FINAL', 'const': 'CONST', 'void': 'VOID',
+    'dynamic': 'DYNAMIC_TYPE', 'Function': 'FUNCTION_TYPE', 'type': 'TYPE_KEYWORD',
+    'class': 'CLASS', 'enum': 'ENUM', 'typedef': 'TYPEDEF',
+    'extension': 'EXTENSION', 'late': 'LATE', 'external': 'EXTERNAL',
+    'factory': 'FACTORY', 'mixin': 'MIXIN', 'abstract': 'ABSTRACT',
+    'static': 'STATIC', 'get': 'GET', 'set': 'SET',
+    'required': 'REQUIRED', 'with': 'WITH', 'is': 'IS', 'in': 'IN',
+    'as': 'AS', 'this': 'THIS', 'super': 'SUPER',
+    'base': 'BASE', 'covariant': 'COVARIANT', 'sealed': 'SEALED',
+    'interface': 'INTERFACE',
+    'implements': 'IMPLEMENTS',
 
-reserved = {}  # Andrés llenará esto
+    # Control de Flujo y Sentencias
+    'if': 'IF', 'else': 'ELSE', 'for': 'FOR', 'while': 'WHILE', 'do': 'DO',
+    'switch': 'SWITCH', 'case': 'CASE', 'default': 'DEFAULT', 'when': 'WHEN',
+    'break': 'BREAK', 'continue': 'CONTINUE', 'return': 'RETURN',
+    'yield': 'YIELD', 'await': 'AWAIT', 'async': 'ASYNC', 'sync': 'SYNC',
+    'try': 'TRY', 'catch': 'CATCH', 'finally': 'FINALLY', 'throw': 'THROW',
+    'on': 'ON', 'rethrow': 'RETHROW',
+
+    # Valores Constantes y Especiales
+    'true': 'TRUE', 'false': 'FALSE', 'null': 'NULL', 'new': 'NEW',
+    'assert': 'ASSERT',
+
+    # Importaciones y Librerías
+    'import': 'IMPORT', 'export': 'EXPORT', 'library': 'LIBRARY', 'part': 'PART',
+    'show': 'SHOW', 'hide': 'HIDE', 'deferred': 'DEFERRED',
+    'extends': 'EXTENDS',
+
+    # Otros
+    'of': 'OF',
+    'operator': 'OPERATOR',
+}
 
 # ============================================================================
 # SECCIÓN PARA ANDRÉS SALINAS (ivandresalin)
@@ -57,108 +64,48 @@ reserved = {}  # Andrés llenará esto
 #                      operadores lógicos (&&, ||, !),
 #                      delimitadores (, ), {, }, [, ], ;, ,, ., :, =>
 
+# Lista de tokens (COMPLETO - ivandresalin)
 tokens = [
-    # Tokens de Andrés (ivandresalin) - PENDIENTE
-    # 'PLUS',           # +
-    # 'MINUS',          # -
-    # 'TIMES',          # *
-    # 'DIVIDE',         # /
-    # 'MODULO',         # %
-    # 'EQUALS',         # ==
-    # 'NOTEQUAL',       # !=
-    # 'LESSTHAN',       # <
-    # 'GREATERTHAN',    # >
-    # 'LESSEQUAL',      # <=
-    # 'GREATEREQUAL',   # >=
-    # 'AND',            # &&
-    # 'OR',             # ||
-    # 'NOT',            # !
-    # 'ASSIGN',         # =
-    # 'LPAREN',         # (
-    # 'RPAREN',         # )
-    # 'LBRACE',         # {
-    # 'RBRACE',         # }
-    # 'LBRACKET',       # [
-    # 'RBRACKET',       # ]
-    # 'SEMICOLON',      # ;
-    # 'COMMA',          # ,
-    # 'DOT',            # .
-    # 'COLON',          # :
-    # 'ARROW',          # =>
-    
-    # Tokens de Mateo (bironmanusa)
-    'NUMBER',         # Números enteros y decimales
-    'STRING',         # Cadenas de texto
-    'ID',             # Identificadores
+    # Operadores Aritméticos
+    'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'MODULO', 'INT_DIVIDE',  # +, -, *, /, %, ~/
 
-    # Token temporal para que el lexer funcione (Samir)
-    # Tus compañeros reemplazarán esto con sus tokens reales
-    'DUMMY',  # Token temporal - ELIMINAR cuando se agreguen los tokens reales
+    # Operadores de Comparación/Relacionales
+    'EQUALS', 'NOTEQUAL', 'LESSTHAN', 'GREATERTHAN', 'LESSEQUAL', 'GREATEREQUAL',  # ==, !=, <, >, <=, >=
+
+    # Operadores Lógicos/Nulos
+    'AND', 'OR', 'NOT', 'DOUBLE_QUESTION', 'QUESTION',  # &&, ||, !, ??, ?
+
+    # Operadores Asignacion
+    'ASSIGN', 'PLUSEQUAL', 'MINUSEQUAL', 'TIMESEQUAL', 'DIVIDEEQUAL', 'MODULOEQUAL',  # =, +=, -=, *=, /=, %=
+
+    # Operadores Bitwise y Shift
+    'BITWISE_AND', 'BITWISE_OR', 'BITWISE_XOR', 'BITWISE_NOT',  # &, |, ^, ~
+    'SHIFT_LEFT', 'SHIFT_RIGHT', 'USHIFT_RIGHT',  # <<, >>, >>>
+
+    # Incremento/Decremento
+    'INCREMENT', 'DECREMENT',  # ++, --
+
+    # Operadores Especiales
+    'ARROW',  # =>
+    'DOT', 'CASCADE', 'NULL_AWARE_MEMBER', 'NULL_AWARE_CASCADE',  # ., .., ?., ?..
+    'SPREAD', 'NULL_AWARE_SPREAD',  # ..., ...?
+
+    # Delimitadores
+    'LPAREN', 'RPAREN',  # ( )
+    'LBRACE', 'RBRACE',  # { }
+    'LBRACKET', 'RBRACKET',  # [ ]
+    'SEMICOLON',  # ;
+    'COMMA',  # ,
+    'COLON',  # :
+
+    # Tokens de Mateo (bironmanusa) - Mantenidos para la lista final
+    'NUMBER',
+    'STRING',
+    'ID',
+
+    # Token temporal (DUMMY) - ELIMINADO para evitar conflictos
+
 ] + list(reserved.values())
-
-
-# ============================================================================
-# SECCIÓN PARA ANDRÉS SALINAS (ivandresalin)
-# TODO: Agregar aquí las reglas de tokens para operadores y delimitadores
-# ============================================================================
-
-# Andrés debe agregar reglas simples como:
-# t_PLUS = r'\+'
-# t_MINUS = r'-'
-# t_TIMES = r'\*'
-# t_DIVIDE = r'/'
-# t_MODULO = r'%'
-# t_EQUALS = r'=='
-# t_NOTEQUAL = r'!='
-# t_LESSTHAN = r'<'
-# t_LESSEQUAL = r'<='
-# t_GREATERTHAN = r'>'
-# t_GREATEREQUAL = r'>='
-# t_AND = r'&&'
-# t_OR = r'\|\|'
-# t_NOT = r'!'
-# t_ASSIGN = r'='
-# t_LPAREN = r'\('
-# t_RPAREN = r'\)'
-# t_LBRACE = r'\{'
-# t_RBRACE = r'\}'
-# t_LBRACKET = r'\['
-# t_RBRACKET = r'\]'
-# t_SEMICOLON = r';'
-# t_COMMA = r','
-# t_DOT = r'\.'
-# t_COLON = r':'
-# t_ARROW = r'=>'
-
-# Regla temporal para que el lexer funcione (Samir)
-# Tus compañeros eliminarán esto cuando agreguen sus tokens
-t_DUMMY = r'[a-zA-Z0-9_{}();\[\]=+\-*/<>!,.:"]+'  # Reconoce cualquier cosa temporalmente
-
-
-# ============================================================================
-# INICIO APORTE: Mateo Mayorga (bironmanusa)
-# Responsable: Literales (números, strings, identificadores)
-# ============================================================================
-
-# Mateo debe agregar funciones como:
-def t_NUMBER(t):
-    r'\d+(\.\d+)?'
-    t.value = float(t.value) if '.' in t.value else int(t.value)
-    return t
-
-def t_STRING(t):
-    r'\"([^\\\n]|(\\.))*?\"'
-    t.value = t.value[1:-1]  # Remover comillas
-    return t
-
-def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value, 'ID')  # Verificar si es palabra reservada
-    return t
-
-# ============================================================================
-# FIN APORTE: Mateo Mayorga (bironmanusa)
-# ============================================================================
 
 # ============================================================================
 # INICIO APORTE: Samir Caizapasto (Sam-24-dev)
@@ -198,6 +145,106 @@ def find_column(token):
 # ============================================================================
 # FIN APORTE: Samir Caizapasto (Sam-24-dev)
 # ============================================================================
+# ============================================================================
+# SECCIÓN PARA ANDRÉS SALINAS (ivandresalin)
+# TODO: Agregar aquí las reglas de tokens para operadores y delimitadores
+# ============================================================================
+
+# Andrés debe agregar reglas simples como:
+# Operadores de 3 caracteres (Máxima prioridad)
+t_USHIFT_RIGHT = r'>>>'            # >>>
+t_NULL_AWARE_SPREAD = r'\.\.\.\?'  # ...?
+
+# Operadores de 2 caracteres
+# Relacionales/Igualdad
+t_EQUALS = r'=='                   # ==
+t_NOTEQUAL = r'!='                 # !=
+t_LESSEQUAL = r'<='                # <=
+t_GREATEREQUAL = r'>='              # >=
+# Lógicos/Nulos
+t_AND = r'&&'                     # &&
+t_OR = r'\|\|'                    # ||
+t_DOUBLE_QUESTION = r'\?\?'        # ??
+# Shift
+t_SHIFT_LEFT = r'<<'               # <<
+t_SHIFT_RIGHT = r'>>'              # >>
+# Aritméticos
+t_INT_DIVIDE = r'~/'               # ~/
+t_INCREMENT = r'\+\+'             # ++
+t_DECREMENT = r'--'               # --
+# Cascada/Null-Aware
+t_CASCADE = r'\.\.'                # ..
+t_NULL_AWARE_MEMBER = r'\?\.'      # ?.
+t_NULL_AWARE_CASCADE = r'\?\.\.'   # ?..
+# Asignación Compuesta
+t_PLUSEQUAL = r'\+='               # +=
+t_MINUSEQUAL = r'-='               # -=
+t_TIMESEQUAL = r'\*='              # *=
+t_DIVIDEEQUAL = r'/='               # /=
+t_MODULOEQUAL = r'%='              # %=
+t_ARROW = r'=>'                    # =>
+t_SPREAD = r'\.\.\.'               # ...
+
+# Operadores y Delimitadores de 1 carácter (Mínima prioridad)
+# Asignación/Lógicos/Condicional
+t_ASSIGN = r'='                    # =
+t_NOT = r'!'                       # !
+t_QUESTION = r'\?'                 # ?
+# Relacionales
+t_LESSTHAN = r'<'                  # <
+t_GREATERTHAN = r'>'               # >
+# Aritméticos/Bitwise
+t_PLUS = r'\+'                     # +
+t_MINUS = r'-'                     # -
+t_TIMES = r'\*'                    # *
+t_DIVIDE = r'/'                    # /
+t_MODULO = r'%'                    # %
+t_BITWISE_AND = r'&'               # &
+t_BITWISE_OR = r'\|'               # |
+t_BITWISE_XOR = r'\^'              # ^
+t_BITWISE_NOT = r'~'               # ~
+# Delimitadores
+t_LPAREN = r'\('                   # (
+t_RPAREN = r'\)'                   # )
+t_LBRACE = r'\{'                   # {
+t_RBRACE = r'\}'                   # }
+t_LBRACKET = r'\['                 # [
+t_RBRACKET = r'\]'                 # ]
+t_SEMICOLON = r';'                 # ;
+t_COMMA = r','                     # ,
+t_DOT = r'\.'                      # .
+t_COLON = r':'                     # :
+
+# Regla temporal para que el lexer funcione (Samir)
+# Tus compañeros eliminarán esto cuando agreguen sus tokens
+#t_DUMMY = r'[a-zA-Z0-9_{}();\[\]=+\-*/<>!,.:"]+'  # Reconoce cualquier cosa temporalmente
+
+
+# ============================================================================
+# INICIO APORTE: Mateo Mayorga (bironmanusa)
+# Responsable: Literales (números, strings, identificadores)
+# ============================================================================
+
+# Mateo debe agregar funciones como:
+def t_NUMBER(t):
+    r'\d+(\.\d+)?'
+    t.value = float(t.value) if '.' in t.value else int(t.value)
+    return t
+
+def t_STRING(t):
+    r'(\"([^\\\n]|(\\.))*?\")|(\'([^\\\n]|(\\.))*?\')' # Cadenas con comillas dobles o simples
+    t.value = t.value[1:-1]  # Remover comillas
+    return t
+
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value, 'ID')  # Verificar si es palabra reservada
+    return t
+
+# ============================================================================
+# FIN APORTE: Mateo Mayorga (bironmanusa)
+# ============================================================================
+
 
 
 # ============================================================================
