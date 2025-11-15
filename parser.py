@@ -23,20 +23,12 @@ precedence = (
 # Responsable: Estructura base, variables, expresiones, estructuras de datos
 # ============================================================================
 
-# TODO Mateo: Implementar reglas de:
-# - Programa principal (p_program)
-# - Declaración de variables (var, final, const)
-# - Expresiones aritméticas (+, -, *, /, %)
-# - Expresiones booleanas (==, !=, <, >, &&, ||)
-# - Listas: [1, 2, 3]
-# - Mapas: {'key': value}
-# - Clases básicas
-
-# Regla temporal para que compile
+# ---------------- REGLA DE PROGRAMA PRINCIPAL ----------------
 def p_program(p):
     '''program : statement_list'''
     p[0] = ('program', p[1])
 
+# ---------------- LISTA DE SENTENCIAS ----------------
 def p_statement_list(p):
     '''statement_list : statement
                       | statement_list statement
@@ -46,17 +38,22 @@ def p_statement_list(p):
     else:
         p[0] = p[1] + [p[2]]
 
+# ---------------- SENTENCIA ----------------
 def p_statement(p):
     '''statement : function_declaration
                  | print_statement
                  | return_statement
                  | variable_declaration
                  | assignment
+                 | class_declaration
                  | expression SEMICOLON'''
     p[0] = p[1]
 
+# ---------------- DECLARACIÓN DE VARIABLES ----------------
 def p_variable_declaration(p):
     '''variable_declaration : VAR ID ASSIGN expression SEMICOLON
+                            | CONST ID ASSIGN expression SEMICOLON
+                            | FINAL ID ASSIGN expression SEMICOLON
                             | tipo ID ASSIGN expression SEMICOLON
                             | tipo ID SEMICOLON'''
     if len(p) == 6:
@@ -64,10 +61,12 @@ def p_variable_declaration(p):
     else:
         p[0] = ('var_decl', p[1], p[2], None)
 
+# ---------------- ASIGNACIÓN ----------------
 def p_assignment(p):
     '''assignment : ID ASSIGN expression SEMICOLON'''
     p[0] = ('assign', p[1], p[3])
 
+# ---------------- EXPRESIONES ----------------
 def p_expression(p):
     '''expression : ID
                   | NUMBER
@@ -75,6 +74,8 @@ def p_expression(p):
                   | TRUE
                   | FALSE
                   | NULL
+                  | list_literal
+                  | map_literal
                   | function_call
                   | input_expression
                   | binary_operation
@@ -84,14 +85,81 @@ def p_expression(p):
     else:
         p[0] = p[1]
 
+# ---------------- OPERACIONES ARITMÉTICAS Y BOOLEANAS ----------------
 def p_binary_operation(p):
     '''binary_operation : expression PLUS expression
                         | expression MINUS expression
                         | expression TIMES expression
                         | expression DIVIDE expression
-                        | expression MODULO expression'''
+                        | expression MODULO expression
+                        | expression EQUALS expression
+                        | expression NOTEQUAL expression
+                        | expression LESSTHAN expression
+                        | expression GREATERTHAN expression
+                        | expression LESSEQUAL expression
+                        | expression GREATEREQUAL expression
+                        | expression AND expression
+                        | expression OR expression'''
     p[0] = ('binop', p[2], p[1], p[3])
 
+# ---------------- LISTAS ----------------
+def p_list_literal(p):
+    '''list_literal : LBRACKET list_elements RBRACKET
+                    | LBRACKET RBRACKET'''
+    if len(p) == 3:
+        p[0] = ('list', [])
+    else:
+        p[0] = ('list', p[2])
+
+def p_list_elements(p):
+    '''list_elements : expression
+                     | list_elements COMMA expression'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[3]]
+
+# ---------------- MAPAS ----------------
+def p_map_literal(p):
+    '''map_literal : LBRACE map_entries RBRACE 
+                   | LBRACE RBRACE'''
+    if len(p) == 3:
+        p[0] = (map, {})
+    else:
+        p[0] = ('map', dict(p[2]))
+
+def p_map_entries(p):
+    '''map_entries : map_entry
+                   | map_entries COMMA map_entry'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[3]]
+
+def p_map_entry(p):
+    '''map_entry : STRING COLON expression'''
+    p[0] = (p[1], p[3])
+
+# ---------------- CLASES BÁSICAS ----------------
+def p_class_declaration(p):
+    '''class_declaration : CLASS ID LBRACE class_members RBRACE'''
+    p[0] = ('class', p[2], p[4])
+
+def p_class_members(p):
+    '''class_members : class_member
+                     | class_members class_member
+                     | empty'''
+    if len(p) == 2:
+        p[0] = [p[1]] if p[1] else []
+    else:
+        p[0] = p[1] + [p[2]]
+
+def p_class_member(p):
+    '''class_member : variable_declaration
+                    | function_declaration'''
+    p[0] = p[1]
+
+# ---------------- LLAMADAS A FUNCIÓN ----------------
 def p_function_call(p):
     '''function_call : ID LPAREN argument_list RPAREN
                      | ID LPAREN RPAREN'''
@@ -100,6 +168,7 @@ def p_function_call(p):
     else:
         p[0] = ('call', p[1], [])
 
+# ---------------- ARGUMENTOS DE FUNCIÓN ----------------
 def p_argument_list(p):
     '''argument_list : expression
                      | argument_list COMMA expression'''
@@ -108,6 +177,7 @@ def p_argument_list(p):
     else:
         p[0] = p[1] + [p[3]]
 
+# ---------------- VACÍO ----------------
 def p_empty(p):
     '''empty :'''
     pass

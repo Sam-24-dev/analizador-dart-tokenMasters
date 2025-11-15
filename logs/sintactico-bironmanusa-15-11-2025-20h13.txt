@@ -1,0 +1,31 @@
+================================================================================
+  ANÁLISIS SINTÁCTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba/algoritmo_mateo.dart
+Usuario: bironmanusa
+Fecha: 15/11/2025 20:13:09
+
+================================================================================
+  ERRORES SINTÁCTICOS: 18
+================================================================================
+
+1. Error sintáctico en línea 6: Token inesperado 'if' (tipo: IF)
+2. Error sintáctico en línea 6: Token inesperado '<=' (tipo: LESSEQUAL)
+3. Error sintáctico en línea 6: Token inesperado '0' (tipo: NUMBER)
+4. Error sintáctico en línea 6: Token inesperado '{' (tipo: LBRACE)
+5. Error sintáctico en línea 7: Token inesperado 'return' (tipo: RETURN)
+6. Error sintáctico en línea 7: Token inesperado '0' (tipo: NUMBER)
+7. Error sintáctico en línea 10: Token inesperado 'if' (tipo: IF)
+8. Error sintáctico en línea 10: Token inesperado '==' (tipo: EQUALS)
+9. Error sintáctico en línea 10: Token inesperado '1' (tipo: NUMBER)
+10. Error sintáctico en línea 10: Token inesperado '{' (tipo: LBRACE)
+11. Error sintáctico en línea 11: Token inesperado 'return' (tipo: RETURN)
+12. Error sintáctico en línea 11: Token inesperado '1' (tipo: NUMBER)
+13. Error sintáctico en línea 12: Token inesperado '}' (tipo: RBRACE)
+14. Error sintáctico en línea 15: Token inesperado '}' (tipo: RBRACE)
+15. Error sintáctico en línea 19: Token inesperado 'print' (tipo: ID)
+16. Error sintáctico en línea 19: Token inesperado '(' (tipo: LPAREN)
+17. Error sintáctico en línea 19: Token inesperado 'El numero de la sucesion de fibonacci en la posicion 9 es: ' (tipo: STRING)
+18. Error sintáctico en línea 19: Token inesperado ')' (tipo: RPAREN)
