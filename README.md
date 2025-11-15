@@ -1,6 +1,6 @@
-# Analizador Léxico para Dart - TokenMasters
+# Analizador Léxico-Sintáctico para Dart - TokenMasters
 
-Proyecto de desarrollo de un analizador léxico para el lenguaje de programación Dart utilizando Python y la biblioteca PLY (Python Lex-Yacc).
+Proyecto de desarrollo de un analizador léxico y sintáctico para el lenguaje de programación Dart utilizando Python y la biblioteca PLY (Python Lex-Yacc).
 
 ## 👥 Equipo
 
@@ -10,12 +10,22 @@ Proyecto de desarrollo de un analizador léxico para el lenguaje de programació
 
 ## 📋 Descripción del Proyecto
 
-Este proyecto implementa un analizador léxico (lexer) para el lenguaje Dart, capaz de:
+Este proyecto implementa un compilador completo para Dart en dos fases:
+
+### Avance 1: Analizador Léxico ✅ COMPLETADO
 - Identificar y clasificar tokens del lenguaje
 - Reconocer palabras reservadas, operadores y delimitadores
 - Procesar literales (números, cadenas, identificadores)
 - Generar logs detallados del análisis léxico
 - Detectar y reportar errores léxicos
+
+### Avance 2: Analizador Sintáctico 🔄 EN PROGRESO
+- Validar la estructura gramatical del código Dart
+- Reconocer declaraciones de funciones, variables y clases
+- Procesar estructuras de control (if, while, for)
+- Analizar expresiones aritméticas y lógicas
+- Generar logs de análisis sintáctico
+- Detectar y reportar errores sintácticos
 
 ## �️ Tecnologías
 
@@ -40,11 +50,14 @@ pip install -r requirements.txt
 ```
 analizador-dart-tokenMasters/
 ├── algoritmos_prueba/         # Algoritmos de prueba en Dart de cada integrante
-│   ├── algoritmo_samir.dart   # Algoritmo de Samir (comentarios, variables)
+│   ├── algoritmo_samir.dart   # Algoritmo de Samir (funciones, print, input)
 │   ├── algoritmo_andres.dart  # Algoritmo de Andrés (operadores, clases)
 │   └── algoritmo_mateo.dart   # Algoritmo de Mateo (fibonacci recursivo)
-├── logs/                      # Logs de análisis léxico generados (16 logs)
-├── lexer.py                   # Analizador léxico principal (PLY)
+├── logs/                      # Logs de análisis léxico y sintáctico
+│   ├── lexico-*.txt          # 16 logs de análisis léxico
+│   └── sintactico-*.txt      # Logs de análisis sintáctico
+├── lexer.py                   # Analizador léxico (PLY) - Avance 1 ✅
+├── parser.py                  # Analizador sintáctico (PLY) - Avance 2 🔄
 ├── .gitignore                 # Archivos ignorados por Git
 ├── requirements.txt           # Dependencias (PLY 3.11)
 └── README.md                  # Documentación del proyecto
@@ -84,15 +97,30 @@ analizador-dart-tokenMasters/
 
 ## 🚀 Estado del Proyecto
 
+### Avance 1: Analizador Léxico ✅ COMPLETADO
 - [x] Configuración inicial del repositorio
 - [x] Estructura de carpetas
 - [x] Algoritmos de prueba por integrante
 - [x] Implementación del analizador léxico (lexer.py)
 - [x] Pruebas con algoritmos
-- [x] Generación de logs
+- [x] Generación de 16 logs
 - [x] Documentación completa
+- [x] **Entregado: 12 de noviembre de 2025**
 
-## 💻 Uso del Analizador
+### Avance 2: Analizador Sintáctico 🔄 EN PROGRESO
+- [x] Creación de parser.py con PLY yacc
+- [x] Implementación de funciones (Samir) ✅
+- [x] Implementación de print statements (Samir) ✅
+- [x] Implementación de input (Samir) ✅
+- [ ] Estructuras de control - if, while, for (Andrés)
+- [ ] Variables, expresiones, listas, mapas (Mateo)
+- [ ] Clases y objetos (Mateo)
+- [x] Generación de logs sintácticos
+- [ ] **Entrega: 15 de noviembre de 2025, 23:59**
+
+## 💻 Uso de los Analizadores
+
+### Analizador Léxico (Avance 1)
 
 Para ejecutar el analizador léxico:
 
@@ -107,23 +135,40 @@ python lexer.py algoritmos_prueba/algoritmo_andres.dart ivandresalin
 python lexer.py algoritmos_prueba/algoritmo_mateo.dart bironmanusa
 ```
 
-Esto generará automáticamente un archivo log en la carpeta `logs/` con el formato: `lexico-[usuario]-DD-MM-YYYY-HHhMM.txt`
+Genera logs con formato: `lexico-[usuario]-DD-MM-YYYY-HHhMM.txt`
+
+### Analizador Sintáctico (Avance 2)
+
+Para ejecutar el analizador sintáctico:
+
+```bash
+python parser.py algoritmos_prueba/[archivo.dart] [usuario-git]
+```
+
+**Ejemplos:**
+```bash
+python parser.py algoritmos_prueba/algoritmo_samir.dart Sam-24-dev
+python parser.py algoritmos_prueba/algoritmo_andres.dart ivandresalin
+python parser.py algoritmos_prueba/algoritmo_mateo.dart bironmanusa
+```
+
+Genera logs con formato: `sintactico-[usuario]-DD-MM-YYYY-HHhMM.txt`
 
 ## 📝 Formato de Logs
 
-Los logs generados seguirán el formato:
-```
-lexico-usuario-DD-MM-YYYY-HHhMM.txt
-```
+### Logs Léxicos
+Formato: `lexico-usuario-DD-MM-YYYY-HHhMM.txt`
 
-Ejemplo:
-```
-lexico-Sam-24-dev-12-11-2025-14h30.txt
-```
+Ejemplo: `lexico-Sam-24-dev-12-11-2025-14h30.txt`
+
+### Logs Sintácticos
+Formato: `sintactico-usuario-DD-MM-YYYY-HHhMM.txt`
+
+Ejemplo: `sintactico-Sam-24-dev-15-11-2025-01h30.txt`
 
 ## 🤝 Contribuciones
 
-### Distribución de Tareas - Análisis Léxico
+### Avance 1: Análisis Léxico ✅
 
 **Samir Caizapasto (Sam-24-dev):**
 - Manejo de comentarios de línea (`//`) y multilínea (`/* */`)
@@ -144,12 +189,40 @@ lexico-Sam-24-dev-12-11-2025-14h30.txt
 - Reconocimiento de identificadores con validación de palabras reservadas
 - Algoritmo de prueba con recursividad (Fibonacci)
 
+### Avance 2: Análisis Sintáctico 🔄
+
+**Samir Caizapasto (Sam-24-dev):** ✅ COMPLETADO
+- Declaración de funciones con tipo de retorno y parámetros
+- Funciones void con/sin parámetros
+- Arrow functions (`=>`)
+- Return statements (con/sin valor)
+- Print statements
+- Input statements (`stdin.readLineSync()`)
+- Algoritmo de prueba con múltiples tipos de funciones
+
+**Andrés Salinas (ivandresalin):** ⏳ PENDIENTE
+- Estructuras de control: if-else, while, for, do-while
+- Algoritmo de prueba con estructuras de control
+
+**Mateo Mayorga (bironmanusa):** ⏳ PENDIENTE
+- Declaración de variables (var, final, const)
+- Expresiones aritméticas y lógicas
+- Estructuras de datos: listas y mapas
+- Clases básicas
+- Algoritmo de prueba con estructuras de datos
+
 ### Logs Generados
 
-Se generaron **16 logs** de prueba con el formato correcto:
+**Avance 1 - Análisis Léxico:**
+- **Total:** 16 logs
 - **Sam-24-dev:** 3 logs
 - **bironmanusa:** 11 logs (múltiples pruebas)
-- **ivandresalin:** 2 log
+- **ivandresalin:** 2 logs
+
+**Avance 2 - Análisis Sintáctico:**
+- **Sam-24-dev:** Logs generados exitosamente ✅
+- **ivandresalin:** Pendiente
+- **bironmanusa:** Pendiente
 
 Los aportes están claramente marcados en el código con comentarios:
 ```python
@@ -159,9 +232,38 @@ Los aportes están claramente marcados en el código con comentarios:
 # ============================================================
 ```
 
-## 📅 Entrega
+## 📊 Reglas Sintácticas Implementadas
 
-**Fecha límite**: 12 de noviembre de 2025, 23:55
+### Funciones (Samir) ✅
+- `tipo ID (parametros) { cuerpo }`
+- `void ID (parametros) { cuerpo }`  
+- `tipo ID (parametros) => expresion;` (arrow functions)
+- `return expresion;`
+- `return;`
+
+### Print e Input (Samir) ✅
+- `print(expresion);`
+- `stdin.readLineSync()`
+
+### Variables y Expresiones (Mateo) ⏳
+- Declaraciones: `var`, `final`, `const`
+- Expresiones aritméticas: `+`, `-`, `*`, `/`, `%`
+- Listas y mapas
+
+### Estructuras de Control (Andrés) ⏳
+- `if-else`
+- `while`
+- `for`
+
+## 📅 Entregas
+
+**Avance 1 - Analizador Léxico:**
+- Fecha límite: 12 de noviembre de 2025, 23:55
+- Estado: ✅ ENTREGADO
+
+**Avance 2 - Analizador Sintáctico:**
+- Fecha límite: 15 de noviembre de 2025, 23:59
+- Estado: 🔄 EN PROGRESO (Samir completado)
 
 ---
 

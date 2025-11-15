@@ -1,37 +1,42 @@
 // Algoritmo de Prueba - Samir Caizapasto
-// Propósito: Validar el analizador léxico para comentarios y errores
-
-/*
-  Este es un comentario multilínea
-  para probar el reconocimiento de comentarios
-  en el analizador léxico de Dart
-*/
+// Propósito: Validar funciones, print e input
 
 void main() {
+  // Print básico
+  print("Iniciando programa...");
+  
   // Declaración de variables
   var nombre = "Samir";
   int edad = 20;
-  double promedio = 8.5;
   
-  /* 
-    Prueba de operaciones básicas
-  */
-  int suma = 10 + 5;
-  int resta = 10 - 5;
+  print("Nombre: Samir");
   
-  // Condicional simple
-  if (edad >= 18) {
-    print("Es mayor de edad");
-  } else {
-    print("Es menor de edad");
-  }
+  // Llamada a función
+  int resultado = sumar(10, 5);
+  print(resultado);
   
-  // Ciclo for
-  for (int i = 0; i < 5; i++) {
-    print(i);
-  }
+  // Función que retorna
+  double promedio = calcularPromedio(8, 9);
+  print(promedio);
   
-  // Comentario al final
+  // Solicitar entrada (comentado para no causar error)
+  // var input = stdin.readLineSync();
 }
 
-/* Fin del algoritmo de prueba */
+// Función con retorno y parámetros
+int sumar(int a, int b) {
+  return a + b;
+}
+
+// Función con retorno
+double calcularPromedio(int a, int b) {
+  return (a + b) / 2;
+}
+
+// Función void
+void mostrarMensaje() {
+  print("Este es un mensaje");
+}
+
+// Arrow function
+int duplicar(int x) => x * 2;

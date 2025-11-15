@@ -1,0 +1,65 @@
+================================================================================
+  ANÁLISIS SINTÁCTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba/algoritmo_samir.dart
+Usuario: Sam-24-dev
+Fecha: 15/11/2025 01:25:53
+
+================================================================================
+  ERRORES SINTÁCTICOS: 52
+================================================================================
+
+1. Error sintáctico en línea 9: Token inesperado 'var' (tipo: VAR)
+2. Error sintáctico en línea 9: Token inesperado '=' (tipo: ASSIGN)
+3. Error sintáctico en línea 9: Token inesperado 'Samir' (tipo: STRING)
+4. Error sintáctico en línea 10: Token inesperado '=' (tipo: ASSIGN)
+5. Error sintáctico en línea 10: Token inesperado '20' (tipo: NUMBER)
+6. Error sintáctico en línea 10: Token inesperado ';' (tipo: SEMICOLON)
+7. Error sintáctico en línea 12: Token inesperado 'print' (tipo: ID)
+8. Error sintáctico en línea 12: Token inesperado 'Nombre: Samir' (tipo: STRING)
+9. Error sintáctico en línea 12: Token inesperado ';' (tipo: SEMICOLON)
+10. Error sintáctico en línea 15: Token inesperado 'int' (tipo: ID)
+11. Error sintáctico en línea 15: Token inesperado 'resultado' (tipo: ID)
+12. Error sintáctico en línea 15: Token inesperado '=' (tipo: ASSIGN)
+13. Error sintáctico en línea 15: Token inesperado 'sumar' (tipo: ID)
+14. Error sintáctico en línea 15: Token inesperado '(' (tipo: LPAREN)
+15. Error sintáctico en línea 15: Token inesperado '10' (tipo: NUMBER)
+16. Error sintáctico en línea 15: Token inesperado ',' (tipo: COMMA)
+17. Error sintáctico en línea 15: Token inesperado '5' (tipo: NUMBER)
+18. Error sintáctico en línea 15: Token inesperado ')' (tipo: RPAREN)
+19. Error sintáctico en línea 15: Token inesperado ';' (tipo: SEMICOLON)
+20. Error sintáctico en línea 16: Token inesperado 'print' (tipo: ID)
+21. Error sintáctico en línea 16: Token inesperado '(' (tipo: LPAREN)
+22. Error sintáctico en línea 16: Token inesperado 'resultado' (tipo: ID)
+23. Error sintáctico en línea 16: Token inesperado ')' (tipo: RPAREN)
+24. Error sintáctico en línea 16: Token inesperado ';' (tipo: SEMICOLON)
+25. Error sintáctico en línea 19: Token inesperado 'double' (tipo: ID)
+26. Error sintáctico en línea 19: Token inesperado 'promedio' (tipo: ID)
+27. Error sintáctico en línea 19: Token inesperado '=' (tipo: ASSIGN)
+28. Error sintáctico en línea 19: Token inesperado 'calcularPromedio' (tipo: ID)
+29. Error sintáctico en línea 19: Token inesperado '(' (tipo: LPAREN)
+30. Error sintáctico en línea 19: Token inesperado '8' (tipo: NUMBER)
+31. Error sintáctico en línea 19: Token inesperado ',' (tipo: COMMA)
+32. Error sintáctico en línea 19: Token inesperado '9' (tipo: NUMBER)
+33. Error sintáctico en línea 19: Token inesperado ')' (tipo: RPAREN)
+34. Error sintáctico en línea 19: Token inesperado ';' (tipo: SEMICOLON)
+35. Error sintáctico en línea 20: Token inesperado 'print' (tipo: ID)
+36. Error sintáctico en línea 20: Token inesperado '(' (tipo: LPAREN)
+37. Error sintáctico en línea 20: Token inesperado 'promedio' (tipo: ID)
+38. Error sintáctico en línea 20: Token inesperado ')' (tipo: RPAREN)
+39. Error sintáctico en línea 20: Token inesperado ';' (tipo: SEMICOLON)
+40. Error sintáctico en línea 24: Token inesperado '}' (tipo: RBRACE)
+41. Error sintáctico en línea 27: Token inesperado 'int' (tipo: ID)
+42. Error sintáctico en línea 27: Token inesperado 'sumar' (tipo: ID)
+43. Error sintáctico en línea 27: Token inesperado '(' (tipo: LPAREN)
+44. Error sintáctico en línea 27: Token inesperado 'int' (tipo: ID)
+45. Error sintáctico en línea 27: Token inesperado 'a' (tipo: ID)
+46. Error sintáctico en línea 27: Token inesperado ',' (tipo: COMMA)
+47. Error sintáctico en línea 27: Token inesperado 'int' (tipo: ID)
+48. Error sintáctico en línea 27: Token inesperado 'b' (tipo: ID)
+49. Error sintáctico en línea 27: Token inesperado ')' (tipo: RPAREN)
+50. Error sintáctico en línea 33: Token inesperado '(' (tipo: LPAREN)
+51. Error sintáctico en línea 33: Token inesperado ')' (tipo: RPAREN)
+52. Error sintáctico: Final de archivo inesperado
