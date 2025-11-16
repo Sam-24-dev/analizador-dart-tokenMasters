@@ -19,7 +19,7 @@ Este proyecto implementa un compilador completo para Dart en dos fases:
 - Generar logs detallados del análisis léxico
 - Detectar y reportar errores léxicos
 
-### Avance 2: Analizador Sintáctico 🔄 EN PROGRESO
+### Avance 2: Analizador Sintáctico ✅ COMPLETADO
 - Validar la estructura gramatical del código Dart
 - Reconocer declaraciones de funciones, variables y clases
 - Procesar estructuras de control (if, while, for)
@@ -189,7 +189,7 @@ Ejemplo: `sintactico-Sam-24-dev-15-11-2025-01h30.txt`
 - Reconocimiento de identificadores con validación de palabras reservadas
 - Algoritmo de prueba con recursividad (Fibonacci)
 
-### Avance 2: Análisis Sintáctico 🔄
+### Avance 2: Análisis Sintáctico ✅
 
 **Samir Caizapasto (Sam-24-dev):** ✅ COMPLETADO
 - Declaración de funciones con tipo de retorno y parámetros
