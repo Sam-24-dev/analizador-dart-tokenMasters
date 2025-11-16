@@ -40,13 +40,21 @@ def p_statement_list(p):
 
 # ---------------- SENTENCIA ----------------
 def p_statement(p):
-    '''statement : function_declaration
+    '''statement : if_statement
+                 | while_statement
+                 | do_while_statement
+                 | for_statement
+                 | for_in_statement
+                 | break_statement
+                 | continue_statement
+                 | function_declaration
                  | print_statement
                  | return_statement
                  | variable_declaration
                  | assignment
                  | class_declaration
-                 | expression SEMICOLON'''
+                 | expression SEMICOLON
+                 '''
     p[0] = p[1]
 
 # ---------------- DECLARACIÓN DE VARIABLES ----------------
@@ -89,7 +97,7 @@ def p_expression(p):
 def p_binary_operation(p):
     '''binary_operation : expression PLUS expression
                         | expression MINUS expression
-                        | expression TIMES expression
+                         | expression TIMES expression
                         | expression DIVIDE expression
                         | expression MODULO expression
                         | expression EQUALS expression
@@ -192,11 +200,120 @@ def p_empty(p):
 # Responsable: Estructuras de control
 # ============================================================================
 
-# TODO Andrés: Implementar reglas de:
-# - if-else statements
-# - while loops
-# - for loops
-# - do-while loops
+# Sentencia compuesta o simple (ayuda a aceptar bloques con o sin llaves).
+def p_block_or_statement(p):
+    '''block_or_statement : LBRACE statement_list RBRACE
+                          | statement'''
+    if len(p) == 4:
+        p[0] = ('block', p[2])   # bloque: lista de sentencias
+    else:
+        p[0] = ('block', [p[1]]) # normalizamos a bloque con una sola sentencia
+
+# ---------------- IF / ELSEIF / ELSE ----------------
+def p_if_statement(p):
+    '''if_statement : IF LPAREN expression RPAREN block_or_statement
+                    | IF LPAREN expression RPAREN block_or_statement ELSE block_or_statement
+                    | IF LPAREN expression RPAREN block_or_statement else_if_list'''
+    # Caso simple: if (cond) stmt
+    if len(p) == 6:
+        p[0] = ('if', p[3], p[5], None)
+    # if ... else ...
+    elif len(p) == 8 and p[6] == 'ELSE':
+        p[0] = ('if', p[3], p[5], p[7])
+    # if ... else-if list (else_if_list devuelve un árbol que puede terminar en else o None)
+    else:
+        # estructura: IF LPAREN expr RPAREN block_or_statement else_if_list
+        p[0] = ('if_chain', p[3], p[5], p[6])
+
+# lista de else-if (puede finalizar con un else opcional)
+def p_else_if_list(p):
+    '''else_if_list : ELSE IF LPAREN expression RPAREN block_or_statement
+                    | ELSE IF LPAREN expression RPAREN block_or_statement else_if_list
+                    | ELSE block_or_statement'''
+    # else if simple
+    if len(p) == 7 and p[1] == 'ELSE' and p[2] == 'IF':
+        # devuelve una lista encadenada como ('elif', cond, block, next) donde next puede ser otra elif o None
+        p[0] = ('elif', p[4], p[6], None)
+    # else if seguido de más else-if
+    elif len(p) == 8:
+        p[0] = ('elif', p[4], p[6], p[7])
+    # else final
+    else:
+        p[0] = ('else', p[2])
+
+# ---------------- WHILE ----------------
+def p_while_statement(p):
+    '''while_statement : WHILE LPAREN expression RPAREN block_or_statement'''
+    p[0] = ('while', p[3], p[5])
+
+# ---------------- DO-WHILE ----------------
+def p_do_while_statement(p):
+    '''do_while_statement : DO block_or_statement WHILE LPAREN expression RPAREN SEMICOLON'''
+    p[0] = ('do_while', p[2], p[5])
+
+# ---------------- FOR (tradicional) ----------------
+# Para la parte de inicialización permitimos variable_declaration, assignment o empty.
+def p_for_statement(p):
+    '''for_statement : FOR LPAREN for_init SEMICOLON for_condition SEMICOLON for_update RPAREN block_or_statement'''
+    p[0] = ('for', p[3], p[5], p[7], p[9])
+
+def p_for_init(p):
+    '''for_init : variable_declaration_no_semicolon
+                | assignment_no_semicolon
+                | empty'''
+    p[0] = p[1]
+
+def p_for_condition(p):
+    '''for_condition : expression
+                     | empty'''
+    p[0] = p[1]
+
+def p_for_update(p):
+    '''for_update : expression
+                  | assignment_no_semicolon
+                  | empty'''
+    p[0] = p[1]
+
+# versiones de reglas sin punto y coma para usar en la cabecera del for
+def p_variable_declaration_no_semicolon(p):
+    '''variable_declaration_no_semicolon : VAR ID ASSIGN expression
+                                         | CONST ID ASSIGN expression
+                                         | FINAL ID ASSIGN expression
+                                         | tipo ID ASSIGN expression
+                                         | tipo ID'''
+    if len(p) == 5:
+        p[0] = ('var_decl', p[1], p[2], p[4])
+    else:
+        p[0] = ('var_decl', p[1], p[2], None)
+
+def p_assignment_no_semicolon(p):
+    '''assignment_no_semicolon : ID ASSIGN expression'''
+    p[0] = ('assign', p[1], p[3])
+
+# ---------------- FOR-IN (for each) ----------------
+def p_for_in_statement(p):
+    '''for_in_statement : FOR LPAREN for_in_iterator IN expression RPAREN block_or_statement'''
+    # for (iterator in expr) block
+    p[0] = ('for_in', p[3], p[5], p[7])
+
+#iterador del for-in (iterator)
+def p_for_in_iterator(p):
+    '''for_in_iterator : VAR ID
+                       | ID''' # ID aquí asume que ID puede ser un tipo de dato
+    if len(p) == 3:
+        p[0] = ('iterator_decl', p[1], p[2])
+    else:
+        p[0] = ('iterator_id', p[1])
+
+# ---------------- BREAK / CONTINUE ----------------
+def p_break_statement(p):
+    '''break_statement : BREAK SEMICOLON'''
+    p[0] = ('break',)
+
+def p_continue_statement(p):
+    '''continue_statement : CONTINUE SEMICOLON'''
+    p[0] = ('continue',)
+
 
 # ============================================================================
 # FIN APORTE: Andrés Salinas (ivandresalin)

@@ -51,13 +51,13 @@ pip install -r requirements.txt
 analizador-dart-tokenMasters/
 ├── algoritmos_prueba/         # Algoritmos de prueba en Dart de cada integrante
 │   ├── algoritmo_samir.dart   # Algoritmo de Samir (funciones, print, input)
-│   ├── algoritmo_andres.dart  # Algoritmo de Andrés (operadores, clases)
+│   ├── algoritmo_andres.dart  # Algoritmo de Andrés (Estructuras de control)
 │   └── algoritmo_mateo.dart   # Algoritmo de Mateo (fibonacci recursivo)
 ├── logs/                      # Logs de análisis léxico y sintáctico
 │   ├── lexico-*.txt          # 16 logs de análisis léxico
-│   └── sintactico-*.txt      # Logs de análisis sintáctico
+│   └── sintactico-*.txt      # 10 logs de análisis sintáctico
 ├── lexer.py                   # Analizador léxico (PLY) - Avance 1 ✅
-├── parser.py                  # Analizador sintáctico (PLY) - Avance 2 🔄
+├── parser.py                  # Analizador sintáctico (PLY) - Avance 2 ✅
 ├── .gitignore                 # Archivos ignorados por Git
 ├── requirements.txt           # Dependencias (PLY 3.11)
 └── README.md                  # Documentación del proyecto
@@ -107,16 +107,16 @@ analizador-dart-tokenMasters/
 - [x] Documentación completa
 - [x] **Entregado: 12 de noviembre de 2025**
 
-### Avance 2: Analizador Sintáctico 🔄 EN PROGRESO
+### Avance 2: Analizador Sintáctico ✅ COMPLETADO
 - [x] Creación de parser.py con PLY yacc
 - [x] Implementación de funciones (Samir) ✅
 - [x] Implementación de print statements (Samir) ✅
 - [x] Implementación de input (Samir) ✅
-- [ ] Estructuras de control - if, while, for (Andrés)
-- [ ] Variables, expresiones, listas, mapas (Mateo)
-- [ ] Clases y objetos (Mateo)
-- [x] Generación de logs sintácticos
-- [ ] **Entrega: 15 de noviembre de 2025, 23:59**
+- [x] Estructuras de control - if, while, for (Andrés)✅
+- [x] Variables, expresiones, listas, mapas (Mateo)✅
+- [x] Clases y objetos (Mateo)✅
+- [x] Generación de logs sintácticos✅
+- [x] **Entrega: 15 de noviembre de 2025, 23:59**✅
 
 ## 💻 Uso de los Analizadores
 
@@ -200,11 +200,11 @@ Ejemplo: `sintactico-Sam-24-dev-15-11-2025-01h30.txt`
 - Input statements (`stdin.readLineSync()`)
 - Algoritmo de prueba con múltiples tipos de funciones
 
-**Andrés Salinas (ivandresalin):** ⏳ PENDIENTE
+**Andrés Salinas (ivandresalin):** ✅ COMPLETADO
 - Estructuras de control: if-else, while, for, do-while
 - Algoritmo de prueba con estructuras de control
 
-**Mateo Mayorga (bironmanusa):** ⏳ PENDIENTE
+**Mateo Mayorga (bironmanusa):** ✅ COMPLETADO
 - Declaración de variables (var, final, const)
 - Expresiones aritméticas y lógicas
 - Estructuras de datos: listas y mapas
@@ -221,8 +221,8 @@ Ejemplo: `sintactico-Sam-24-dev-15-11-2025-01h30.txt`
 
 **Avance 2 - Análisis Sintáctico:**
 - **Sam-24-dev:** Logs generados exitosamente ✅
-- **ivandresalin:** Pendiente
-- **bironmanusa:** Pendiente
+- **ivandresalin:** Logs generados exitosamente ✅
+- **bironmanusa:** Logs generados exitosamente ✅
 
 Los aportes están claramente marcados en el código con comentarios:
 ```python
@@ -245,12 +245,12 @@ Los aportes están claramente marcados en el código con comentarios:
 - `print(expresion);`
 - `stdin.readLineSync()`
 
-### Variables y Expresiones (Mateo) ⏳
+### Variables y Expresiones (Mateo) ✅
 - Declaraciones: `var`, `final`, `const`
 - Expresiones aritméticas: `+`, `-`, `*`, `/`, `%`
 - Listas y mapas
 
-### Estructuras de Control (Andrés) ⏳
+### Estructuras de Control (Andrés) ✅
 - `if-else`
 - `while`
 - `for`
@@ -263,7 +263,7 @@ Los aportes están claramente marcados en el código con comentarios:
 
 **Avance 2 - Analizador Sintáctico:**
 - Fecha límite: 15 de noviembre de 2025, 23:59
-- Estado: 🔄 EN PROGRESO (Samir completado)
+- Estado: ✅ ENTREGADO
 
 ---
 

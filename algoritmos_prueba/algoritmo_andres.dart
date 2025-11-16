@@ -1,46 +1,62 @@
-// Archivo de prueba para Andrés Salinas (ivandresalin): Palabras Reservadas, Operadores, Delimitadores
-
-import 'dart:async' show hide; // IMPORT, SHOW, HIDE
-
-abstract class TestClass with Mixin { // ABSTRACT, CLASS, WITH, MIXIN
-    final int baseValue = 100; // FINAL, BASE
-    int? count = 1; // QUESTION, ASSIGN, NUMBER
-
-    void testOperators(var a, var b) { // VOID, VAR, LPAREN, RPAREN
-        if (a is! dynamic && b == baseValue) { // IF, IS_NOT, DYNAMIC_TYPE, AND, EQUALS, ID
-            count++; // INCREMENT
-            
-            // Operadores de asignación y lógicos
-            a += 5; // PLUSEQUAL
-            if (b != null || a < 10) { // NOTEQUAL, OR, LESSTHAN
-                b = a >> 1; // SHIFT_RIGHT
-            }
-        } else { // ELSE
-            a = ~b; // ASSIGN, BITWISE_NOT
-        }
-    }
-    
-    // Operadores especiales y delimitadores
-    var result = (a > 0) ? a : null; // GREATERTHAN, QUESTION, COLON, NULL
-    var list = [1, 2, ...?count]; // LBRACKET, RBRACKET, COMMA, SPREAD, NULL_AWARE_SPREAD
-    
-    // Cascade (Cascada)
-    var obj = TestClass()..count = 5 // CASCADE, DOT
-                          ..baseValue *= 2; // TIMESEQUAL
-                          
-    // Arrow function
-    String getName() => "Andres"; // ARROW, STRING
-
-    int get area => count ?? 0; // GET, DOUBLE_QUESTION
-}
-
-// Sentencias de control
 void main() {
-    try {
-        throw 'Error'; // THROW
-    } on Exception catch (e) { // ON, CATCH
-        return; // RETURN
-    } finally { // FINALLY
-        assert(true); // ASSERT
-    }
+  // === PRUEBAS VÁLIDAS ===
+  var x = 10;
+
+  // 1. if simple
+  if (x > 5) {
+    print("Mayor a 5");
+  }
+
+  // 2. if-else
+  var flag = true;
+  if (flag == false) {
+    print("Falso");
+  } else {
+    print("Verdadero");
+  }
+
+  // 3. if-else if-else
+  var temp = 25;
+  if (temp < 0) {
+    print("Congelado");
+  } else if (temp < 30) {
+    print("Normal");
+  } else {
+    print("Caliente");
+  }
+
+  // 4. if con sentencia simple (sin llaves)
+  var a = 1;
+  if (a == 1) print("a es 1");
+  else print("a no es 1");
+
+
+  // 6. while simple
+  var i = 0;
+  while (i < 5) {
+    i = i + 1;
+  }
+
+  // 7. do-while
+  var j = 10;
+  do {
+    j = j - 1;
+  } while (j > 5);
+
+  // 8. for tradicional (con todas las partes)
+  for (var k = 0; k < 10; k = k + 1) {
+    print(k);
+  }
+
+  // 10. for-in (for each)
+  var numbers = [1, 2, 3];
+  for (var num in numbers) {
+    print(num);
+  }
+
+  // 11. break y continue
+  for (var l = 0; l < 10; l = l + 1) {
+    if (l == 5) break;
+    if (l % 2 == 0) continue;
+  }
 }

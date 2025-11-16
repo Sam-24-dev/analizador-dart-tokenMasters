@@ -1,0 +1,27 @@
+================================================================================
+  ANÁLISIS SINTÁCTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba/algoritmo_andres.dart
+Usuario: ivandresalin
+Fecha: 15/11/2025 19:47:50
+
+================================================================================
+  ERRORES SINTÁCTICOS: 14
+================================================================================
+
+1. Error sintáctico en línea 53: Token inesperado 'in' (tipo: IN)
+2. Error sintáctico en línea 53: Token inesperado 'numbers' (tipo: ID)
+3. Error sintáctico en línea 53: Token inesperado ')' (tipo: RPAREN)
+4. Error sintáctico en línea 53: Token inesperado '{' (tipo: LBRACE)
+5. Error sintáctico en línea 54: Token inesperado 'print' (tipo: ID)
+6. Error sintáctico en línea 54: Token inesperado '(' (tipo: LPAREN)
+7. Error sintáctico en línea 54: Token inesperado 'num' (tipo: ID)
+8. Error sintáctico en línea 54: Token inesperado ')' (tipo: RPAREN)
+9. Error sintáctico en línea 54: Token inesperado ';' (tipo: SEMICOLON)
+10. Error sintáctico en línea 55: Token inesperado '}' (tipo: RBRACE)
+11. Error sintáctico en línea 58: Token inesperado 'for' (tipo: FOR)
+12. Error sintáctico en línea 58: Token inesperado '(' (tipo: LPAREN)
+13. Error sintáctico en línea 58: Token inesperado 'var' (tipo: VAR)
+14. Error sintáctico en línea 58: Token inesperado 'l' (tipo: ID)

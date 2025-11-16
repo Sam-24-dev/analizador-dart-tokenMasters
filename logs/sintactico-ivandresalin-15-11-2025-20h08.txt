@@ -1,0 +1,21 @@
+================================================================================
+  ANÁLISIS SINTÁCTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba/algoritmo_andres.dart
+Usuario: ivandresalin
+Fecha: 15/11/2025 20:08:11
+
+================================================================================
+  ERRORES SINTÁCTICOS: 8
+================================================================================
+
+1. Error sintáctico en línea 6: Token inesperado 'x' (tipo: ID)
+2. Error sintáctico en línea 6: Token inesperado '>' (tipo: GREATERTHAN)
+3. Error sintáctico en línea 6: Token inesperado '5' (tipo: NUMBER)
+4. Error sintáctico en línea 6: Token inesperado ')' (tipo: RPAREN)
+5. Error sintáctico en línea 6: Token inesperado '{' (tipo: LBRACE)
+6. Error sintáctico en línea 7: Token inesperado 'print' (tipo: ID)
+7. Error sintáctico en línea 7: Token inesperado ';' (tipo: SEMICOLON)
+8. Error sintáctico en línea 8: Token inesperado '}' (tipo: RBRACE)
