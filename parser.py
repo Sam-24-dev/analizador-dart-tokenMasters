@@ -1,16 +1,27 @@
 """
-Analizador Sintáctico para Dart - Proyecto TokenMasters
+Analizador Sintáctico y Semántico para Dart - Proyecto TokenMasters
 Utiliza PLY (Python Lex-Yacc)
 Integrantes:
 - Andrés Salinas (ivandresalin)
 - Mateo Mayorga (bironmanusa)
 - Samir Caizapasto (Sam-24-dev)
+
+AVANCE 2: Análisis Sintáctico(Completado)
+AVANCE 3: Análisis Semántico (En proceso)
 """
 
 import ply.yacc as yacc
 from lexer import tokens
 from datetime import datetime
 import os
+
+# ============================================================================
+# TABLAS SEMÁNTICAS - Avance 3 (Samir)
+# ============================================================================
+symbol_table = {}      # Tabla de símbolos: variables y tipos
+function_table = {}    # Tabla de funciones: firmas y tipos de retorno
+loop_stack = []        # Stack de loops: validar break/continue
+semantic_errors = []   # Lista de errores semánticos
 
 # Precedencia de operadores
 precedence = (
@@ -244,17 +255,23 @@ def p_else_if_list(p):
 # ---------------- WHILE ----------------
 def p_while_statement(p):
     '''while_statement : WHILE LPAREN expression RPAREN block_or_statement'''
+    # Semántica (Samir): Gestión de loop_stack para validar break/continue
+    # Nota: No se puede usar append/pop aquí porque PLY parsea todo primero
     p[0] = ('while', p[3], p[5])
 
 # ---------------- DO-WHILE ----------------
 def p_do_while_statement(p):
     '''do_while_statement : DO block_or_statement WHILE LPAREN expression RPAREN SEMICOLON'''
+    # Semántica (Samir): Gestión de loop_stack para validar break/continue
+    # Nota: No se puede usar append/pop aquí porque PLY parsea todo primero
     p[0] = ('do_while', p[2], p[5])
 
 # ---------------- FOR (tradicional) ----------------
 # Para la parte de inicialización permitimos variable_declaration, assignment o empty.
 def p_for_statement(p):
     '''for_statement : FOR LPAREN for_init SEMICOLON for_condition SEMICOLON for_update RPAREN block_or_statement'''
+    # Semántica (Samir): Gestión de loop_stack para validar break/continue
+    # Nota: No se puede usar append/pop aquí porque PLY parsea todo primero
     p[0] = ('for', p[3], p[5], p[7], p[9])
 
 def p_for_init(p):
@@ -294,6 +311,8 @@ def p_assignment_no_semicolon(p):
 def p_for_in_statement(p):
     '''for_in_statement : FOR LPAREN for_in_iterator IN expression RPAREN block_or_statement'''
     # for (iterator in expr) block
+    # Semántica (Samir): Gestión de loop_stack para validar break/continue
+    # Nota: No se puede usar append/pop aquí porque PLY parsea todo primero  
     p[0] = ('for_in', p[3], p[5], p[7])
 
 #iterador del for-in (iterator)
@@ -308,11 +327,13 @@ def p_for_in_iterator(p):
 # ---------------- BREAK / CONTINUE ----------------
 def p_break_statement(p):
     '''break_statement : BREAK SEMICOLON'''
-    p[0] = ('break',)
+    # Guardamos línea para validación semántica post-parsing (Samir - Regla 2.2)
+    p[0] = ('break', p.lineno(1))
 
 def p_continue_statement(p):
     '''continue_statement : CONTINUE SEMICOLON'''
-    p[0] = ('continue',)
+    # Guardamos línea para validación semántica post-parsing (Samir - Regla 2.2)
+    p[0] = ('continue', p.lineno(1))
 
 
 # ============================================================================
@@ -325,37 +346,165 @@ def p_continue_statement(p):
 # Responsable: Funciones, Print, Input
 # ============================================================================
 
-# 1. DECLARACIÓN DE FUNCIONES
+# ========== FUNCIONES HELPER SEMÁNTICAS (Samir - Avance 3) ==========
+
+def validate_return_type(declared_type, return_expression):
+    """Valida si el tipo de retorno coincide con el declarado"""
+    # TODO: Implementación completa requiere evaluación de expresiones
+    # Por ahora, validación básica
+    return True
+
+def has_return_in_all_paths(statement_list):
+    """Verifica si todos los caminos de ejecución tienen return"""
+    if not statement_list:
+        return False
+    
+    for stmt in statement_list:
+        if isinstance(stmt, tuple):
+            if stmt[0] == 'return':
+                return True
+            # TODO Andrés/Mateo: Validar if-else que ambas ramas retornen
+    return False
+
+def validate_break_continue(tree, in_loop=False):
+    """
+    Valida que break/continue solo aparezcan dentro de bucles (Samir - Regla 2.2)
+    
+    Se ejecuta DESPUÉS del parsing porque:
+    - PLY usa parsing bottom-up (reduce primero las hojas, luego los padres)
+    - Intentar usar loop_stack durante el parsing causa falsos positivos
+    - Esta función recorre el árbol de arriba hacia abajo
+    
+    Parámetros:
+    - tree: Árbol sintáctico (tupla o lista) generado por el parser
+    - in_loop: Flag que indica si estamos dentro de un bucle
+    """
+    # Si es None o vacío, terminar
+    if tree is None:
+        return
+    
+    # Si es una lista (statement_list), recorrer cada elemento
+    if isinstance(tree, list):
+        for item in tree:
+            validate_break_continue(item, in_loop)
+        return
+    
+    # Si no es tupla, no hay nada que validar
+    if not isinstance(tree, tuple) or len(tree) == 0:
+        return
+    
+    node_type = tree[0]
+    
+    # Si encontramos un bucle, activamos el flag para sus hijos
+    if node_type in ('while', 'for', 'do-while', 'for-in'):
+        # while: ('while', condition, body)
+        # for: ('for', init, condition, update, body)
+        # do-while: ('do-while', body, condition)
+        # for-in: ('for-in', variable, iterable, body)
+        
+        # Recorrer TODOS los hijos CON in_loop=True
+        for child in tree[1:]:
+            validate_break_continue(child, in_loop=True)
+    
+    # Si encontramos break/continue, verificamos si estamos en bucle
+    elif node_type == 'break':
+        if not in_loop:
+            semantic_errors.append("Error semántico: 'break' fuera de bucle")
+    
+    elif node_type == 'continue':
+        if not in_loop:
+            semantic_errors.append("Error semántico: 'continue' fuera de bucle")
+    
+    # Para cualquier otro nodo, seguir recorriendo CON el mismo flag
+    else:
+        for child in tree[1:]:
+            validate_break_continue(child, in_loop)
+
+# ========== 1. DECLARACIÓN DE FUNCIONES ==========
 
 # Función con tipo de retorno y parámetros
 def p_function_with_params(p):
     '''function_declaration : tipo ID LPAREN parameters RPAREN LBRACE statement_list RBRACE'''
-    p[0] = ('function', p[1], p[2], p[4], p[7])
+    # SINTÁCTICO: Reconocer estructura
+    func_type = p[1]
+    func_name = p[2]
+    params = p[4]
+    body = p[7]
+    
+    # ========== SEMÁNTICA: Validar retornos (Samir - Regla 1) ==========
+    # Guardar función en tabla
+    function_table[func_name] = {'type': func_type, 'params': params}
+    
+    # Validar que la función tenga return
+    if not has_return_in_all_paths(body):
+        semantic_errors.append(
+            f"Línea {p.lineno(2)}: Función '{func_name}' debe retornar '{func_type}' en todos los caminos"
+        )
+    # ========== FIN SEMÁNTICA ==========
+    
+    p[0] = ('function', func_type, func_name, params, body)
 
 # Función con tipo de retorno sin parámetros
 def p_function_no_params(p):
     '''function_declaration : tipo ID LPAREN RPAREN LBRACE statement_list RBRACE'''
-    p[0] = ('function', p[1], p[2], [], p[6])
+    # SINTÁCTICO: Reconocer estructura
+    func_type = p[1]
+    func_name = p[2]
+    body = p[6]
+    
+    # ========== SEMÁNTICA: Validar retornos (Samir - Regla 1) ==========
+    function_table[func_name] = {'type': func_type, 'params': []}
+    
+    if not has_return_in_all_paths(body):
+        semantic_errors.append(
+            f"Línea {p.lineno(2)}: Función '{func_name}' debe retornar '{func_type}' en todos los caminos"
+        )
+    # ========== FIN SEMÁNTICA ==========
+    
+    p[0] = ('function', func_type, func_name, [], body)
 
 # Función void con parámetros
 def p_function_void_params(p):
     '''function_declaration : VOID ID LPAREN parameters RPAREN LBRACE statement_list RBRACE'''
-    p[0] = ('function_void', p[2], p[4], p[7])
+    # SINTÁCTICO: Reconocer estructura
+    func_name = p[2]
+    params = p[4]
+    
+    # ========== SEMÁNTICA: Guardar en tabla (Samir) ==========
+    function_table[func_name] = {'type': 'void', 'params': params}
+    # Void no requiere return, está OK
+    # ========== FIN SEMÁNTICA ==========
+    
+    p[0] = ('function_void', func_name, params, p[7])
 
 # Función void sin parámetros
 def p_function_void_no_params(p):
     '''function_declaration : VOID ID LPAREN RPAREN LBRACE statement_list RBRACE'''
-    p[0] = ('function_void', p[2], [], p[6])
+    # SINTÁCTICO: Reconocer estructura
+    func_name = p[2]
+    
+    # ========== SEMÁNTICA: Guardar en tabla (Samir) ==========
+    function_table[func_name] = {'type': 'void', 'params': []}
+    # Void no requiere return, está OK
+    # ========== FIN SEMÁNTICA ==========
+    
+    p[0] = ('function_void', func_name, [], p[6])
 
 # Arrow function con parámetros
 def p_arrow_function_params(p):
     '''function_declaration : tipo ID LPAREN parameters RPAREN ARROW expression SEMICOLON'''
-    p[0] = ('arrow_function', p[1], p[2], p[4], p[7])
+    # SINTÁCTICO: Arrow functions siempre retornan (OK semánticamente)
+    func_name = p[2]
+    function_table[func_name] = {'type': p[1], 'params': p[4]}
+    p[0] = ('arrow_function', p[1], func_name, p[4], p[7])
 
 # Arrow function sin parámetros
 def p_arrow_function_no_params(p):
     '''function_declaration : tipo ID LPAREN RPAREN ARROW expression SEMICOLON'''
-    p[0] = ('arrow_function', p[1], p[2], [], p[6])
+    # SINTÁCTICO: Arrow functions siempre retornan (OK semánticamente)
+    func_name = p[2]
+    function_table[func_name] = {'type': p[1], 'params': []}
+    p[0] = ('arrow_function', p[1], func_name, [], p[6])
 
 # Parámetros de función (lista)
 def p_parameters_multiple(p):
@@ -387,21 +536,22 @@ def p_return_void(p):
     p[0] = ('return', None)
 
 
-# 2. PRINT STATEMENT
+# ========== 2. PRINT STATEMENT ==========
 
 # Print con expresión
 def p_print_expression(p):
     '''print_statement : ID LPAREN expression RPAREN SEMICOLON'''
-    # Se asume que ID es 'print'
+    # SINTÁCTICO: Se asume que ID es 'print'
+    # TODO Mateo: Validar semánticamente que ID sea 'print'
     p[0] = ('print', p[3])
 
 
-# 3. INPUT STATEMENT (stdin.readLineSync)
+# ========== 3. INPUT STATEMENT (stdin.readLineSync) ==========
 
 # Lectura de input: stdin.readLineSync()
 def p_input_read(p):
     '''input_expression : ID DOT ID LPAREN RPAREN'''
-    # stdin.readLineSync()
+    # SINTÁCTICO: stdin.readLineSync()
     p[0] = ('input', p[1], p[3])
 
 # ============================================================================
@@ -481,12 +631,87 @@ def analyze_syntax(filename, git_user):
     print(f"Log: {log_filename}")
     print(f"{'='*70}\n")
 
+
+def analyze_semantic(filename, git_user):
+    global syntax_errors, semantic_errors
+    syntax_errors = []
+    semantic_errors = []
+    
+    with open(filename, 'r', encoding='utf-8') as f:
+        data = f.read()
+    
+    from lexer import build_lexer
+    lexer = build_lexer()
+    parser_obj = build_parser()
+    
+    print(f"\n{'='*70}")
+    print("  ANALIZADOR SEMÁNTICO - DART - TokenMasters")
+    print(f"{'='*70}")
+    print(f"Archivo: {filename}")
+    print(f"Usuario: {git_user}")
+    
+    result = parser_obj.parse(data, lexer=lexer)
+    
+    # ========== SEMÁNTICA: Validar break/continue después del parsing (Samir - Regla 2.2) ==========
+    # Esto se hace DESPUÉS del parsing porque necesitamos el árbol completo
+    # Durante el parsing PLY trabaja bottom-up, aquí trabajamos top-down
+    if result is not None:
+        validate_break_continue(result, in_loop=False)
+    
+    now = datetime.now()
+    timestamp = now.strftime("%d%m%Y-%Hh%M")
+    log_filename = f"logs/semantico-{git_user}-{timestamp}.txt"
+    
+    os.makedirs('logs', exist_ok=True)
+    
+    with open(log_filename, 'w', encoding='utf-8-sig') as log:
+        log.write("=" * 80 + "\n")
+        log.write("  ANÁLISIS SEMÁNTICO - DART\n")
+        log.write("  Proyecto: TokenMasters\n")
+        log.write("=" * 80 + "\n\n")
+        log.write(f"Archivo: {filename}\n")
+        log.write(f"Usuario: {git_user}\n")
+        log.write(f"Fecha: {now.strftime('%d/%m/%Y %H:%M:%S')}\n\n")
+        
+        if semantic_errors:
+            log.write("=" * 80 + "\n")
+            log.write(f"  ERRORES SEMÁNTICOS: {len(semantic_errors)}\n")
+            log.write("=" * 80 + "\n\n")
+            for i, error in enumerate(semantic_errors, 1):
+                log.write(f"{i}. {error}\n")
+        else:
+            log.write("=" * 80 + "\n")
+            log.write("  ✓ ANÁLISIS EXITOSO - SIN ERRORES\n")
+            log.write("=" * 80 + "\n")
+    
+    print(f"\nErrores semánticos: {len(semantic_errors)}")
+    print(f"Log: {log_filename}")
+    print(f"{'='*70}\n")
+
 def main():
     import sys
     if len(sys.argv) >= 3:
-        analyze_syntax(sys.argv[1], sys.argv[2])
+        # Verificar qué tipo de análisis se solicita
+        if len(sys.argv) >= 4:
+            if sys.argv[3] == '--ambos':
+                # Ejecutar ambos análisis (genera 2 logs)
+                analyze_syntax(sys.argv[1], sys.argv[2])
+                analyze_semantic(sys.argv[1], sys.argv[2])
+            elif sys.argv[3] == '--semantico':
+                # Solo semántico
+                analyze_semantic(sys.argv[1], sys.argv[2])
+            else:
+                # Por defecto: sintáctico
+                analyze_syntax(sys.argv[1], sys.argv[2])
+        else:
+            # Sin flag: por defecto sintáctico
+            analyze_syntax(sys.argv[1], sys.argv[2])
     else:
-        print("Uso: python parser.py <archivo.dart> <usuario-git>")
+        print("Uso:")
+        print("  Sintáctico: python parser.py <archivo.dart> <usuario-git>")
+        print("  Semántico:  python parser.py <archivo.dart> <usuario-git> --semantico")
+        print("  Ambos:      python parser.py <archivo.dart> <usuario-git> --ambos")
+        print("\nEjecutando análisis sintáctico por defecto...")
         analyze_syntax("algoritmos_prueba/algoritmo_samir.dart", "Sam-24-dev")
 
 if __name__ == "__main__":

@@ -1,0 +1,205 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Archivo analizado: algoritmos_prueba\algoritmo_samir.dart
+ Usuario Git: Sam-24-dev
+ Fecha y hora: 17/11/2025 15:06:23
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | VOID                 | 4      | void
+2      | ID                   | 4      | main
+3      | LPAREN               | 4      | (
+4      | RPAREN               | 4      | )
+5      | LBRACE               | 4      | {
+6      | ID                   | 6      | print
+7      | LPAREN               | 6      | (
+8      | STRING               | 6      | Iniciando programa...
+9      | RPAREN               | 6      | )
+10     | SEMICOLON            | 6      | ;
+11     | VAR                  | 9      | var
+12     | ID                   | 9      | nombre
+13     | ASSIGN               | 9      | =
+14     | STRING               | 9      | Samir
+15     | SEMICOLON            | 9      | ;
+16     | ID                   | 10     | int
+17     | ID                   | 10     | edad
+18     | ASSIGN               | 10     | =
+19     | NUMBER               | 10     | 20
+20     | SEMICOLON            | 10     | ;
+21     | ID                   | 12     | print
+22     | LPAREN               | 12     | (
+23     | STRING               | 12     | Nombre: Samir
+24     | RPAREN               | 12     | )
+25     | SEMICOLON            | 12     | ;
+26     | ID                   | 15     | int
+27     | ID                   | 15     | resultado
+28     | ASSIGN               | 15     | =
+29     | ID                   | 15     | sumar
+30     | LPAREN               | 15     | (
+31     | NUMBER               | 15     | 10
+32     | COMMA                | 15     | ,
+33     | NUMBER               | 15     | 5
+34     | RPAREN               | 15     | )
+35     | SEMICOLON            | 15     | ;
+36     | ID                   | 16     | print
+37     | LPAREN               | 16     | (
+38     | ID                   | 16     | resultado
+39     | RPAREN               | 16     | )
+40     | SEMICOLON            | 16     | ;
+41     | ID                   | 19     | double
+42     | ID                   | 19     | promedio
+43     | ASSIGN               | 19     | =
+44     | ID                   | 19     | calcularPromedio
+45     | LPAREN               | 19     | (
+46     | NUMBER               | 19     | 8
+47     | COMMA                | 19     | ,
+48     | NUMBER               | 19     | 9
+49     | RPAREN               | 19     | )
+50     | SEMICOLON            | 19     | ;
+51     | ID                   | 20     | print
+52     | LPAREN               | 20     | (
+53     | ID                   | 20     | promedio
+54     | RPAREN               | 20     | )
+55     | SEMICOLON            | 20     | ;
+56     | RBRACE               | 24     | }
+57     | ID                   | 31     | int
+58     | ID                   | 31     | sumar
+59     | LPAREN               | 31     | (
+60     | ID                   | 31     | int
+61     | ID                   | 31     | a
+62     | COMMA                | 31     | ,
+63     | ID                   | 31     | int
+64     | ID                   | 31     | b
+65     | RPAREN               | 31     | )
+66     | LBRACE               | 31     | {
+67     | RETURN               | 32     | return
+68     | ID                   | 32     | a
+69     | PLUS                 | 32     | +
+70     | ID                   | 32     | b
+71     | SEMICOLON            | 32     | ;
+72     | RBRACE               | 33     | }
+73     | ID                   | 36     | double
+74     | ID                   | 36     | calcularPromedio
+75     | LPAREN               | 36     | (
+76     | ID                   | 36     | int
+77     | ID                   | 36     | a
+78     | COMMA                | 36     | ,
+79     | ID                   | 36     | int
+80     | ID                   | 36     | b
+81     | RPAREN               | 36     | )
+82     | LBRACE               | 36     | {
+83     | RETURN               | 37     | return
+84     | LPAREN               | 37     | (
+85     | ID                   | 37     | a
+86     | PLUS                 | 37     | +
+87     | ID                   | 37     | b
+88     | RPAREN               | 37     | )
+89     | DIVIDE               | 37     | /
+90     | NUMBER               | 37     | 2
+91     | SEMICOLON            | 37     | ;
+92     | RBRACE               | 38     | }
+93     | VOID                 | 41     | void
+94     | ID                   | 41     | mostrarMensaje
+95     | LPAREN               | 41     | (
+96     | RPAREN               | 41     | )
+97     | LBRACE               | 41     | {
+98     | ID                   | 42     | print
+99     | LPAREN               | 42     | (
+100    | STRING               | 42     | Este es un mensaje
+101    | RPAREN               | 42     | )
+102    | SEMICOLON            | 42     | ;
+103    | RBRACE               | 43     | }
+104    | ID                   | 46     | int
+105    | ID                   | 46     | duplicar
+106    | LPAREN               | 46     | (
+107    | ID                   | 46     | int
+108    | ID                   | 46     | x
+109    | RPAREN               | 46     | )
+110    | ARROW                | 46     | =>
+111    | ID                   | 46     | x
+112    | TIMES                | 46     | *
+113    | NUMBER               | 46     | 2
+114    | SEMICOLON            | 46     | ;
+115    | VOID                 | 91     | void
+116    | ID                   | 91     | funcionLoopsCorrectos
+117    | LPAREN               | 91     | (
+118    | RPAREN               | 91     | )
+119    | LBRACE               | 91     | {
+120    | FOR                  | 92     | for
+121    | LPAREN               | 92     | (
+122    | ID                   | 92     | int
+123    | ID                   | 92     | i
+124    | ASSIGN               | 92     | =
+125    | NUMBER               | 92     | 0
+126    | SEMICOLON            | 92     | ;
+127    | ID                   | 92     | i
+128    | LESSTHAN             | 92     | <
+129    | NUMBER               | 92     | 10
+130    | SEMICOLON            | 92     | ;
+131    | ID                   | 92     | i
+132    | ASSIGN               | 92     | =
+133    | ID                   | 92     | i
+134    | PLUS                 | 92     | +
+135    | NUMBER               | 92     | 1
+136    | RPAREN               | 92     | )
+137    | LBRACE               | 92     | {
+138    | IF                   | 93     | if
+139    | LPAREN               | 93     | (
+140    | ID                   | 93     | i
+141    | EQUALS               | 93     | ==
+142    | NUMBER               | 93     | 5
+143    | RPAREN               | 93     | )
+144    | LBRACE               | 93     | {
+145    | BREAK                | 94     | break
+146    | SEMICOLON            | 94     | ;
+147    | RBRACE               | 95     | }
+148    | RBRACE               | 96     | }
+149    | ID                   | 98     | int
+150    | ID                   | 98     | contador
+151    | ASSIGN               | 98     | =
+152    | NUMBER               | 98     | 0
+153    | SEMICOLON            | 98     | ;
+154    | WHILE                | 99     | while
+155    | LPAREN               | 99     | (
+156    | ID                   | 99     | contador
+157    | LESSTHAN             | 99     | <
+158    | NUMBER               | 99     | 5
+159    | RPAREN               | 99     | )
+160    | LBRACE               | 99     | {
+161    | ID                   | 100    | contador
+162    | ASSIGN               | 100    | =
+163    | ID                   | 100    | contador
+164    | PLUS                 | 100    | +
+165    | NUMBER               | 100    | 1
+166    | SEMICOLON            | 100    | ;
+167    | IF                   | 101    | if
+168    | LPAREN               | 101    | (
+169    | ID                   | 101    | contador
+170    | EQUALS               | 101    | ==
+171    | NUMBER               | 101    | 3
+172    | RPAREN               | 101    | )
+173    | LBRACE               | 101    | {
+174    | CONTINUE             | 102    | continue
+175    | SEMICOLON            | 102    | ;
+176    | RBRACE               | 103    | }
+177    | RBRACE               | 104    | }
+178    | RBRACE               | 105    | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 178
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: Sam-24-dev
+  Analizador Léxico para Dart - TokenMasters
+================================================================================

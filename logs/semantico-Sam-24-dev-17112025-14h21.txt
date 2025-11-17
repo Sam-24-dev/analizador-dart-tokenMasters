@@ -1,0 +1,15 @@
+================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba\algoritmo_samir.dart
+Usuario: Sam-24-dev
+Fecha: 17/11/2025 14:21:00
+
+================================================================================
+  ERRORES SEMÁNTICOS: 2
+================================================================================
+
+1. Línea 94: 'break' fuera de estructura de control (loop)
+2. Línea 102: 'continue' fuera de estructura de control (loop)

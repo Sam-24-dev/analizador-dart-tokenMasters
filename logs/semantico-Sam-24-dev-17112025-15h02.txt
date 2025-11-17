@@ -1,0 +1,17 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba\algoritmo_samir.dart
+Usuario: Sam-24-dev
+Fecha: 17/11/2025 15:02:58
+
+================================================================================
+  ERRORES SEMÁNTICOS: 4
+================================================================================
+
+1. Línea 54: Función 'funcionSinRetorno' debe retornar 'int' en todos los caminos
+2. Línea 61: Función 'funcionRetornoParcial' debe retornar 'int' en todos los caminos
+3. Línea 72: 'break' fuera de bucle
+4. Línea 79: 'continue' fuera de bucle
