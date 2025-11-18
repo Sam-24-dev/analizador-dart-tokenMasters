@@ -15,7 +15,7 @@ int fibonacci(int n) {
 }
 
 void main() {
-    int n = 9
+    int n = 9;
     print("El numero de la sucesion de fibonacci en la posicion 9 es: ");
     print(fibonacci(n));
 }

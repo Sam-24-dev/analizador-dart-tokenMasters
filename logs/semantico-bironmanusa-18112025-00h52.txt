@@ -1,0 +1,17 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba/algoritmo_mateo.dart
+Usuario: bironmanusa
+Fecha: 18/11/2025 00:52:00
+
+================================================================================
+  ERRORES SEMÁNTICOS: 4
+================================================================================
+
+1. Comparación '<=' entre tipos incompatibles ('String', 'int')
+2. Comparación '==' entre tipos incompatibles ('String', 'int')
+3. Operador aritmético '-' requiere operandos numéricos (encontrado 'String', 'int')
+4. Operador aritmético '-' requiere operandos numéricos (encontrado 'String', 'int')

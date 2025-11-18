@@ -198,7 +198,8 @@ def t_NUMBER(t):
 
 def t_STRING(t):
     r'(\"([^\\\n]|(\\.))*?\")|(\'([^\\\n]|(\\.))*?\')'
-    t.value = t.value[1:-1]
+    # Marcar los literales string como tupla para distinguirlos de identificadores
+    t.value = ('str', t.value[1:-1])
     return t
 
 def t_ID(t):

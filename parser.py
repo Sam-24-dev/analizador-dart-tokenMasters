@@ -77,13 +77,25 @@ def p_variable_declaration(p):
                             | tipo ID SEMICOLON'''
     if len(p) == 6:
         p[0] = ('var_decl', p[1], p[2], p[4])
+        try:
+            register_variable(p[2], p[1], p[4], p.lineno(2))
+        except Exception:
+            register_variable(p[2], p[1], p[4])
     else:
         p[0] = ('var_decl', p[1], p[2], None)
+        try:
+            register_variable(p[2], p[1], None, p.lineno(2))
+        except Exception:
+            register_variable(p[2], p[1], None)
 
 # ---------------- ASIGNACIÓN ----------------
 def p_assignment(p):
     '''assignment : ID ASSIGN expression SEMICOLON'''
     p[0] = ('assign', p[1], p[3])
+    try:
+        validate_assignment(p[1], p[3], p.lineno(1))
+    except Exception:
+        validate_assignment(p[1], p[3])
 
 # ---------------- EXPRESIONES ----------------
 def p_expression(p):
@@ -108,7 +120,7 @@ def p_expression(p):
 def p_binary_operation(p):
     '''binary_operation : expression PLUS expression
                         | expression MINUS expression
-                         | expression TIMES expression
+                        | expression TIMES expression
                         | expression DIVIDE expression
                         | expression MODULO expression
                         | expression EQUALS expression
@@ -119,7 +131,12 @@ def p_binary_operation(p):
                         | expression GREATEREQUAL expression
                         | expression AND expression
                         | expression OR expression'''
-    p[0] = ('binop', p[2], p[1], p[3])
+    # Guardamos también la línea del operador para reportes más precisos
+    try:
+        lineno = p.lineno(2)
+    except Exception:
+        lineno = None
+    p[0] = ('binop', p[2], p[1], p[3], lineno)
 
 # ---------------- LISTAS ----------------
 def p_list_literal(p):
@@ -200,6 +217,237 @@ def p_argument_list(p):
 def p_empty(p):
     '''empty :'''
     pass
+
+def is_numeric_type(t):
+    return t in ('int', 'double', 'num')
+
+def can_implicitly_convert(from_t, to_t):
+    """Reglas de conversión implícita:
+    - int -> double es implícito (ej: 3 a 3.0)
+    - int/double -> num implícito
+    - mismo tipo: ok
+    """
+    if from_t == to_t:
+        return True
+    if from_t == 'int' and to_t == 'double':
+        return True
+    if (from_t in ('int', 'double') and to_t == 'num'):
+        return True
+    return False
+
+def infer_type(node):
+    """Inferir tipo desde un nodo del AST o valor literal.
+    Retorna cadenas como 'int','double','String','bool','Null','List','Map','unknown'.
+    """
+    # Literales python
+    if node is None:
+        return 'Null'
+    if isinstance(node, bool):
+        return 'bool'
+    if isinstance(node, int):
+        return 'int'
+    if isinstance(node, float):
+        return 'double'
+    # Literales string ahora se representan como tupla ('str', valor)
+    if isinstance(node, tuple) and len(node) == 2 and node[0] == 'str':
+        return 'String'
+    if isinstance(node, list):
+        return 'List'
+    if isinstance(node, dict):
+        return 'Map'
+
+    # Nodos AST (tuplas)
+    if isinstance(node, tuple) and len(node) > 0:
+        tag = node[0]
+        # binop: ('binop', op, left, right)
+        if tag == 'binop':
+            op = node[1]
+            left_t = infer_type(node[2])
+            right_t = infer_type(node[3])
+            # Operadores aritméticos -> num
+            if op in ('+', '-', '*', '/', '%', '~/'):
+                if is_numeric_type(left_t) and is_numeric_type(right_t):
+                    if 'double' in (left_t, right_t):
+                        return 'double'
+                    return 'int'
+                # String concatenation
+                if op == '+' and left_t == 'String' and right_t == 'String':
+                    return 'String'
+                return 'unknown'
+            # comparaciones y lógicos
+            if op in ('==', '!=', '<', '>', '<=', '>='):
+                return 'bool'
+            if op in ('&&', '||'):
+                return 'bool'
+            if op == '??':
+                # null-aware coalescing: tipo es del operando no-null
+                if left_t != 'Null':
+                    return left_t
+                return right_t
+        # llamada a función: ('call', name, args)
+        if tag == 'call':
+            fname = node[1]
+            f = function_table.get(fname)
+            if f:
+                return f.get('type', 'unknown')
+            return 'unknown'
+        # return, var_decl, assign, etc -> no inf
+        return 'unknown'
+
+    # identificadores: nombre de variable (cadenas simples)
+    if isinstance(node, str):
+        return symbol_table.get(node, 'unknown')
+
+    return 'unknown'
+
+
+def register_variable(name, declared_token, init_expr, lineno=None):
+    """Registrar variable en symbol_table y validar compatibilidad inicial.
+    declared_token puede ser 'var','const','final' o un tipo como 'int'
+    """
+    if declared_token in ('var', 'const', 'final', 'VAR', 'CONST', 'FINAL'):
+        # intentar inferir desde init_expr
+        if init_expr is not None:
+            t = infer_type(init_expr)
+            symbol_table[name] = t
+        else:
+            symbol_table[name] = 'dynamic'
+    else:
+        # declarado con tipo explícito (ej: 'int')
+        declared_type = declared_token
+        symbol_table[name] = declared_type
+        if init_expr is not None:
+            expr_t = infer_type(init_expr)
+            if expr_t == 'unknown':
+                # no podemos inferir, solo reportar advertencia
+                semantic_errors.append(f"Línea {lineno}: No se pudo inferir el tipo de la expresión al inicializar '{name}'")
+            elif not can_implicitly_convert(expr_t, declared_type):
+                # permitir algunas conversiones numéricas solo con cast
+                if is_numeric_type(expr_t) and is_numeric_type(declared_type):
+                    # ejemplo: double -> int requiere cast explícito
+                    semantic_errors.append(f"Línea {lineno}: Asignación de '{expr_t}' a '{declared_type}' en '{name}' puede requerir conversión explícita/cast")
+                else:
+                    semantic_errors.append(f"Línea {lineno}: Tipo incompatible al inicializar '{name}': '{expr_t}' no es '{declared_type}'")
+
+
+def validate_assignment(target_name, expr_node, lineno=None):
+    """Validar asignación a variable previamente declarada."""
+    expr_t = infer_type(expr_node)
+    declared = symbol_table.get(target_name)
+    if declared is None:
+        # variable no declarada: asumimos declaración implícita (var)
+        symbol_table[target_name] = expr_t
+        return
+    if declared == 'dynamic' or expr_t == 'unknown' or declared == 'unknown':
+        return
+    # si ambos numéricos, revisar convertibilidad
+    if is_numeric_type(expr_t) and is_numeric_type(declared):
+        # int -> double OK; double -> int requiere cast
+        if expr_t == 'double' and declared == 'int':
+            semantic_errors.append(f"Línea {lineno}: Asignación de 'double' a 'int' en '{target_name}' requiere cast explícito")
+        return
+    # compatibles iguales
+    if expr_t == declared:
+        return
+    # comparar String/bool
+    if declared == 'String' and expr_t != 'String':
+        semantic_errors.append(f"Línea {lineno}: No se puede asignar '{expr_t}' a 'String' en '{target_name}'")
+        return
+    if declared == 'bool' and expr_t != 'bool':
+        semantic_errors.append(f"Línea {lineno}: No se puede asignar '{expr_t}' a 'bool' en '{target_name}'")
+        return
+    # casos generales
+    if not can_implicitly_convert(expr_t, declared):
+        semantic_errors.append(f"Línea {lineno}: Asignación incompatible: '{expr_t}' no se convierte implícitamente a '{declared}' en '{target_name}'")
+
+
+def validate_binary_operations(tree):
+    """Recorre el AST y valida operaciones binarias respecto a tipos y null-safety."""
+    if tree is None:
+        return
+    if isinstance(tree, list):
+        for item in tree:
+            validate_binary_operations(item)
+        return
+    if not isinstance(tree, tuple) or len(tree) == 0:
+        return
+    node_type = tree[0]
+    if node_type == 'binop':
+        op = tree[1]
+        left = tree[2]
+        right = tree[3]
+        lt = infer_type(left)
+        rt = infer_type(right)
+        lineno = None
+        if len(tree) > 4:
+            lineno = tree[4]
+        # Null safety: si alguno es Null y op no es '??' o comparación, alertar
+        if ('Null' in (lt, rt)) and op not in ('??', '==', '!='):
+            if lineno:
+                semantic_errors.append(f"Línea {lineno}: Operación '{op}' con valor null sin comprobación")
+            else:
+                semantic_errors.append(f"Operación '{op}' con valor null sin comprobación")
+        # Operadores aritméticos
+        if op in ('+', '-', '*', '/', '%', '~/'):
+            if not (is_numeric_type(lt) and is_numeric_type(rt)):
+                # permitir concatenación String + String
+                if not (op == '+' and lt == 'String' and rt == 'String'):
+                    if lineno:
+                        semantic_errors.append(f"Línea {lineno}: Operador aritmético '{op}' requiere operandos numéricos (encontrado '{lt}', '{rt}')")
+                    else:
+                        semantic_errors.append(f"Operador aritmético '{op}' requiere operandos numéricos (encontrado '{lt}', '{rt}')")
+        # Operadores lógicos
+        if op in ('&&', '||'):
+            if lt != 'bool' or rt != 'bool':
+                if lineno:
+                    semantic_errors.append(f"Línea {lineno}: Operador lógico '{op}' requiere operandos booleanos (encontrado '{lt}', '{rt}')")
+                else:
+                    semantic_errors.append(f"Operador lógico '{op}' requiere operandos booleanos (encontrado '{lt}', '{rt}')")
+        # Comparaciones: permitir entre tipos comparables
+        if op in ('==', '!=', '<', '>', '<=', '>='):
+            if lt != rt and not (is_numeric_type(lt) and is_numeric_type(rt)):
+                if lineno:
+                    semantic_errors.append(f"Línea {lineno}: Comparación '{op}' entre tipos incompatibles ('{lt}', '{rt}')")
+                else:
+                    semantic_errors.append(f"Comparación '{op}' entre tipos incompatibles ('{lt}', '{rt}')")
+
+    # Recursión en hijos
+    for child in tree[1:]:
+        validate_binary_operations(child)
+
+
+def validate_semantic_rules(tree):
+    # 1) Validar break/continue (ya existente)
+    validate_break_continue(tree, in_loop=False)
+    # 2) Validar operaciones binarias y null-safety
+    validate_binary_operations(tree)
+    # 3) Recorrer declaraciones/asignaciones para validar conversiones
+    def walk_and_validate(node):
+        if node is None:
+            return
+        if isinstance(node, list):
+            for it in node:
+                walk_and_validate(it)
+            return
+        if not isinstance(node, tuple) or len(node) == 0:
+            return
+        tag = node[0]
+        if tag == 'var_decl':
+            # ('var_decl', declared_token, name, expr)
+            declared_tok = node[1]
+            name = node[2]
+            expr = node[3]
+            register_variable(name, declared_tok, expr)
+        elif tag == 'assign':
+            # ('assign', name, expr)
+            name = node[1]
+            expr = node[2]
+            validate_assignment(name, expr)
+        else:
+            for child in node[1:]:
+                walk_and_validate(child)
+
+    walk_and_validate(tree)
 
 # ============================================================================
 # FIN APORTE: Mateo Mayorga (bironmanusa)
@@ -542,7 +790,10 @@ def p_return_void(p):
 def p_print_expression(p):
     '''print_statement : ID LPAREN expression RPAREN SEMICOLON'''
     # SINTÁCTICO: Se asume que ID es 'print'
-    # TODO Mateo: Validar semánticamente que ID sea 'print'
+    # SEMÁNTICO: Validar que realmente se esté llamando a 'print'
+    if p[1] != 'print':
+        # Reportar como error semántico (no detener parsing)
+        semantic_errors.append(f"Línea {p.lineno(1)}: Identificador '{p[1]}' no es la función 'print'")
     p[0] = ('print', p[3])
 
 
@@ -553,6 +804,8 @@ def p_input_read(p):
     '''input_expression : ID DOT ID LPAREN RPAREN'''
     # SINTÁCTICO: stdin.readLineSync()
     p[0] = ('input', p[1], p[3])
+
+
 
 # ============================================================================
 # FIN APORTE: Samir Caizapasto (Sam-24-dev)
@@ -652,11 +905,10 @@ def analyze_semantic(filename, git_user):
     
     result = parser_obj.parse(data, lexer=lexer)
     
-    # ========== SEMÁNTICA: Validar break/continue después del parsing (Samir - Regla 2.2) ==========
-    # Esto se hace DESPUÉS del parsing porque necesitamos el árbol completo
-    # Durante el parsing PLY trabaja bottom-up, aquí trabajamos top-down
+    # ========== SEMÁNTICA: Validaciones post-parse (null-safety, operaciones, conversiones) ==========
+    # Ejecutar validaciones semánticas completas que recorren el árbol
     if result is not None:
-        validate_break_continue(result, in_loop=False)
+        validate_semantic_rules(result)
     
     now = datetime.now()
     timestamp = now.strftime("%d%m%Y-%Hh%M")
