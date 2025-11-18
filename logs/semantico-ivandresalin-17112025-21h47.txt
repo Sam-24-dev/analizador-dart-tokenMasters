@@ -1,0 +1,35 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba/algoritmo_andres.dart
+Usuario: ivandresalin
+Fecha: 17/11/2025 21:47:31
+
+================================================================================
+  ERRORES SEMÁNTICOS: 22
+================================================================================
+
+1. Línea 47: Error semántico: Uso de identificador no declarado: 'k'
+2. Línea 47: Error semántico: Uso de identificador no declarado: 'k'
+3. Línea 48: Error semántico: Uso de identificador no declarado: 'k'
+4. Línea 54: Error semántico: Uso de identificador no declarado: 'num'
+5. Línea 58: Error semántico: Uso de identificador no declarado: 'l'
+6. Línea 58: Error semántico: Uso de identificador no declarado: 'l'
+7. Línea 59: Error semántico: Uso de identificador no declarado: 'l'
+8. Línea 60: Error semántico: Uso de identificador no declarado: 'l'
+9. Línea 47: Comparación '<' entre tipos incompatibles ('unknown', 'int')
+10. Línea 47: Operador aritmético '+' requiere operandos numéricos (encontrado 'unknown', 'int')
+11. Línea 58: Comparación '<' entre tipos incompatibles ('unknown', 'int')
+12. Línea 58: Operador aritmético '+' requiere operandos numéricos (encontrado 'unknown', 'int')
+13. Línea 59: Comparación '==' entre tipos incompatibles ('unknown', 'int')
+14. Línea 60: Comparación '==' entre tipos incompatibles ('unknown', 'int')
+15. Línea 60: Operador aritmético '%' requiere operandos numéricos (encontrado 'unknown', 'int')
+16. Línea None: Error semántico: Variable 'x' ya declarada en este ámbito.
+17. Línea None: Error semántico: Variable 'flag' ya declarada en este ámbito.
+18. Línea None: Error semántico: Variable 'temp' ya declarada en este ámbito.
+19. Línea None: Error semántico: Variable 'a' ya declarada en este ámbito.
+20. Línea None: Error semántico: Variable 'i' ya declarada en este ámbito.
+21. Línea None: Error semántico: Variable 'j' ya declarada en este ámbito.
+22. Línea None: Error semántico: Variable 'numbers' ya declarada en este ámbito.

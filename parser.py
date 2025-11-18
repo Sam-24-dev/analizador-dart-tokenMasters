@@ -7,7 +7,7 @@ Integrantes:
 - Samir Caizapasto (Sam-24-dev)
 
 AVANCE 2: Análisis Sintáctico(Completado)
-AVANCE 3: Análisis Semántico (En proceso)
+AVANCE 3: Análisis Semántico (Reglas de Alcance y Existencia Completadas)
 """
 
 import ply.yacc as yacc
@@ -16,9 +16,10 @@ from datetime import datetime
 import os
 
 # ============================================================================
-# TABLAS SEMÁNTICAS - Avance 3 (Samir)
+# TABLAS SEMÁNTICAS - Avance 3 (Samir/Andrés/Mateo)
 # ============================================================================
-symbol_table = {}      # Tabla de símbolos: variables y tipos
+# Pila de tablas de símbolos para manejar el alcance (scopes). scope_stack[0] es el ámbito global.
+scope_stack = [{}] # Ámbito global inicial
 function_table = {}    # Tabla de funciones: firmas y tipos de retorno
 loop_stack = []        # Stack de loops: validar break/continue
 semantic_errors = []   # Lista de errores semánticos
@@ -28,6 +29,38 @@ precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE', 'MODULO'),
 )
+
+# ============================================================================
+# GESTIÓN DE ÁMBITOS (SCOPES) - [Andrés Salinas]
+# ============================================================================
+
+def push_scope():
+    """Abre un nuevo ámbito (nuevo diccionario) y lo añade a la pila."""
+    scope_stack.append({})
+    
+def pop_scope():
+    """Cierra el ámbito actual (elimina el último diccionario de la pila)."""
+    if len(scope_stack) > 1:
+        scope_stack.pop()
+        
+def get_current_scope():
+    """Retorna la tabla de símbolos del ámbito actual."""
+    return scope_stack[-1]
+
+def lookup_variable(name, local_only=False):
+    """
+    Busca una variable por nombre, desde el ámbito actual hacia el global.
+    Retorna el diccionario de información de la variable (tipo, inmutabilidad) o None.
+    Implementa el alcance léxico (lexical scoping).
+    """
+    # Recorrer la pila de ámbitos de arriba a abajo (local a global)
+    for scope in reversed(scope_stack):
+        if name in scope:
+            return scope[name] # Retorna el dict: {'type': 'int', 'is_final': True, ...}
+        # Si solo buscamos localmente, paramos tras el ámbito actual
+        if local_only:
+            break
+    return None # No encontrado
 
 # ============================================================================
 # INICIO APORTE: Mateo Mayorga (bironmanusa)
@@ -75,15 +108,21 @@ def p_variable_declaration(p):
                             | FINAL ID ASSIGN expression SEMICOLON
                             | tipo ID ASSIGN expression SEMICOLON
                             | tipo ID SEMICOLON'''
+    # En este punto, no podemos obligar la inicialización de CONST/FINAL 
+    # sin reescribir la gramática para evitar la regla 'tipo ID SEMICOLON' para ellos.
+    # Se maneja en register_variable.
+
     if len(p) == 6:
         p[0] = ('var_decl', p[1], p[2], p[4])
         try:
+            # Uso de register_variable (Mateo/Andrés/Samir)
             register_variable(p[2], p[1], p[4], p.lineno(2))
         except Exception:
             register_variable(p[2], p[1], p[4])
-    else:
+    else: # Regla: tipo ID SEMICOLON (p[1] es tipo o palabra clave, p[2] es ID, p[3] es SEMICOLON)
         p[0] = ('var_decl', p[1], p[2], None)
         try:
+            # Uso de register_variable (Mateo/Andrés/Samir)
             register_variable(p[2], p[1], None, p.lineno(2))
         except Exception:
             register_variable(p[2], p[1], None)
@@ -93,6 +132,7 @@ def p_assignment(p):
     '''assignment : ID ASSIGN expression SEMICOLON'''
     p[0] = ('assign', p[1], p[3])
     try:
+        # Uso de validate_assignment (Mateo/Andrés/Samir)
         validate_assignment(p[1], p[3], p.lineno(1))
     except Exception:
         validate_assignment(p[1], p[3])
@@ -111,7 +151,15 @@ def p_expression(p):
                   | input_expression
                   | binary_operation
                   | LPAREN expression RPAREN'''
-    if len(p) == 4 and p[1] == '(':
+    if len(p) == 2 and isinstance(p[1], str) and p.slice[1].type == 'ID':
+        # Validación de EXISTENCIA (Andrés/Mateo)
+        if lookup_variable(p[1]) is None:
+            # Solo si no es una función (porque las funciones se validan en 'function_call')
+            if p[1] not in function_table:
+                semantic_errors.append(f"Línea {p.lineno(1)}: Error semántico: Uso de identificador no declarado: '{p[1]}'")
+                
+        p[0] = p[1]
+    elif len(p) == 4 and p[1] == '(':
         p[0] = p[2]
     else:
         p[0] = p[1]
@@ -179,7 +227,14 @@ def p_map_entry(p):
 # ---------------- CLASES BÁSICAS ----------------
 def p_class_declaration(p):
     '''class_declaration : CLASS ID LBRACE class_members RBRACE'''
+    
+    # 1. Gestión de Ámbito de la Clase (propiedades y métodos)
+    push_scope() # Empieza el ámbito de la clase
+    
+    # 2. class_members [p[4]] se procesan dentro del nuevo ámbito
     p[0] = ('class', p[2], p[4])
+    
+    pop_scope() # Cierra el ámbito de la clase
 
 def p_class_members(p):
     '''class_members : class_member
@@ -218,8 +273,16 @@ def p_empty(p):
     '''empty :'''
     pass
 
+# ============================================================================
+# HELPERS SEMÁNTICOS [Mateo Mayorga / Andrés Salinas]
+# ============================================================================
+
 def is_numeric_type(t):
     return t in ('int', 'double', 'num')
+
+def get_base_type(var_info):
+    """Extrae el tipo base (string) de la información de la variable."""
+    return var_info['type'] if isinstance(var_info, dict) else var_info
 
 def can_implicitly_convert(from_t, to_t):
     """Reglas de conversión implícita:
@@ -296,70 +359,125 @@ def infer_type(node):
 
     # identificadores: nombre de variable (cadenas simples)
     if isinstance(node, str):
-        return symbol_table.get(node, 'unknown')
+        var_info = lookup_variable(node)
+        # Si encuentra la variable, devuelve el tipo base. Si no, devuelve 'unknown'.
+        if var_info:
+            return get_base_type(var_info)
+        
+        # Validación de EXISTENCIA/DECLARACIÓN:
+        if node not in function_table: # No es función
+             # La línea del error es difícil de obtener aquí, pero la regla p_expression ya lo maneja
+             pass 
+
+        return 'unknown'
 
     return 'unknown'
 
 
 def register_variable(name, declared_token, init_expr, lineno=None):
-    """Registrar variable en symbol_table y validar compatibilidad inicial.
-    declared_token puede ser 'var','const','final' o un tipo como 'int'
     """
-    if declared_token in ('var', 'const', 'final', 'VAR', 'CONST', 'FINAL'):
-        # intentar inferir desde init_expr
+    Registrar variable en el ámbito actual y validar compatibilidad inicial e inmutabilidad.
+    """
+    current_scope= get_current_scope()
+
+    # Determinar si es inmutable (Andrés)
+    is_final = declared_token == 'FINAL'
+    is_const = declared_token == 'CONST'
+    is_keyword = declared_token in ('VAR', 'CONST', 'FINAL')
+    
+    # Validar RE-DECLARACIÓN LOCAL (Alcance)
+    if name in current_scope:
+        semantic_errors.append(f"Línea {lineno}: Error semántico: Variable '{name}' ya declarada en este ámbito.")
+        return # No registrar si ya existe en el ámbito local
+
+    # 1. Validación de Inicialización para inmutables (Regla de Dart - Andrés)
+    if (is_final or is_const) and init_expr is None:
+        semantic_errors.append(f"Línea {lineno}: Error semántico: La variable '{name}' declarada como {declared_token} debe ser inicializada.")
+    
+    # 2. Determinar el tipo inferido o declarado
+    if is_keyword:
+        # Si es palabra clave (var, final, const), inferimos
         if init_expr is not None:
             t = infer_type(init_expr)
-            symbol_table[name] = t
         else:
-            symbol_table[name] = 'dynamic'
+            t = 'dynamic'
     else:
-        # declarado con tipo explícito (ej: 'int')
-        declared_type = declared_token
-        symbol_table[name] = declared_type
-        if init_expr is not None:
-            expr_t = infer_type(init_expr)
-            if expr_t == 'unknown':
-                # no podemos inferir, solo reportar advertencia
-                semantic_errors.append(f"Línea {lineno}: No se pudo inferir el tipo de la expresión al inicializar '{name}'")
-            elif not can_implicitly_convert(expr_t, declared_type):
-                # permitir algunas conversiones numéricas solo con cast
-                if is_numeric_type(expr_t) and is_numeric_type(declared_type):
-                    # ejemplo: double -> int requiere cast explícito
-                    semantic_errors.append(f"Línea {lineno}: Asignación de '{expr_t}' a '{declared_type}' en '{name}' puede requerir conversión explícita/cast")
-                else:
-                    semantic_errors.append(f"Línea {lineno}: Tipo incompatible al inicializar '{name}': '{expr_t}' no es '{declared_type}'")
+        # Declarado con tipo explícito (ej: 'int')
+        t = declared_token
+
+    # Estructura de registro unificada: tipo + propiedades de inmutabilidad
+    var_info = {
+        'type': t,
+        'is_final': is_final,
+        'is_const': is_const
+    }
+    current_scope[name] = var_info
+
+    # 3. Validación de compatibilidad inicial (Solo si NO fue palabra clave)
+    # Si usamos var, final, o const, la compatibilidad es implícita (inferida).
+    if init_expr is not None and not is_keyword:
+        declared_type = t
+        expr_t = infer_type(init_expr)
+        
+        if expr_t == 'unknown':
+            semantic_errors.append(f"Línea {lineno}: No se pudo inferir el tipo de la expresión al inicializar '{name}'")
+        elif not can_implicitly_convert(expr_t, declared_type):
+            if is_numeric_type(expr_t) and is_numeric_type(declared_type):
+                semantic_errors.append(f"Línea {lineno}: Asignación de '{expr_t}' a '{declared_type}' en '{name}' puede requerir conversión explícita/cast")
+            else:
+                semantic_errors.append(f"Línea {lineno}: Tipo incompatible al inicializar '{name}': '{expr_t}' no es '{declared_type}'")
 
 
 def validate_assignment(target_name, expr_node, lineno=None):
-    """Validar asignación a variable previamente declarada."""
+    """
+    Validar asignación a variable (Compatibilidad e Inmutabilidad).
+    """
+    
+    # 1. Existencia y Obtención del objeto de información de la variable
+    var_info = lookup_variable(target_name)
+    
+    if var_info is None:
+        # Error: Variable no declarada (existencia)
+        semantic_errors.append(f"Línea {lineno}: Error semántico: Intento de asignar a identificador no declarado: '{target_name}'")
+        return # Sale si no existe
+
+    # 2. Validación de INMUTABILIDAD (Regla de Dart - Andrés)
+    if var_info.get('is_final') or var_info.get('is_const'):
+        semantic_errors.append(f"Línea {lineno}: Error semántico: No se puede asignar a la variable inmutable '{target_name}'.")
+        return # Sale si es inmutable
+
+    # 3. Evaluación del Tipo de la Expresión y Tipo Declarado
+    declared_type = get_base_type(var_info)
     expr_t = infer_type(expr_node)
-    declared = symbol_table.get(target_name)
-    if declared is None:
-        # variable no declarada: asumimos declaración implícita (var)
-        symbol_table[target_name] = expr_t
+    
+    if declared_type == 'dynamic' or expr_t == 'unknown' or declared_type == 'unknown':
         return
-    if declared == 'dynamic' or expr_t == 'unknown' or declared == 'unknown':
-        return
-    # si ambos numéricos, revisar convertibilidad
-    if is_numeric_type(expr_t) and is_numeric_type(declared):
-        # int -> double OK; double -> int requiere cast
-        if expr_t == 'double' and declared == 'int':
+        
+    # Validaciones de Compatibilidad de Tipo
+    
+    # Si ambos numéricos, revisar convertibilidad
+    if is_numeric_type(expr_t) and is_numeric_type(declared_type):
+        # int -> double OK; double -> int requiere cast (Compatibilidad)
+        if expr_t == 'double' and declared_type == 'int': 
             semantic_errors.append(f"Línea {lineno}: Asignación de 'double' a 'int' en '{target_name}' requiere cast explícito")
         return
+        
     # compatibles iguales
-    if expr_t == declared:
+    if expr_t == declared_type: 
         return
+        
     # comparar String/bool
-    if declared == 'String' and expr_t != 'String':
+    if declared_type == 'String' and expr_t != 'String': 
         semantic_errors.append(f"Línea {lineno}: No se puede asignar '{expr_t}' a 'String' en '{target_name}'")
         return
-    if declared == 'bool' and expr_t != 'bool':
+        
+    if declared_type == 'bool' and expr_t != 'bool': 
         semantic_errors.append(f"Línea {lineno}: No se puede asignar '{expr_t}' a 'bool' en '{target_name}'")
         return
+        
     # casos generales
-    if not can_implicitly_convert(expr_t, declared):
-        semantic_errors.append(f"Línea {lineno}: Asignación incompatible: '{expr_t}' no se convierte implícitamente a '{declared}' en '{target_name}'")
-
+    if not can_implicitly_convert(expr_t, declared_type): # Usar declared_type
+        semantic_errors.append(f"Línea {lineno}: Asignación incompatible: '{expr_t}' no se convierte implícitamente a '{declared_type}' en '{target_name}'")
 
 def validate_binary_operations(tree):
     """Recorre el AST y valida operaciones binarias respecto a tipos y null-safety."""
@@ -417,37 +535,18 @@ def validate_binary_operations(tree):
 
 
 def validate_semantic_rules(tree):
+    """
+    Recorrido Post-Parse: Solo para validaciones que requieren el AST completo 
+    (como break/continue y operaciones binarias), NO para registro de símbolos.
+    """
     # 1) Validar break/continue (ya existente)
     validate_break_continue(tree, in_loop=False)
+    
     # 2) Validar operaciones binarias y null-safety
     validate_binary_operations(tree)
-    # 3) Recorrer declaraciones/asignaciones para validar conversiones
-    def walk_and_validate(node):
-        if node is None:
-            return
-        if isinstance(node, list):
-            for it in node:
-                walk_and_validate(it)
-            return
-        if not isinstance(node, tuple) or len(node) == 0:
-            return
-        tag = node[0]
-        if tag == 'var_decl':
-            # ('var_decl', declared_token, name, expr)
-            declared_tok = node[1]
-            name = node[2]
-            expr = node[3]
-            register_variable(name, declared_tok, expr)
-        elif tag == 'assign':
-            # ('assign', name, expr)
-            name = node[1]
-            expr = node[2]
-            validate_assignment(name, expr)
-        else:
-            for child in node[1:]:
-                walk_and_validate(child)
-
-    walk_and_validate(tree)
+    
+    # IMPORTANTE: Se elimina la función walk_and_validate
+    # que causaba la doble registración de variables.
 
 # ============================================================================
 # FIN APORTE: Mateo Mayorga (bironmanusa)
@@ -456,13 +555,14 @@ def validate_semantic_rules(tree):
 
 # ============================================================================
 # INICIO APORTE: Andrés Salinas (ivandresalin)
-# Responsable: Estructuras de control
+# Responsable: Estructuras de control (Añadido manejo de ámbito de bloque)
 # ============================================================================
 
 # Sentencia compuesta o simple (ayuda a aceptar bloques con o sin llaves).
 def p_block_or_statement(p):
     '''block_or_statement : LBRACE statement_list RBRACE
                           | statement'''
+    # Esta regla solo normaliza el AST; el manejo de ámbito se hace en las estructuras de control.
     if len(p) == 4:
         p[0] = ('block', p[2])   # bloque: lista de sentencias
     else:
@@ -470,9 +570,12 @@ def p_block_or_statement(p):
 
 # ---------------- IF / ELSEIF / ELSE ----------------
 def p_if_statement(p):
-    '''if_statement : IF LPAREN expression RPAREN block_or_statement
-                    | IF LPAREN expression RPAREN block_or_statement ELSE block_or_statement
-                    | IF LPAREN expression RPAREN block_or_statement else_if_list'''
+    '''if_statement : IF LPAREN expression RPAREN statement_block
+                    | IF LPAREN expression RPAREN statement_block ELSE statement_block
+                    | IF LPAREN expression RPAREN statement_block else_if_list'''
+    
+    # El statement_block (p[5]) ya maneja el push/pop scope internamente.
+    
     # Caso simple: if (cond) stmt
     if len(p) == 6:
         p[0] = ('if', p[3], p[5], None)
@@ -481,14 +584,14 @@ def p_if_statement(p):
         p[0] = ('if', p[3], p[5], p[7])
     # if ... else-if list (else_if_list devuelve un árbol que puede terminar en else o None)
     else:
-        # estructura: IF LPAREN expr RPAREN block_or_statement else_if_list
+        # estructura: IF LPAREN expr RPAREN statement_block else_if_list
         p[0] = ('if_chain', p[3], p[5], p[6])
 
 # lista de else-if (puede finalizar con un else opcional)
 def p_else_if_list(p):
-    '''else_if_list : ELSE IF LPAREN expression RPAREN block_or_statement
-                    | ELSE IF LPAREN expression RPAREN block_or_statement else_if_list
-                    | ELSE block_or_statement'''
+    '''else_if_list : ELSE IF LPAREN expression RPAREN statement_block
+                    | ELSE IF LPAREN expression RPAREN statement_block else_if_list
+                    | ELSE statement_block'''
     # else if simple
     if len(p) == 7 and p[1] == 'ELSE' and p[2] == 'IF':
         # devuelve una lista encadenada como ('elif', cond, block, next) donde next puede ser otra elif o None
@@ -500,26 +603,39 @@ def p_else_if_list(p):
     else:
         p[0] = ('else', p[2])
 
+# Regla de bloque con gestión de ámbito
+def p_statement_block(p):
+    '''statement_block : LBRACE statement_list RBRACE
+                       | statement'''
+    
+    if len(p) == 4:
+        # Si tiene llaves, se crea un ámbito explícito para el bloque.
+        push_scope()
+        result = ('block', p[2])
+        pop_scope()
+        p[0] = result
+    else:
+        # Si es una sola sentencia, el ámbito es el del padre (no se necesita push/pop).
+        p[0] = p[1]
+
+
 # ---------------- WHILE ----------------
 def p_while_statement(p):
-    '''while_statement : WHILE LPAREN expression RPAREN block_or_statement'''
-    # Semántica (Samir): Gestión de loop_stack para validar break/continue
-    # Nota: No se puede usar append/pop aquí porque PLY parsea todo primero
+    '''while_statement : WHILE LPAREN expression RPAREN statement_block'''
+    # El statement_block (p[5]) ya maneja el push/pop scope internamente.
     p[0] = ('while', p[3], p[5])
 
 # ---------------- DO-WHILE ----------------
 def p_do_while_statement(p):
-    '''do_while_statement : DO block_or_statement WHILE LPAREN expression RPAREN SEMICOLON'''
-    # Semántica (Samir): Gestión de loop_stack para validar break/continue
-    # Nota: No se puede usar append/pop aquí porque PLY parsea todo primero
+    '''do_while_statement : DO statement_block WHILE LPAREN expression RPAREN SEMICOLON'''
+    # El statement_block (p[2]) ya maneja el push/pop scope internamente.
     p[0] = ('do_while', p[2], p[5])
 
 # ---------------- FOR (tradicional) ----------------
 # Para la parte de inicialización permitimos variable_declaration, assignment o empty.
 def p_for_statement(p):
-    '''for_statement : FOR LPAREN for_init SEMICOLON for_condition SEMICOLON for_update RPAREN block_or_statement'''
-    # Semántica (Samir): Gestión de loop_stack para validar break/continue
-    # Nota: No se puede usar append/pop aquí porque PLY parsea todo primero
+    '''for_statement : FOR LPAREN for_init SEMICOLON for_condition SEMICOLON for_update RPAREN statement_block'''
+    # El statement_block (p[9]) ya maneja el push/pop scope internamente.
     p[0] = ('for', p[3], p[5], p[7], p[9])
 
 def p_for_init(p):
@@ -548,6 +664,7 @@ def p_variable_declaration_no_semicolon(p):
                                          | tipo ID'''
     if len(p) == 5:
         p[0] = ('var_decl', p[1], p[2], p[4])
+        # Nota: Estas variables se registran en el ámbito actual de la función/bloque.
     else:
         p[0] = ('var_decl', p[1], p[2], None)
 
@@ -557,10 +674,8 @@ def p_assignment_no_semicolon(p):
 
 # ---------------- FOR-IN (for each) ----------------
 def p_for_in_statement(p):
-    '''for_in_statement : FOR LPAREN for_in_iterator IN expression RPAREN block_or_statement'''
-    # for (iterator in expr) block
-    # Semántica (Samir): Gestión de loop_stack para validar break/continue
-    # Nota: No se puede usar append/pop aquí porque PLY parsea todo primero  
+    '''for_in_statement : FOR LPAREN for_in_iterator IN expression RPAREN statement_block'''
+    # El statement_block (p[7]) ya maneja el push/pop scope internamente.
     p[0] = ('for_in', p[3], p[5], p[7])
 
 #iterador del for-in (iterator)
@@ -668,7 +783,7 @@ def validate_break_continue(tree, in_loop=False):
         for child in tree[1:]:
             validate_break_continue(child, in_loop)
 
-# ========== 1. DECLARACIÓN DE FUNCIONES ==========
+# ========== 1. DECLARACIÓN DE FUNCIONES (Gestión de Alcance) ==========
 
 # Función con tipo de retorno y parámetros
 def p_function_with_params(p):
@@ -677,19 +792,28 @@ def p_function_with_params(p):
     func_type = p[1]
     func_name = p[2]
     params = p[4]
+    
+    # 1. Entrar a nuevo ámbito para la función (Alcance)
+    push_scope()
+    
+    # 2. Registrar los parámetros en el nuevo ámbito (Scope) y preparar lista para Function Table
+    function_params_list = []
+    for tag, param_type, param_name in params: 
+        # Los parámetros de Dart son implícitamente final
+        get_current_scope()[param_name] = {'type': param_type, 'is_final': True, 'is_const': False} 
+        function_params_list.append((param_type, param_name)) # Lista limpia para Function Table
     body = p[7]
     
     # ========== SEMÁNTICA: Validar retornos (Samir - Regla 1) ==========
     # Guardar función en tabla
-    function_table[func_name] = {'type': func_type, 'params': params}
+    function_table[func_name] = {'type': func_type, 'params': function_params_list}
     
     # Validar que la función tenga return
-    if not has_return_in_all_paths(body):
-        semantic_errors.append(
-            f"Línea {p.lineno(2)}: Función '{func_name}' debe retornar '{func_type}' en todos los caminos"
-        )
+    if func_type != 'VOID' and not has_return_in_all_paths(body):
+        semantic_errors.append(f"Línea {p.lineno(2)}: Función '{func_name}' debe retornar '{func_type}' en todos los caminos")
     # ========== FIN SEMÁNTICA ==========
     
+    pop_scope() # Cierra el ámbito de la función
     p[0] = ('function', func_type, func_name, params, body)
 
 # Función con tipo de retorno sin parámetros
@@ -698,6 +822,9 @@ def p_function_no_params(p):
     # SINTÁCTICO: Reconocer estructura
     func_type = p[1]
     func_name = p[2]
+
+    push_scope() # Abre el ámbito de la función
+
     body = p[6]
     
     # ========== SEMÁNTICA: Validar retornos (Samir - Regla 1) ==========
@@ -709,6 +836,7 @@ def p_function_no_params(p):
         )
     # ========== FIN SEMÁNTICA ==========
     
+    pop_scope() # Cierra el ámbito de la función
     p[0] = ('function', func_type, func_name, [], body)
 
 # Función void con parámetros
@@ -718,11 +846,23 @@ def p_function_void_params(p):
     func_name = p[2]
     params = p[4]
     
+    push_scope() # Abre el ámbito de la función
+
+    # Registrar los parámetros en el nuevo ámbito (Scope) y preparar lista para Function Table
+    function_params_list = []
+    for tag, param_type, param_name in params: 
+        # Los parámetros de Dart son implícitamente final
+        get_current_scope()[param_name] = {'type': param_type, 'is_final': True, 'is_const': False} 
+        function_params_list.append((param_type, param_name)) # Lista limpia para Function Table
+        
+    body = p[7]
+    
     # ========== SEMÁNTICA: Guardar en tabla (Samir) ==========
-    function_table[func_name] = {'type': 'void', 'params': params}
+    function_table[func_name] = {'type': 'void', 'params': function_params_list}
     # Void no requiere return, está OK
     # ========== FIN SEMÁNTICA ==========
     
+    pop_scope() # Cierra el ámbito de la función
     p[0] = ('function_void', func_name, params, p[7])
 
 # Función void sin parámetros
@@ -731,11 +871,14 @@ def p_function_void_no_params(p):
     # SINTÁCTICO: Reconocer estructura
     func_name = p[2]
     
+    push_scope() # Abre el ámbito de la función
+    
     # ========== SEMÁNTICA: Guardar en tabla (Samir) ==========
     function_table[func_name] = {'type': 'void', 'params': []}
     # Void no requiere return, está OK
     # ========== FIN SEMÁNTICA ==========
     
+    pop_scope() # Cierra el ámbito de la función
     p[0] = ('function_void', func_name, [], p[6])
 
 # Arrow function con parámetros
@@ -743,7 +886,15 @@ def p_arrow_function_params(p):
     '''function_declaration : tipo ID LPAREN parameters RPAREN ARROW expression SEMICOLON'''
     # SINTÁCTICO: Arrow functions siempre retornan (OK semánticamente)
     func_name = p[2]
-    function_table[func_name] = {'type': p[1], 'params': p[4]}
+    params = p[4]
+    
+    # Preparar lista limpia para Function Table
+    function_params_list = []
+    for tag, param_type, param_name in params: 
+        # No se necesita push/pop scope aquí porque las arrow functions no crean un bloque de alcance local para variables internas
+        function_params_list.append((param_type, param_name))
+        
+    function_table[func_name] = {'type': p[1], 'params': function_params_list}
     p[0] = ('arrow_function', p[1], func_name, p[4], p[7])
 
 # Arrow function sin parámetros
@@ -766,6 +917,7 @@ def p_parameters_multiple(p):
 # Parámetro individual
 def p_parameter(p):
     '''parameter : tipo ID'''
+    # El valor reducido aquí es la tupla de 3 elementos: ('param', tipo, ID)
     p[0] = ('param', p[1], p[2])
 
 # Tipo de dato

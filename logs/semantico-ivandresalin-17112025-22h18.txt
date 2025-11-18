@@ -1,0 +1,22 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba/algoritmo_andres.dart
+Usuario: ivandresalin
+Fecha: 17/11/2025 22:18:05
+
+================================================================================
+  ERRORES SEMÁNTICOS: 9
+================================================================================
+
+1. Línea 5: Tipo incompatible al inicializar 'contador': 'int' no es 'var'
+2. Línea 6: Asignación incompatible: 'int' no se convierte implícitamente a 'var' en 'contador'
+3. Línea 9: Tipo incompatible al inicializar 'PI': 'double' no es 'final'
+4. Línea 17: Tipo incompatible al inicializar 'limite': 'int' no es 'final'
+5. Línea 18: Asignación incompatible: 'int' no se convierte implícitamente a 'final' en 'limite'
+6. Línea 21: Tipo incompatible al inicializar 'nombre': 'int' no es 'final'
+7. Línea 25: Error semántico: Intento de asignar a identificador no declarado: 'entero'
+8. Línea 29: No se pudo inferir el tipo de la expresión al inicializar 'temporal'
+9. Línea 28: Comparación '>' entre tipos incompatibles ('var', 'int')

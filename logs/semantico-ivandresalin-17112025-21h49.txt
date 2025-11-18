@@ -1,0 +1,17 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba/algoritmo_andres.dart
+Usuario: ivandresalin
+Fecha: 17/11/2025 21:49:31
+
+================================================================================
+  ERRORES SEMÁNTICOS: 4
+================================================================================
+
+1. Línea None: Error semántico: Variable 'globalVar' ya declarada en este ámbito.
+2. Línea None: Error semántico: Variable 'outerVar' ya declarada en este ámbito.
+3. Línea None: Error semántico: Variable 'innerVar' ya declarada en este ámbito.
+4. Línea None: Error semántico: Variable 'x' ya declarada en este ámbito.

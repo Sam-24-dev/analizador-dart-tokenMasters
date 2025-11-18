@@ -1,0 +1,18 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba/algoritmo_andres.dart
+Usuario: ivandresalin
+Fecha: 17/11/2025 22:12:43
+
+================================================================================
+  ERRORES SEMÁNTICOS: 5
+================================================================================
+
+1. Línea 1: Tipo incompatible al inicializar 'globalVar': 'int' no es 'var'
+2. Línea 4: Tipo incompatible al inicializar 'outerVar': 'int' no es 'var'
+3. Línea 7: Tipo incompatible al inicializar 'innerVar': 'int' no es 'var'
+4. Línea 10: No se pudo inferir el tipo de la expresión al inicializar 'x'
+5. Línea 10: Operador aritmético '+' requiere operandos numéricos (encontrado 'var', 'var')
