@@ -29,23 +29,40 @@ Este proyecto implementa un compilador completo para Dart en tres fases:
 - Detectar y reportar errores sintácticos
 - **Entregado: 15 de noviembre de 2025**
 
-### Avance 3: Analizador Semántico 🔄 EN PROCESO
+### Avance 3: Analizador Semántico ✅ COMPLETADO
 **Implementado (Samir):**
-- ✅ **Regla 1:** Retorno de funciones
+- ✅ **Regla 1:** Retorno de funciones (COMPLETO)
+  - Validación de tipo de retorno compatible con expresión retornada
   - Funciones con tipo de retorno deben retornar en todos los caminos
-  - Validación de existencia de `return`
+  - Validación de if-else: ambas ramas deben retornar
+  - Validación de if-elif-else: todas las ramas deben retornar
   - Generación de errores con número de línea
-- ✅ **Regla 2:** Estructuras de control (break/continue)
+- ✅ **Regla 2:** Estructuras de control (break/continue) (COMPLETO)
   - `break` y `continue` solo permitidos dentro de bucles
   - Validación post-parsing del árbol sintáctico
   - Reporte de errores con línea exacta
 
-**Pendiente:**
-- ⏳ **Andrés:** Reglas de Identificadores (Existencia y Alcance)
-- ⏳ **Mateo:** Reglas de Operaciones Permitidas (Null Safety, Compatibilidad)
-- ⏳ **Mateo:** Reglas de Conversión (Casting, Conversión Numérica)
+**Implementado (Andrés):**
+- ✅ **Reglas de Identificadores:** Existencia y Alcance (COMPLETO)
+  - Sistema de ámbitos (scopes) con pila de tablas de símbolos
+  - Búsqueda de variables con alcance léxico
+  - Validación de re-declaración en mismo ámbito
+  - Validación de inmutabilidad (final/const)
+  - Validación de inicialización obligatoria para inmutables
 
-**Entrega parcial (Samir):** 17 de noviembre de 2025
+**Implementado (Mateo):**
+- ✅ **Reglas de Operaciones Permitidas:** (COMPLETO)
+  - Validación de null-safety en operaciones
+  - Compatibilidad aritmética entre tipos
+  - Validación de operadores lógicos con booleanos
+  - Comparaciones entre tipos compatibles
+- ✅ **Reglas de Conversión:** (COMPLETO)
+  - Conversión implícita (int → double, int/double → num)
+  - Detección de conversiones que requieren cast explícito
+  - Inferencia completa de tipos desde expresiones
+  - Validación de compatibilidad en asignaciones
+
+**Entrega completa:** 17 de noviembre de 2025
 
 ## �️ Tecnologías
 
@@ -75,8 +92,8 @@ analizador-dart-tokenMasters/
 │   └── algoritmo_mateo.dart   # Algoritmo de Mateo (fibonacci recursivo)
 ├── logs/                      # Logs de análisis léxico, sintáctico y semántico
 │   ├── lexico-*.txt          # 17 logs de análisis léxico
-│   ├── sintactico-*.txt      # 13 logs de análisis sintáctico
-│   └── semantico-*.txt       # 11 logs de análisis semántico
+│   ├── sintactico-*.txt      # 17 logs de análisis sintáctico
+│   └── semantico-*.txt       # 31 logs de análisis semántico
 ├── lexer.py                   # Analizador léxico (PLY) - Avance 1 ✅
 ├── parser.py                  # Analizador sintáctico y semántico (PLY) - Avances 2 y 3 ✅
 ├── parsetab.py                # Tabla de parsing generada por PLY
@@ -138,12 +155,12 @@ analizador-dart-tokenMasters/
 - [x] Estructuras de control - if, while, for (Andrés) ✅
 - [x] Variables, expresiones, listas, mapas (Mateo) ✅
 - [x] Clases y objetos (Mateo) ✅
-- [x] Generación de 13 logs sintácticos ✅
+- [x] Generación de 17 logs sintácticos ✅
 - [x] **Entregado: 15 de noviembre de 2025**
 
-### Avance 3: Analizador Semántico 🔄 EN PROCESO
+### Avance 3: Analizador Semántico ✅ COMPLETADO
 **Implementado (Samir):**
-- [x] Tablas semánticas (symbol_table, function_table, semantic_errors) ✅
+- [x] Tablas semánticas (scope_stack, function_table, semantic_errors) ✅
 - [x] **Regla 1:** Validación de retornos en funciones ✅
   - [x] Funciones con tipo de retorno deben tener `return`
   - [x] Validación en todos los caminos de ejecución
@@ -153,22 +170,32 @@ analizador-dart-tokenMasters/
   - [x] `continue` solo dentro de loops
   - [x] Validación post-parsing del árbol sintáctico
   - [x] Función helper: `validate_break_continue()`
-- [x] Generación de 11 logs semánticos ✅
+
+**Implementado (Andrés):**
+- [x] Sistema de ámbitos (scopes) con pila de símbolos ✅
+- [x] **Reglas de Identificadores:** Existencia y Alcance ✅
+  - [x] Validación de existencia de variables
+  - [x] Búsqueda con alcance léxico
+  - [x] Validación de re-declaración
+  - [x] Validación de inmutabilidad (final/const)
+  - [x] Funciones helper: `push_scope()`, `pop_scope()`, `lookup_variable()`, `register_variable()`
+
+**Implementado (Mateo):**
+- [x] **Reglas de Operaciones Permitidas:** ✅
+  - [x] Validación de null-safety
+  - [x] Compatibilidad aritmética entre tipos
+  - [x] Validación de operadores lógicos
+  - [x] Función helper: `validate_binary_operations()`
+- [x] **Reglas de Conversión:** ✅
+  - [x] Conversión implícita (int → double)
+  - [x] Detección de cast explícito requerido
+  - [x] Inferencia de tipos
+  - [x] Funciones helper: `infer_type()`, `can_implicitly_convert()`
+
+- [x] Generación de 31 logs semánticos ✅
 - [x] Reportar errores con número de línea ✅
 - [x] Opción `--semantico` y `--ambos` ✅
 - [x] Encoding UTF-8-sig para tildes ✅
-
-**Pendiente (Otros integrantes):**
-- [ ] **Andrés:** Reglas de Identificadores (Existencia y Alcance)
-- [ ] **Mateo:** Reglas de Operaciones Permitidas (Null Safety, Compatibilidad)
-- [ ] **Mateo:** Reglas de Conversión (Casting, Conversión Numérica)
-
-**Entrega parcial (Samir):** 17 de noviembre de 2025
-  - [x] `continue` solo dentro de loops
-  - [x] Validación post-parsing del árbol sintáctico
-- [x] Generación de 11 logs semánticos ✅
-- [x] Reportar errores con número de línea ✅
-- [x] Opción `--semantico` y `--ambos` ✅
 - [x] **Entregado: 17 de noviembre de 2025**
 
 ## 💻 Uso de los Analizadores
@@ -345,30 +372,50 @@ Genera 2 logs: uno sintáctico y uno semántico
 
 ---
 
-### Avance 3: Análisis Semántico 🔄 EN PROCESO
+### Avance 3: Análisis Semántico ✅ COMPLETADO
 
-**Samir Caizapasto (Sam-24-dev):** ✅ IMPLEMENTADO (Parcial)
-- **Regla 1: Retorno de funciones**
+**Samir Caizapasto (Sam-24-dev):** ✅ COMPLETADO
+- **Regla 1: Retorno de funciones (COMPLETO)**
+  - Validación de tipo de retorno compatible con expresión retornada
   - Validación de que funciones con tipo de retorno tengan `return`
-  - Verificación de `return` en todos los caminos de ejecución
-  - Funciones helper: `has_return_in_all_paths()`, `validate_return_type()`
-- **Regla 2: Break/Continue en loops**
+  - Verificación de `return` en todos los caminos de ejecución (if-else, if-elif-else)
+  - Funciones helper: `has_return_in_all_paths()`, `has_return_in_block()`, `has_return_in_elif_chain()`, `validate_return_type()`
+- **Regla 2: Break/Continue en loops (COMPLETO)**
   - Validación de `break` solo dentro de bucles
   - Validación de `continue` solo dentro de bucles
-  - Función helper: `validate_break_continue()` (post-parsing)
-- Tablas semánticas: `symbol_table`, `function_table`, `semantic_errors`
-- Sistema de logs semánticos con encoding UTF-8-sig
+  - Función helper: `validate_break_continue()` (post-parsing con recorrido del árbol)
+  - Reporte de errores con número de línea
+
+**Andrés Salinas (ivandresalin):** ✅ COMPLETADO
+- **Reglas de Identificadores: Existencia y Alcance (COMPLETO)**
+  - Sistema de ámbitos (scopes) con pila de tablas de símbolos
+  - Funciones de gestión: `push_scope()`, `pop_scope()`, `get_current_scope()`, `lookup_variable()`
+  - Búsqueda de variables con alcance léxico (de local a global)
+  - Validación de re-declaración en mismo ámbito
+  - Validación de inmutabilidad (final/const) con `validate_assignment()`
+  - Validación de inicialización obligatoria para variables inmutables
+  - Función helper: `register_variable()`
+
+**Mateo Mayorga (bironmanusa):** ✅ COMPLETADO
+- **Reglas de Operaciones Permitidas (COMPLETO)**
+  - Validación de null-safety en operaciones binarias
+  - Compatibilidad aritmética entre tipos numéricos
+  - Validación de operadores lógicos requieren booleanos
+  - Comparaciones solo entre tipos compatibles
+  - Función helper: `validate_binary_operations()`
+- **Reglas de Conversión (COMPLETO)**
+  - Conversión implícita permitida (int → double, int/double → num)
+  - Detección de conversiones que requieren cast explícito (double → int)
+  - Inferencia completa de tipos desde expresiones
+  - Validación de compatibilidad en asignaciones y declaraciones
+  - Funciones helper: `infer_type()`, `can_implicitly_convert()`, `is_numeric_type()`, `get_base_type()`
+
+**Sistema Completo:**
+- Tablas semánticas: `scope_stack`, `function_table`, `semantic_errors`
+- Sistema de logs semánticos con encoding UTF-8-sig (Windows compatible)
 - Opción `--semantico` y `--ambos` en parser.py
 - Reporte de errores con número de línea en PowerShell y logs
-
-**Andrés Salinas (ivandresalin):** ⏳ PENDIENTE
-- Reglas de Identificadores (Existencia y Alcance)
-- TODOs dejados en código para implementación futura
-
-**Mateo Mayorga (bironmanusa):** ⏳ PENDIENTE
-- Reglas de Operaciones Permitidas (Null Safety, Compatibilidad Aritmética)
-- Reglas de Conversión (Casting Explícito, Conversión Numérica)
-- TODOs dejados en código para implementación futura
+- Limpieza automática de tablas entre análisis múltiples
 
 ### Logs Generados
 
@@ -379,16 +426,18 @@ Genera 2 logs: uno sintáctico y uno semántico
 - **ivandresalin:** 2 logs
 
 **Avance 2 - Análisis Sintáctico:**
-- **Total:** 13 logs
+- **Total:** 17 logs
 - **Sam-24-dev:** Logs generados exitosamente ✅
 - **ivandresalin:** Logs generados exitosamente ✅
 - **bironmanusa:** Logs generados exitosamente ✅
 
 **Avance 3 - Análisis Semántico:**
-- **Total:** 11 logs
+- **Total:** 31 logs
 - **Sam-24-dev:** Logs generados con validaciones exitosas ✅
+- **ivandresalin:** Implementación completa de alcance y existencia ✅
+- **bironmanusa:** Implementación completa de operaciones y conversiones ✅
 - Pruebas con código correcto (0 errores)
-- Pruebas con código incorrecto (4 errores detectados)
+- Pruebas con código incorrecto (errores detectados correctamente)
 
 Los aportes están claramente marcados en el código con comentarios:
 ```python
@@ -459,19 +508,28 @@ Los aportes están claramente marcados en el código con comentarios:
 |--------|-------------|--------------|--------|
 | **Avance 1** | Analizador Léxico | 12 de noviembre de 2025, 23:55 | ✅ ENTREGADO |
 | **Avance 2** | Analizador Sintáctico | 15 de noviembre de 2025, 23:59 | ✅ ENTREGADO |
-| **Avance 3** | Analizador Semántico | 17 de noviembre de 2025, 23:59 | 🔄 PARCIAL (Samir) |
+| **Avance 3** | Analizador Semántico | 17 de noviembre de 2025, 23:59 | ✅ COMPLETADO |
 
-**Nota Avance 3:** Solo la parte de Samir está implementada. Andrés y Mateo tienen pendientes sus reglas semánticas asignadas.
+**Nota Importante:** Todos los avances están completos. La GUI (Interfaz Gráfica) será implementada en una fase posterior del proyecto.
 
 ---
 
 ## 🎯 Reglas Semánticas Validadas
 
-### Regla 1: Retorno de Funciones (Samir)
+### Regla 1: Retorno de Funciones (Samir) ✅
 ```dart
 // ✅ CORRECTO
 int sumar(int a, int b) {
   return a + b;  // Retorna en todos los caminos
+}
+
+// ✅ CORRECTO: if-else ambas ramas retornan
+int absoluto(int x) {
+  if (x >= 0) {
+    return x;
+  } else {
+    return -x;
+  }
 }
 
 // ❌ ERROR: Función 'funcionSinRetorno' debe retornar 'int' en todos los caminos
@@ -480,13 +538,21 @@ int funcionSinRetorno(int x) {
   print(resultado);
   // Falta return
 }
+
+// ❌ ERROR: No todos los caminos retornan
+int funcionRetornoParcial(int x) {
+  if (x > 0) {
+    return x;
+  }
+  // ERROR: Falta return cuando x <= 0
+}
 ```
 
-### Regla 2: Break/Continue en Loops (Samir)
+### Regla 2: Break/Continue en Loops (Samir) ✅
 ```dart
 // ✅ CORRECTO
 void funcionLoops() {
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 10; i = i + 1) {
     if (i == 5) break;  // OK: dentro de for
   }
   
@@ -495,11 +561,120 @@ void funcionLoops() {
   }
 }
 
-// ❌ ERROR: Línea X: 'break' fuera de bucle
+// ❌ ERROR: 'break' fuera de bucle
 void funcionIncorrecta() {
   if (x > 3) {
     break;  // ERROR: break no está en loop
   }
+}
+
+// ❌ ERROR: 'continue' fuera de bucle
+void otraFuncionIncorrecta() {
+  continue;  // ERROR: continue no está en loop
+}
+```
+
+### Regla 3: Alcance y Existencia de Variables (Andrés) ✅
+```dart
+// ✅ CORRECTO: Variables en diferentes ámbitos
+void funcionConAmbitos() {
+  int x = 10;  // Ámbito de función
+  
+  if (x > 5) {
+    int y = 20;  // Ámbito de bloque if
+    print(x);    // OK: x visible desde ámbito padre
+    print(y);    // OK: y en ámbito actual
+  }
+  
+  print(x);  // OK: x en ámbito actual
+  // print(y);  // ERROR: y no existe en este ámbito
+}
+
+// ❌ ERROR: Variable ya declarada en este ámbito
+void redeclaracion() {
+  int x = 10;
+  int x = 20;  // ERROR: 'x' ya declarada
+}
+
+// ❌ ERROR: Variable inmutable no puede ser reasignada
+void inmutabilidad() {
+  final int x = 10;
+  x = 20;  // ERROR: No se puede asignar a variable inmutable 'x'
+}
+
+// ❌ ERROR: const/final debe ser inicializada
+void inicializacionObligatoria() {
+  final int x;  // ERROR: 'x' declarada como final debe ser inicializada
+}
+```
+
+### Regla 4: Operaciones y Null Safety (Mateo) ✅
+```dart
+// ✅ CORRECTO: Operaciones entre tipos compatibles
+void operacionesCorrectas() {
+  int a = 10;
+  int b = 5;
+  int suma = a + b;        // OK: int + int = int
+  double division = a / 2;  // OK: int / int = double
+  
+  String s1 = "Hola";
+  String s2 = " Mundo";
+  String concatenacion = s1 + s2;  // OK: String + String
+}
+
+// ❌ ERROR: Operador aritmético requiere operandos numéricos
+void operacionIncorrecta() {
+  String texto = "10";
+  int numero = 5;
+  int resultado = texto + numero;  // ERROR: String + int no permitido
+}
+
+// ❌ ERROR: Operador lógico requiere operandos booleanos
+void operadorLogicoIncorrecto() {
+  int x = 10;
+  int y = 5;
+  bool resultado = x && y;  // ERROR: && requiere bool, no int
+}
+
+// ❌ ERROR: Operación con valor null sin comprobación
+void nullSafety() {
+  int? x = null;
+  int y = 10;
+  int resultado = x + y;  // ERROR: Operación '+' con valor null
+}
+```
+
+### Regla 5: Conversiones y Compatibilidad de Tipos (Mateo) ✅
+```dart
+// ✅ CORRECTO: Conversión implícita permitida
+void conversionImplicita() {
+  int entero = 10;
+  double decimal = entero;  // OK: int → double implícito
+}
+
+// ✅ CORRECTO: Inferencia de tipos
+void inferenciaTipos() {
+  var x = 10;        // Inferido como int
+  var y = 10.5;      // Inferido como double
+  var z = "texto";   // Inferido como String
+}
+
+// ❌ ERROR: Conversión requiere cast explícito
+void castExplicito() {
+  double decimal = 10.5;
+  int entero = decimal;  // ERROR: double → int requiere cast
+}
+
+// ❌ ERROR: Tipo incompatible en asignación
+void incompatibilidadTipos() {
+  int numero = 10;
+  String texto = numero;  // ERROR: No se puede asignar int a String
+}
+
+// ❌ ERROR: Asignación incompatible
+void asignacionIncompatible() {
+  int x = 10;
+  bool y = x;  // ERROR: No se puede asignar int a bool
 }
 ```
 

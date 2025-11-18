@@ -1,0 +1,25 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba\algoritmo_samir.dart
+Usuario: Sam-24-dev
+Fecha: 17/11/2025 23:37:26
+
+================================================================================
+  ERRORES SEMÁNTICOS: 12
+================================================================================
+
+1. Línea 9: Error semántico: Variable 'nombre' ya declarada en este ámbito.
+2. Línea 10: Error semántico: Variable 'edad' ya declarada en este ámbito.
+3. Línea 15: Error semántico: Variable 'resultado' ya declarada en este ámbito.
+4. Línea 19: Error semántico: Variable 'promedio' ya declarada en este ámbito.
+5. Línea 98: Error semántico: Variable 'contador' ya declarada en este ámbito.
+6. Línea 32: Operador aritmético '+' requiere operandos numéricos (encontrado 'unknown', 'unknown')
+7. Línea 37: Operador aritmético '/' requiere operandos numéricos (encontrado 'unknown', 'int')
+8. Línea 37: Operador aritmético '+' requiere operandos numéricos (encontrado 'unknown', 'unknown')
+9. Línea 46: Operador aritmético '*' requiere operandos numéricos (encontrado 'unknown', 'int')
+10. Línea 92: Comparación '<' entre tipos incompatibles ('unknown', 'int')
+11. Línea 92: Operador aritmético '+' requiere operandos numéricos (encontrado 'unknown', 'int')
+12. Línea 93: Comparación '==' entre tipos incompatibles ('unknown', 'int')

@@ -6,8 +6,11 @@ Integrantes:
 - Mateo Mayorga (bironmanusa)
 - Samir Caizapasto (Sam-24-dev)
 
-AVANCE 2: Análisis Sintáctico(Completado)
-AVANCE 3: Análisis Semántico (Reglas de Alcance y Existencia Completadas)
+AVANCE 2: Análisis Sintáctico ✅ COMPLETADO
+AVANCE 3: Análisis Semántico ✅ COMPLETADO
+  ✅ Samir: Reglas de Retorno de Funciones y break/continue
+  ✅ Andrés: Reglas de Identificadores (Alcance, Existencia, Inmutabilidad)
+  ✅ Mateo: Reglas de Operaciones (Null Safety, Compatibilidad, Conversiones)
 """
 
 import ply.yacc as yacc
@@ -152,12 +155,8 @@ def p_expression(p):
                   | binary_operation
                   | LPAREN expression RPAREN'''
     if len(p) == 2 and isinstance(p[1], str) and p.slice[1].type == 'ID':
-        # Validación de EXISTENCIA (Andrés/Mateo)
-        if lookup_variable(p[1]) is None:
-            # Solo si no es una función (porque las funciones se validan en 'function_call')
-            if p[1] not in function_table:
-                semantic_errors.append(f"Línea {p.lineno(1)}: Error semántico: Uso de identificador no declarado: '{p[1]}'")
-                
+        # NO validar existencia aquí (PLY bottom-up causa falsos positivos)
+        # La validación se hace post-parsing en validate_semantic_rules()
         p[0] = p[1]
     elif len(p) == 4 and p[1] == '(':
         p[0] = p[2]
@@ -381,9 +380,10 @@ def register_variable(name, declared_token, init_expr, lineno=None):
     current_scope= get_current_scope()
 
     # Determinar si es inmutable (Andrés)
-    is_final = declared_token == 'FINAL'
-    is_const = declared_token == 'CONST'
-    is_keyword = declared_token in ('VAR', 'CONST', 'FINAL')
+    # El lexer devuelve el VALUE en minúsculas, no el TYPE
+    is_final = declared_token == 'final'
+    is_const = declared_token == 'const'
+    is_keyword = declared_token in ('var', 'const', 'final')
     
     # Validar RE-DECLARACIÓN LOCAL (Alcance)
     if name in current_scope:
@@ -420,7 +420,7 @@ def register_variable(name, declared_token, init_expr, lineno=None):
         expr_t = infer_type(init_expr)
         
         if expr_t == 'unknown':
-            semantic_errors.append(f"Línea {lineno}: No se pudo inferir el tipo de la expresión al inicializar '{name}'")
+            pass  # No reportar error si no se pudo inferir (puede ser función no declarada aún)
         elif not can_implicitly_convert(expr_t, declared_type):
             if is_numeric_type(expr_t) and is_numeric_type(declared_type):
                 semantic_errors.append(f"Línea {lineno}: Asignación de '{expr_t}' a '{declared_type}' en '{name}' puede requerir conversión explícita/cast")
@@ -499,6 +499,14 @@ def validate_binary_operations(tree):
         lineno = None
         if len(tree) > 4:
             lineno = tree[4]
+        
+        # Si no se pudo inferir algún tipo, no validar (evitar falsos positivos)
+        if lt == 'unknown' or rt == 'unknown':
+            # Recursión y salir
+            for child in tree[1:]:
+                validate_binary_operations(child)
+            return
+        
         # Null safety: si alguno es Null y op no es '??' o comparación, alertar
         if ('Null' in (lt, rt)) and op not in ('??', '==', '!='):
             if lineno:
@@ -712,21 +720,110 @@ def p_continue_statement(p):
 # ========== FUNCIONES HELPER SEMÁNTICAS (Samir - Avance 3) ==========
 
 def validate_return_type(declared_type, return_expression):
-    """Valida si el tipo de retorno coincide con el declarado"""
-    # TODO: Implementación completa requiere evaluación de expresiones
-    # Por ahora, validación básica
-    return True
+    """Valida si el tipo de retorno coincide con el declarado (Samir - Regla 1.1)"""
+    if return_expression is None:
+        # Return vacío (void)
+        return declared_type == 'void'
+    
+    # Inferir tipo de la expresión de retorno
+    expr_type = infer_type(return_expression)
+    
+    # Si no se pudo inferir, aceptar (evitar falsos positivos)
+    if expr_type == 'unknown':
+        return True
+    
+    # Validar compatibilidad de tipos
+    if declared_type == 'void' and expr_type != 'Null':
+        return False  # void no debe retornar valor
+    
+    if declared_type == expr_type:
+        return True  # Tipos iguales
+    
+    # Conversión implícita permitida
+    if can_implicitly_convert(expr_type, declared_type):
+        return True
+    
+    return False
 
 def has_return_in_all_paths(statement_list):
-    """Verifica si todos los caminos de ejecución tienen return"""
+    """Verifica si todos los caminos de ejecución tienen return (Samir - Regla 1.2)"""
     if not statement_list:
         return False
     
     for stmt in statement_list:
-        if isinstance(stmt, tuple):
-            if stmt[0] == 'return':
+        if isinstance(stmt, tuple) and len(stmt) > 0:
+            stmt_type = stmt[0]
+            
+            # Return directo encontrado
+            if stmt_type == 'return':
                 return True
-            # TODO Andrés/Mateo: Validar if-else que ambas ramas retornen
+            
+            # Validar if-else: AMBAS ramas deben retornar
+            if stmt_type == 'if' and len(stmt) >= 4:
+                # stmt = ('if', condition, then_block, else_block)
+                then_block = stmt[2]
+                else_block = stmt[3]
+                
+                if else_block is not None:
+                    # Si hay else, verificar que AMBAS ramas retornen
+                    then_has_return = has_return_in_block(then_block)
+                    else_has_return = has_return_in_block(else_block)
+                    
+                    if then_has_return and else_has_return:
+                        return True
+            
+            # Validar if-chain (else-if): todas las ramas deben retornar
+            if stmt_type == 'if_chain' and len(stmt) >= 4:
+                # stmt = ('if_chain', condition, then_block, elif_chain)
+                then_block = stmt[2]
+                elif_chain = stmt[3]
+                
+                if has_return_in_block(then_block) and has_return_in_elif_chain(elif_chain):
+                    return True
+    
+    return False
+
+def has_return_in_block(block):
+    """Verifica si un bloque tiene return (Samir - Helper para Regla 1.2)"""
+    if block is None:
+        return False
+    
+    # Si es un bloque con lista de statements
+    if isinstance(block, tuple) and len(block) > 0:
+        if block[0] == 'block' and len(block) >= 2:
+            return has_return_in_all_paths(block[1])
+        elif block[0] == 'return':
+            return True
+    
+    # Si es una lista de statements directamente
+    if isinstance(block, list):
+        return has_return_in_all_paths(block)
+    
+    return False
+
+def has_return_in_elif_chain(elif_chain):
+    """Verifica si cadena de elif/else tiene return en todas las ramas (Samir - Helper para Regla 1.2)"""
+    if elif_chain is None:
+        return False
+    
+    if not isinstance(elif_chain, tuple) or len(elif_chain) == 0:
+        return False
+    
+    chain_type = elif_chain[0]
+    
+    # Si termina en 'else', verificar que tenga return
+    if chain_type == 'else' and len(elif_chain) >= 2:
+        return has_return_in_block(elif_chain[1])
+    
+    # Si es 'elif', verificar que esta rama Y la siguiente retornen
+    if chain_type == 'elif' and len(elif_chain) >= 4:
+        # elif_chain = ('elif', condition, block, next_chain)
+        current_block = elif_chain[2]
+        next_chain = elif_chain[3]
+        
+        # AMBAS deben retornar: el elif actual Y la cadena siguiente
+        return has_return_in_block(current_block) and has_return_in_elif_chain(next_chain)
+    
     return False
 
 def validate_break_continue(tree, in_loop=False):
@@ -793,21 +890,25 @@ def p_function_with_params(p):
     func_name = p[2]
     params = p[4]
     
+    # ========== SEMÁNTICA: Guardar función en tabla ANTES de procesar el cuerpo ==========
+    function_params_list = []
+    for tag, param_type, param_name in params: 
+        function_params_list.append((param_type, param_name))
+    function_table[func_name] = {'type': func_type, 'params': function_params_list}
+    # ========== FIN REGISTRO PREVIO ==========
+    
     # 1. Entrar a nuevo ámbito para la función (Alcance)
     push_scope()
     
-    # 2. Registrar los parámetros en el nuevo ámbito (Scope) y preparar lista para Function Table
-    function_params_list = []
+    # 2. Registrar los parámetros en el nuevo ámbito (Scope)
     for tag, param_type, param_name in params: 
         # Los parámetros de Dart son implícitamente final
-        get_current_scope()[param_name] = {'type': param_type, 'is_final': True, 'is_const': False} 
-        function_params_list.append((param_type, param_name)) # Lista limpia para Function Table
+        get_current_scope()[param_name] = {'type': param_type, 'is_final': True, 'is_const': False}
+    
+    # 3. Procesar el cuerpo (statement_list se procesa DENTRO del scope con parámetros)
     body = p[7]
     
     # ========== SEMÁNTICA: Validar retornos (Samir - Regla 1) ==========
-    # Guardar función en tabla
-    function_table[func_name] = {'type': func_type, 'params': function_params_list}
-    
     # Validar que la función tenga return
     if func_type != 'VOID' and not has_return_in_all_paths(body):
         semantic_errors.append(f"Línea {p.lineno(2)}: Función '{func_name}' debe retornar '{func_type}' en todos los caminos")
@@ -823,13 +924,15 @@ def p_function_no_params(p):
     func_type = p[1]
     func_name = p[2]
 
+    # ========== SEMÁNTICA: Guardar función en tabla ANTES de procesar el cuerpo ==========
+    function_table[func_name] = {'type': func_type, 'params': []}
+    # ========== FIN REGISTRO PREVIO ==========
+
     push_scope() # Abre el ámbito de la función
 
     body = p[6]
     
     # ========== SEMÁNTICA: Validar retornos (Samir - Regla 1) ==========
-    function_table[func_name] = {'type': func_type, 'params': []}
-    
     if not has_return_in_all_paths(body):
         semantic_errors.append(
             f"Línea {p.lineno(2)}: Función '{func_name}' debe retornar '{func_type}' en todos los caminos"
@@ -846,21 +949,22 @@ def p_function_void_params(p):
     func_name = p[2]
     params = p[4]
     
-    push_scope() # Abre el ámbito de la función
-
-    # Registrar los parámetros en el nuevo ámbito (Scope) y preparar lista para Function Table
+    # ========== SEMÁNTICA: Guardar función en tabla ANTES de procesar el cuerpo ==========
     function_params_list = []
     for tag, param_type, param_name in params: 
+        function_params_list.append((param_type, param_name))
+    function_table[func_name] = {'type': 'void', 'params': function_params_list}
+    # ========== FIN REGISTRO PREVIO ==========
+    
+    push_scope() # Abre el ámbito de la función
+
+    # Registrar los parámetros en el nuevo ámbito (Scope)
+    for tag, param_type, param_name in params: 
         # Los parámetros de Dart son implícitamente final
-        get_current_scope()[param_name] = {'type': param_type, 'is_final': True, 'is_const': False} 
-        function_params_list.append((param_type, param_name)) # Lista limpia para Function Table
+        get_current_scope()[param_name] = {'type': param_type, 'is_final': True, 'is_const': False}
         
     body = p[7]
-    
-    # ========== SEMÁNTICA: Guardar en tabla (Samir) ==========
-    function_table[func_name] = {'type': 'void', 'params': function_params_list}
     # Void no requiere return, está OK
-    # ========== FIN SEMÁNTICA ==========
     
     pop_scope() # Cierra el ámbito de la función
     p[0] = ('function_void', func_name, params, p[7])
@@ -871,15 +975,18 @@ def p_function_void_no_params(p):
     # SINTÁCTICO: Reconocer estructura
     func_name = p[2]
     
+    # ========== SEMÁNTICA: Guardar función en tabla ANTES de procesar el cuerpo ==========
+    function_table[func_name] = {'type': 'void', 'params': []}
+    # ========== FIN REGISTRO PREVIO ==========
+    
     push_scope() # Abre el ámbito de la función
     
-    # ========== SEMÁNTICA: Guardar en tabla (Samir) ==========
-    function_table[func_name] = {'type': 'void', 'params': []}
+    # Procesar cuerpo
+    body = p[6]
     # Void no requiere return, está OK
-    # ========== FIN SEMÁNTICA ==========
     
     pop_scope() # Cierra el ámbito de la función
-    p[0] = ('function_void', func_name, [], p[6])
+    p[0] = ('function_void', func_name, [], body)
 
 # Arrow function con parámetros
 def p_arrow_function_params(p):
@@ -988,8 +1095,11 @@ def build_parser():
     return parser
 
 def analyze_syntax(filename, git_user):
-    global syntax_errors
+    global syntax_errors, semantic_errors, scope_stack, function_table
     syntax_errors = []
+    semantic_errors = []
+    scope_stack = [{}]  # Reiniciar scope global
+    function_table = {}  # Limpiar tabla de funciones
     
     with open(filename, 'r', encoding='utf-8') as f:
         data = f.read()
@@ -1038,9 +1148,11 @@ def analyze_syntax(filename, git_user):
 
 
 def analyze_semantic(filename, git_user):
-    global syntax_errors, semantic_errors
+    global syntax_errors, semantic_errors, scope_stack, function_table
     syntax_errors = []
     semantic_errors = []
+    scope_stack = [{}]  # Reiniciar scope global
+    function_table = {}  # Limpiar tabla de funciones
     
     with open(filename, 'r', encoding='utf-8') as f:
         data = f.read()

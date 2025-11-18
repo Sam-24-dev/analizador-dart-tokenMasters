@@ -1,0 +1,29 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: algoritmos_prueba\algoritmo_samir.dart
+Usuario: Sam-24-dev
+Fecha: 17/11/2025 23:29:12
+
+================================================================================
+  ERRORES SEMÁNTICOS: 16
+================================================================================
+
+1. Línea 9: Tipo incompatible al inicializar 'nombre': 'String' no es 'var'
+2. Línea 32: Error semántico: Uso de identificador no declarado: 'a'
+3. Línea 32: Error semántico: Uso de identificador no declarado: 'b'
+4. Línea 37: Error semántico: Uso de identificador no declarado: 'a'
+5. Línea 37: Error semántico: Uso de identificador no declarado: 'b'
+6. Línea 46: Error semántico: Uso de identificador no declarado: 'x'
+7. Línea 92: Error semántico: Uso de identificador no declarado: 'i'
+8. Línea 92: Error semántico: Uso de identificador no declarado: 'i'
+9. Línea 93: Error semántico: Uso de identificador no declarado: 'i'
+10. Línea 32: Operador aritmético '+' requiere operandos numéricos (encontrado 'unknown', 'unknown')
+11. Línea 37: Operador aritmético '/' requiere operandos numéricos (encontrado 'unknown', 'int')
+12. Línea 37: Operador aritmético '+' requiere operandos numéricos (encontrado 'unknown', 'unknown')
+13. Línea 46: Operador aritmético '*' requiere operandos numéricos (encontrado 'unknown', 'int')
+14. Línea 92: Comparación '<' entre tipos incompatibles ('unknown', 'int')
+15. Línea 92: Operador aritmético '+' requiere operandos numéricos (encontrado 'unknown', 'int')
+16. Línea 93: Comparación '==' entre tipos incompatibles ('unknown', 'int')
