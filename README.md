@@ -200,6 +200,25 @@ analizador-dart-tokenMasters/
 
 ## 💻 Uso de los Analizadores
 
+### Interfaz Gráfica (GUI)
+
+La forma más cómoda de probar el analizador completo es ejecutar la
+interfaz Tkinter incluida en `gui.py`, la cual expone un editor de
+texto, botones para cargar/analizar/limpiar, pestañas de resultados y
+una barra de estado. Para iniciarla:
+
+```powershell
+python gui.py
+```
+
+1. Escribe o carga un archivo `.dart` (botón **Cargar archivo…**).
+2. Indica el usuario Git (campo en la parte superior) o deja el valor
+  por defecto.
+3. Presiona **Analizar** para ejecutar en secuencia los análisis
+  léxico, sintáctico y semántico.
+4. Consulta la pestaña **Tokens** y la pestaña **Errores**; la GUI
+  también muestra las rutas de los logs generados automáticamente.
+
 ### Analizador Léxico (Avance 1)
 
 Para ejecutar el analizador léxico:
