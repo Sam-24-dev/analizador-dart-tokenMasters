@@ -173,7 +173,7 @@ class AnalyzerGUI:
         self.file_label.grid(row=1, column=0, sticky="w", pady=(2, 10))
 
         buttons = tk.Frame(card, bg=self.COLORS["card_bg"])
-        buttons.grid(row=0, column=1, rowspan=2, sticky="e")
+        buttons.grid(row=2, column=0, columnspan=2, sticky="w", pady=(0, 10))
         self.load_button = self._create_button(buttons, "Cargar .dart", self.load_file)
         self.load_button.pack(side="left", padx=4)
         self.clear_button = self._create_button(buttons, "Limpiar", self.clear_all)
@@ -187,8 +187,14 @@ class AnalyzerGUI:
         self.analyze_button.pack(side="left", padx=(8, 0))
 
         editor_container = tk.Frame(card, bg=self.COLORS["card_bg"])
-        editor_container.grid(row=2, column=0, columnspan=2, sticky="nsew")
-        card.rowconfigure(2, weight=1)
+        editor_container.grid(row=3, column=0, columnspan=2, sticky="nsew")
+        card.rowconfigure(3, weight=1)
+        card.columnconfigure(0, weight=1)
+        editor_container.rowconfigure(0, weight=1)
+        editor_container.rowconfigure(1, weight=0)
+        editor_container.columnconfigure(0, weight=0)
+        editor_container.columnconfigure(1, weight=1)
+        editor_container.columnconfigure(2, weight=0)
 
         self.line_numbers = tk.Text(
             editor_container,
@@ -201,13 +207,10 @@ class AnalyzerGUI:
             foreground=self.COLORS["line_fg"],
             font=("Cascadia Code", 11),
         )
-        self.line_numbers.pack(side="left", fill="y")
-
-        text_container = tk.Frame(editor_container, bg=self.COLORS["editor_bg"], bd=1, relief="sunken")
-        text_container.pack(side="left", fill="both", expand=True)
+        self.line_numbers.grid(row=0, column=0, sticky="ns")
 
         self.text_editor = tk.Text(
-            text_container,
+            editor_container,
             wrap="none",
             font=("Cascadia Code", 11),
             background=self.COLORS["editor_bg"],
@@ -216,7 +219,7 @@ class AnalyzerGUI:
             relief="flat",
             undo=True,
         )
-        self.text_editor.pack(fill="both", expand=True)
+        self.text_editor.grid(row=0, column=1, sticky="nsew")
 
         self.text_editor.tag_configure("comment", foreground=self.COLORS["comment_fg"])
 
@@ -226,13 +229,13 @@ class AnalyzerGUI:
         self.text_editor.bind("<Configure>", self._on_text_modified)
         self.text_editor.edit_modified(False)
 
-        self.y_scroll = ttk.Scrollbar(text_container, orient="vertical", command=self._on_scrollbar)
-        self.y_scroll.pack(side="right", fill="y")
+        self.y_scroll = ttk.Scrollbar(editor_container, orient="vertical", command=self._on_scrollbar)
+        self.y_scroll.grid(row=0, column=2, sticky="ns")
         self.text_editor.configure(yscrollcommand=self._on_textscroll)
         self.line_numbers.configure(yscrollcommand=self._on_textscroll)
 
-        self.x_scroll = ttk.Scrollbar(card, orient="horizontal", command=self.text_editor.xview)
-        self.x_scroll.grid(row=3, column=0, columnspan=2, sticky="ew", pady=(6, 0))
+        self.x_scroll = ttk.Scrollbar(editor_container, orient="horizontal", command=self.text_editor.xview)
+        self.x_scroll.grid(row=1, column=1, sticky="ew")
         self.text_editor.configure(xscrollcommand=self.x_scroll.set)
 
     def _build_results_card(self, parent: tk.Frame) -> None:
@@ -240,7 +243,13 @@ class AnalyzerGUI:
         card.grid(row=0, column=1, sticky="nsew")
         parent.rowconfigure(0, weight=1)
 
-        ttk.Label(card, text="Panel de Resultados", style="Section.TLabel").pack(anchor="w")
+        header_frame = tk.Frame(card, bg=self.COLORS["card_bg"])
+        header_frame.pack(fill="x")
+        
+        ttk.Label(header_frame, text="Panel de Resultados", style="Section.TLabel").pack(side="left")
+        
+        self.fullscreen_button = self._create_button(header_frame, "⛶ Ver completo", self._show_fullscreen_results, primary=False)
+        self.fullscreen_button.pack(side="right")
 
         self.notebook = ttk.Notebook(card)
         self.notebook.pack(fill="both", expand=True, pady=(10, 0))
@@ -544,7 +553,10 @@ class AnalyzerGUI:
             ).pack(anchor="w")
             return
 
-        for error in errors[:4]:
+        # Ordenar por número de línea para mostrar los primeros errores cronológicamente
+        sorted_errors = sorted(errors, key=lambda e: e.get('line') if e.get('line') not in (None, 'None') else 9999)
+
+        for error in sorted_errors[:4]:
             bg, fg = self.ERROR_COLORS.get(error.get("type"), ("#e5e7eb", "#111827"))
             card = tk.Frame(self.error_cards_frame, bg=bg, padx=12, pady=8, bd=0, relief="flat")
             card.pack(fill="x", pady=3)
@@ -567,6 +579,88 @@ class AnalyzerGUI:
             os.startfile(path)  # type: ignore[attr-defined]
         except AttributeError:
             messagebox.showinfo("Logs", path)
+
+    def _show_fullscreen_results(self) -> None:
+        """Muestra los resultados en una ventana de pantalla completa."""
+        fullscreen_win = tk.Toplevel(self.root)
+        fullscreen_win.title("TokenMasters - Resultados Completos")
+        fullscreen_win.geometry("1200x800")
+        fullscreen_win.configure(bg=self.COLORS["bg"])
+
+        # Header
+        header = tk.Frame(fullscreen_win, bg=self.COLORS["header_bg"], pady=12, padx=24)
+        header.pack(fill="x")
+        ttk.Label(header, text="Resultados del Análisis", style="Header.TLabel").pack(side="left")
+        close_btn = self._create_button(header, "X Cerrar", fullscreen_win.destroy)
+        close_btn.pack(side="right")
+
+        # Tarjetas de errores (primeras 4)
+        cards_container = tk.Frame(fullscreen_win, bg=self.COLORS["bg"])
+        cards_container.pack(fill="x", padx=24, pady=(16, 8))
+        
+        all_errors = [self.errors_tree.item(item, "values") for item in self.errors_tree.get_children()]
+        # Ordenar por línea
+        sorted_errors = sorted(all_errors, key=lambda e: int(e[1]) if str(e[1]).isdigit() else 9999)
+        for error_values in sorted_errors[:4]:
+            error_type, error_line, error_desc = error_values
+            bg, fg = self.ERROR_COLORS.get(error_type, ("#e5e7eb", "#111827"))
+            card = tk.Frame(cards_container, bg=bg, padx=12, pady=8, bd=0, relief="flat")
+            card.pack(fill="x", pady=3)
+            tk.Label(card, text=f"{error_type} (Línea {error_line}).", bg=bg, fg=fg, font=("Segoe UI", 10, "bold")).pack(anchor="w")
+            tk.Label(card, text=error_desc, bg=bg, fg=fg, font=("Segoe UI", 10)).pack(anchor="w")
+
+        # Notebook con resultados
+        notebook = ttk.Notebook(fullscreen_win)
+        notebook.pack(fill="both", expand=True, padx=24, pady=(0, 16))
+
+        # Tab de tokens
+        tokens_frame = ttk.Frame(notebook, style="Card.TFrame")
+        notebook.add(tokens_frame, text=f"Tokens ({self.tokens_tree.get_children().__len__()})")
+        
+        tokens_tree = ttk.Treeview(tokens_frame, columns=("num", "token", "value", "line"), show="headings")
+        tokens_tree.heading("num", text="#")
+        tokens_tree.heading("token", text="Token")
+        tokens_tree.heading("value", text="Valor")
+        tokens_tree.heading("line", text="Línea")
+        tokens_tree.column("num", width=80, anchor="center")
+        tokens_tree.column("token", width=200, anchor="w")
+        tokens_tree.column("value", width=400, anchor="w")
+        tokens_tree.column("line", width=100, anchor="center")
+        
+        for item in self.tokens_tree.get_children():
+            values = self.tokens_tree.item(item, "values")
+            tokens_tree.insert("", "end", values=values)
+        
+        tokens_tree.pack(fill="both", expand=True, side="left")
+        tokens_y_scroll = ttk.Scrollbar(tokens_frame, orient="vertical", command=tokens_tree.yview)
+        tokens_y_scroll.pack(side="right", fill="y")
+        tokens_x_scroll = ttk.Scrollbar(tokens_frame, orient="horizontal", command=tokens_tree.xview)
+        tokens_x_scroll.pack(fill="x", side="bottom")
+        tokens_tree.configure(yscrollcommand=tokens_y_scroll.set, xscrollcommand=tokens_x_scroll.set)
+
+        # Tab de errores
+        errors_frame = ttk.Frame(notebook, style="Card.TFrame")
+        notebook.add(errors_frame, text=f"Errores ({self.errors_tree.get_children().__len__()})")
+        
+        errors_tree = ttk.Treeview(errors_frame, columns=("type", "line", "description"), show="headings")
+        errors_tree.heading("type", text="Tipo")
+        errors_tree.heading("line", text="Línea")
+        errors_tree.heading("description", text="Descripción")
+        errors_tree.column("type", width=150, anchor="w")
+        errors_tree.column("line", width=100, anchor="center")
+        errors_tree.column("description", width=700, anchor="w")
+        errors_tree.tag_configure("error", foreground="#b91c1c")
+        
+        for item in self.errors_tree.get_children():
+            values = self.errors_tree.item(item, "values")
+            errors_tree.insert("", "end", values=values, tags=("error",))
+        
+        errors_tree.pack(fill="both", expand=True, side="left")
+        errors_y_scroll = ttk.Scrollbar(errors_frame, orient="vertical", command=errors_tree.yview)
+        errors_y_scroll.pack(side="right", fill="y")
+        errors_x_scroll = ttk.Scrollbar(errors_frame, orient="horizontal", command=errors_tree.xview)
+        errors_x_scroll.pack(fill="x", side="bottom")
+        errors_tree.configure(yscrollcommand=errors_y_scroll.set, xscrollcommand=errors_x_scroll.set)
 
     def set_status(self, message: str) -> None:
         self.status_var.set(message)

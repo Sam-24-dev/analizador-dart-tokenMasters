@@ -16,41 +16,36 @@ import sys
 # Palabras reservadas y tokens de operadores/delimitadores
 # ============================================================================
 
-# Palabras reservadas de Dart
+# Palabras reservadas de Dart - OPTIMIZADO (usadas en algoritmos + necesarias para parser)
 reserved = {
-    # Tipos, Variables, y Estructura Básica
-    'var': 'VAR', 'final': 'FINAL', 'const': 'CONST', 'void': 'VOID',
-    'dynamic': 'DYNAMIC_TYPE', 'Function': 'FUNCTION_TYPE', 'type': 'TYPE_KEYWORD',
-    'class': 'CLASS', 'enum': 'ENUM', 'typedef': 'TYPEDEF',
-    'extension': 'EXTENSION', 'late': 'LATE', 'external': 'EXTERNAL',
-    'factory': 'FACTORY', 'mixin': 'MIXIN', 'abstract': 'ABSTRACT',
-    'static': 'STATIC', 'get': 'GET', 'set': 'SET',
-    'required': 'REQUIRED', 'with': 'WITH', 'is': 'IS', 'in': 'IN',
-    'as': 'AS', 'this': 'THIS', 'super': 'SUPER',
-    'base': 'BASE', 'covariant': 'COVARIANT', 'sealed': 'SEALED',
-    'interface': 'INTERFACE',
-    'implements': 'IMPLEMENTS',
+    # Tipos y Variables
+    'var': 'VAR', 
+    'final': 'FINAL', 
+    'const': 'CONST', 
+    'void': 'VOID',
+    'int': 'INT_TYPE',
+    'double': 'DOUBLE_TYPE',
+    'String': 'STRING_TYPE',
+    'bool': 'BOOL_TYPE',
 
-    # Control de Flujo y Sentencias
-    'if': 'IF', 'else': 'ELSE', 'for': 'FOR', 'while': 'WHILE', 'do': 'DO',
-    'switch': 'SWITCH', 'case': 'CASE', 'default': 'DEFAULT', 'when': 'WHEN',
-    'break': 'BREAK', 'continue': 'CONTINUE', 'return': 'RETURN',
-    'yield': 'YIELD', 'await': 'AWAIT', 'async': 'ASYNC', 'sync': 'SYNC',
-    'try': 'TRY', 'catch': 'CATCH', 'finally': 'FINALLY', 'throw': 'THROW',
-    'on': 'ON', 'rethrow': 'RETHROW',
+    # Control de Flujo
+    'if': 'IF', 
+    'else': 'ELSE', 
+    'for': 'FOR', 
+    'while': 'WHILE', 
+    'do': 'DO',
+    'break': 'BREAK', 
+    'continue': 'CONTINUE', 
+    'return': 'RETURN',
+    'in': 'IN',
 
-    # Valores Constantes y Especiales
-    'true': 'TRUE', 'false': 'FALSE', 'null': 'NULL', 'new': 'NEW',
-    'assert': 'ASSERT',
-
-    # Importaciones y Librerías
-    'import': 'IMPORT', 'export': 'EXPORT', 'library': 'LIBRARY', 'part': 'PART',
-    'show': 'SHOW', 'hide': 'HIDE', 'deferred': 'DEFERRED',
-    'extends': 'EXTENDS',
-
-    # Otros
-    'of': 'OF',
-    'operator': 'OPERATOR',
+    # Valores Constantes
+    'true': 'TRUE', 
+    'false': 'FALSE', 
+    'null': 'NULL',
+    
+    # Estructuras (requeridas por parser)
+    'class': 'CLASS',
 }
 
 # Lista de tokens

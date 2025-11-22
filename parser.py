@@ -856,7 +856,7 @@ def validate_break_continue(tree, in_loop=False):
     node_type = tree[0]
     
     # Si encontramos un bucle, activamos el flag para sus hijos
-    if node_type in ('while', 'for', 'do-while', 'for-in'):
+    if node_type in ('while', 'for', 'do_while', 'for_in'):
         # while: ('while', condition, body)
         # for: ('for', init, condition, update, body)
         # do-while: ('do-while', body, condition)
@@ -868,12 +868,20 @@ def validate_break_continue(tree, in_loop=False):
     
     # Si encontramos break/continue, verificamos si estamos en bucle
     elif node_type == 'break':
+        lineno = tree[1] if len(tree) > 1 else None
         if not in_loop:
-            semantic_errors.append("Error semántico: 'break' fuera de bucle")
+            if lineno is not None:
+                semantic_errors.append(f"Línea {lineno}: Error semántico: 'break' fuera de bucle")
+            else:
+                semantic_errors.append("Error semántico: 'break' fuera de bucle")
     
     elif node_type == 'continue':
+        lineno = tree[1] if len(tree) > 1 else None
         if not in_loop:
-            semantic_errors.append("Error semántico: 'continue' fuera de bucle")
+            if lineno is not None:
+                semantic_errors.append(f"Línea {lineno}: Error semántico: 'continue' fuera de bucle")
+            else:
+                semantic_errors.append("Error semántico: 'continue' fuera de bucle")
     
     # Para cualquier otro nodo, seguir recorriendo CON el mismo flag
     else:
