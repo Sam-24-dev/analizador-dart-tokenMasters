@@ -1,0 +1,86 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Usuario: bironmanusa
+ Fecha y hora: 26/11/2025 18:13:07
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | CONST                | 4      | const
+2      | ID                   | 4      | singleQuoted
+3      | ASSIGN               | 4      | =
+4      | STRING               | 4      | single quoted
+5      | SEMICOLON            | 4      | ;
+6      | CONST                | 5      | const
+7      | ID                   | 5      | doubleQuoted
+8      | ASSIGN               | 5      | =
+9      | STRING               | 5      | double quoted
+10     | SEMICOLON            | 5      | ;
+11     | CONST                | 6      | const
+12     | ID                   | 6      | number
+13     | ASSIGN               | 6      | =
+14     | NUMBER               | 6      | 5
+15     | SEMICOLON            | 6      | ;
+16     | CONST                | 7      | const
+17     | ID                   | 7      | number2
+18     | ASSIGN               | 7      | =
+19     | NUMBER               | 7      | 10
+20     | ID                   | 9      | sum
+21     | LPAREN               | 9      | (
+22     | INT_TYPE             | 9      | int
+23     | ID                   | 9      | a
+24     | COMMA                | 9      | ,
+25     | INT_TYPE             | 9      | int
+26     | ID                   | 9      | b
+27     | RPAREN               | 9      | )
+28     | LBRACE               | 9      | {
+29     | RETURN               | 10     | return
+30     | ID                   | 10     | a
+31     | PLUS                 | 10     | +
+32     | ID                   | 10     | b
+33     | SEMICOLON            | 10     | ;
+34     | RBRACE               | 11     | }
+35     | VOID                 | 13     | void
+36     | ID                   | 13     | testLexical
+37     | LPAREN               | 13     | (
+38     | RPAREN               | 13     | )
+39     | LBRACE               | 13     | {
+40     | ID                   | 14     | print
+41     | LPAREN               | 14     | (
+42     | ID                   | 14     | singleQuoted
+43     | RPAREN               | 14     | )
+44     | SEMICOLON            | 14     | ;
+45     | ID                   | 15     | print
+46     | LPAREN               | 15     | (
+47     | ID                   | 15     | doubleQuoted
+48     | RPAREN               | 15     | )
+49     | SEMICOLON            | 15     | ;
+50     | ID                   | 16     | print
+51     | LPAREN               | 16     | (
+52     | ID                   | 16     | sum
+53     | LPAREN               | 16     | (
+54     | ID                   | 16     | number
+55     | COMMA                | 16     | ,
+56     | ID                   | 16     | number2
+57     | RPAREN               | 16     | )
+58     | RPAREN               | 16     | )
+59     | SEMICOLON            | 16     | ;
+60     | RBRACE               | 17     | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 60
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: bironmanusa
+  Analizador Léxico para Dart - TokenMasters
+================================================================================

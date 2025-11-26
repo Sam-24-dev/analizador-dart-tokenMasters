@@ -1,0 +1,95 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Usuario: bironmanusa
+ Fecha y hora: 26/11/2025 17:15:32
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | INT_TYPE             | 5      | int
+2      | ID                   | 5      | fibonacci
+3      | LPAREN               | 5      | (
+4      | INT_TYPE             | 5      | int
+5      | ID                   | 5      | n
+6      | RPAREN               | 5      | )
+7      | LBRACE               | 5      | {
+8      | IF                   | 6      | if
+9      | LPAREN               | 6      | (
+10     | ID                   | 6      | n
+11     | LESSEQUAL            | 6      | <=
+12     | NUMBER               | 6      | 0
+13     | RPAREN               | 6      | )
+14     | LBRACE               | 6      | {
+15     | RETURN               | 7      | return
+16     | NUMBER               | 7      | 0
+17     | SEMICOLON            | 7      | ;
+18     | RBRACE               | 8      | }
+19     | IF                   | 10     | if
+20     | LPAREN               | 10     | (
+21     | ID                   | 10     | n
+22     | EQUALS               | 10     | ==
+23     | NUMBER               | 10     | 1
+24     | RPAREN               | 10     | )
+25     | LBRACE               | 10     | {
+26     | RETURN               | 11     | return
+27     | NUMBER               | 11     | 1
+28     | SEMICOLON            | 11     | ;
+29     | RBRACE               | 12     | }
+30     | RETURN               | 14     | return
+31     | ID                   | 14     | fibonacci
+32     | LPAREN               | 14     | (
+33     | ID                   | 14     | n
+34     | MINUS                | 14     | -
+35     | NUMBER               | 14     | 1
+36     | RPAREN               | 14     | )
+37     | PLUS                 | 14     | +
+38     | ID                   | 14     | fibonacci
+39     | LPAREN               | 14     | (
+40     | ID                   | 14     | n
+41     | MINUS                | 14     | -
+42     | NUMBER               | 14     | 2
+43     | RPAREN               | 14     | )
+44     | SEMICOLON            | 14     | ;
+45     | RBRACE               | 15     | }
+46     | VOID                 | 17     | void
+47     | ID                   | 17     | main
+48     | LPAREN               | 17     | (
+49     | RPAREN               | 17     | )
+50     | LBRACE               | 17     | {
+51     | INT_TYPE             | 18     | int
+52     | ID                   | 18     | n
+53     | ASSIGN               | 18     | =
+54     | NUMBER               | 18     | 9
+55     | SEMICOLON            | 18     | ;
+56     | ID                   | 19     | print
+57     | LPAREN               | 19     | (
+58     | STRING               | 19     | El numero de la sucesion de fibonacci en la posicion 9 es: 
+59     | RPAREN               | 19     | )
+60     | SEMICOLON            | 19     | ;
+61     | ID                   | 20     | print
+62     | LPAREN               | 20     | (
+63     | ID                   | 20     | fibonacci
+64     | LPAREN               | 20     | (
+65     | ID                   | 20     | n
+66     | RPAREN               | 20     | )
+67     | RPAREN               | 20     | )
+68     | SEMICOLON            | 20     | ;
+69     | RBRACE               | 21     | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 69
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: bironmanusa
+  Analizador Léxico para Dart - TokenMasters
+================================================================================

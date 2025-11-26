@@ -1037,7 +1037,8 @@ def p_parameter(p):
 
 # Tipo de dato
 def p_tipo(p):
-    '''tipo : ID'''
+    '''tipo : ID
+            | INT_TYPE'''
     p[0] = p[1]
 
 # Return statement con valor

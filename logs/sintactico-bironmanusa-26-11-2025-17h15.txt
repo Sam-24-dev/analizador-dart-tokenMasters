@@ -1,0 +1,28 @@
+================================================================================
+  ANÁLISIS SINTÁCTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: C:\Users\usuario\Documents\GitHub\analizador-dart-tokenMasters\logs\tmp\tmpkx8qnrvk.dart
+Usuario: bironmanusa
+Fecha: 26/11/2025 17:15:32
+
+================================================================================
+  ERRORES SINTÁCTICOS: 15
+================================================================================
+
+1. Error sintáctico en línea 5: Token inesperado 'int' (tipo: INT_TYPE)
+2. Error sintáctico en línea 5: Token inesperado 'int' (tipo: INT_TYPE)
+3. Error sintáctico en línea 5: Token inesperado '{' (tipo: LBRACE)
+4. Error sintáctico en línea 6: Token inesperado 'if' (tipo: IF)
+5. Error sintáctico en línea 6: Token inesperado '(' (tipo: LPAREN)
+6. Error sintáctico en línea 6: Token inesperado 'n' (tipo: ID)
+7. Error sintáctico en línea 6: Token inesperado '<=' (tipo: LESSEQUAL)
+8. Error sintáctico en línea 6: Token inesperado '0' (tipo: NUMBER)
+9. Error sintáctico en línea 6: Token inesperado ')' (tipo: RPAREN)
+10. Error sintáctico en línea 6: Token inesperado '{' (tipo: LBRACE)
+11. Error sintáctico en línea 7: Token inesperado 'return' (tipo: RETURN)
+12. Error sintáctico en línea 7: Token inesperado '0' (tipo: NUMBER)
+13. Error sintáctico en línea 8: Token inesperado '}' (tipo: RBRACE)
+14. Error sintáctico en línea 15: Token inesperado '}' (tipo: RBRACE)
+15. Error sintáctico en línea 18: Token inesperado 'int' (tipo: INT_TYPE)

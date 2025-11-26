@@ -1,0 +1,15 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: C:\Users\usuario\Documents\GitHub\analizador-dart-tokenMasters\logs\tmp\tmph8qqpwgg.dart
+Usuario: bironmanusa
+Fecha: 26/11/2025 17:17:53
+
+================================================================================
+  ERRORES SEMÁNTICOS: 2
+================================================================================
+
+1. Línea 5: Identificador 'fibonacci' no es la función 'print'
+2. Línea 18: Error semántico: Intento de asignar a identificador no declarado: 'n'
