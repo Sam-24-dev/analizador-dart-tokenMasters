@@ -12,8 +12,8 @@ void main() {
   print(numero);
 
   // Para demostrar el error SINTÁCTICO descomenta las dos líneas siguientes:
-  // var numero = (5 + 3;
-  // print(numero);
+   var numero = (5 + 3;
+   print(numero);
 }
 
 void errorSemantico() {

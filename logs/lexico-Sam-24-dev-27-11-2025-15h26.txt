@@ -1,0 +1,120 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Usuario: Sam-24-dev
+ Fecha y hora: 27/11/2025 15:26:47
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | VOID                 | 4      | void
+2      | ID                   | 4      | main
+3      | LPAREN               | 4      | (
+4      | RPAREN               | 4      | )
+5      | LBRACE               | 4      | {
+6      | VAR                  | 5      | var
+7      | ID                   | 5      | nombre
+8      | ASSIGN               | 5      | =
+9      | STRING               | 5      | Samir
+10     | SEMICOLON            | 5      | ;
+11     | VAR                  | 6      | var
+12     | ID                   | 6      | edad
+13     | ASSIGN               | 6      | =
+14     | NUMBER               | 6      | 22
+15     | SEMICOLON            | 6      | ;
+16     | ID                   | 7      | print
+17     | LPAREN               | 7      | (
+18     | ID                   | 7      | nombre
+19     | RPAREN               | 7      | )
+20     | SEMICOLON            | 7      | ;
+21     | ID                   | 8      | print
+22     | LPAREN               | 8      | (
+23     | ID                   | 8      | edad
+24     | RPAREN               | 8      | )
+25     | SEMICOLON            | 8      | ;
+26     | VAR                  | 11     | var
+27     | ID                   | 11     | numero
+28     | ASSIGN               | 11     | =
+29     | NUMBER               | 11     | 5
+30     | PLUS                 | 11     | +
+31     | NUMBER               | 11     | 3
+32     | SEMICOLON            | 11     | ;
+33     | ID                   | 12     | print
+34     | LPAREN               | 12     | (
+35     | ID                   | 12     | numero
+36     | RPAREN               | 12     | )
+37     | SEMICOLON            | 12     | ;
+38     | VAR                  | 15     | var
+39     | ID                   | 15     | numero
+40     | ASSIGN               | 15     | =
+41     | LPAREN               | 15     | (
+42     | NUMBER               | 15     | 5
+43     | PLUS                 | 15     | +
+44     | NUMBER               | 15     | 3
+45     | SEMICOLON            | 15     | ;
+46     | ID                   | 16     | print
+47     | LPAREN               | 16     | (
+48     | ID                   | 16     | numero
+49     | RPAREN               | 16     | )
+50     | SEMICOLON            | 16     | ;
+51     | RBRACE               | 17     | }
+52     | VOID                 | 19     | void
+53     | ID                   | 19     | errorSemantico
+54     | LPAREN               | 19     | (
+55     | RPAREN               | 19     | )
+56     | LBRACE               | 19     | {
+57     | ID                   | 21     | print
+58     | LPAREN               | 21     | (
+59     | ID                   | 21     | total
+60     | RPAREN               | 21     | )
+61     | SEMICOLON            | 21     | ;
+62     | BREAK                | 22     | break
+63     | SEMICOLON            | 22     | ;
+64     | RBRACE               | 23     | }
+65     | VOID                 | 25     | void
+66     | ID                   | 25     | loopOk
+67     | LPAREN               | 25     | (
+68     | RPAREN               | 25     | )
+69     | LBRACE               | 25     | {
+70     | FOR                  | 26     | for
+71     | LPAREN               | 26     | (
+72     | VAR                  | 26     | var
+73     | ID                   | 26     | i
+74     | ASSIGN               | 26     | =
+75     | NUMBER               | 26     | 0
+76     | SEMICOLON            | 26     | ;
+77     | ID                   | 26     | i
+78     | LESSTHAN             | 26     | <
+79     | NUMBER               | 26     | 3
+80     | SEMICOLON            | 26     | ;
+81     | ID                   | 26     | i
+82     | ASSIGN               | 26     | =
+83     | ID                   | 26     | i
+84     | PLUS                 | 26     | +
+85     | NUMBER               | 26     | 1
+86     | RPAREN               | 26     | )
+87     | LBRACE               | 26     | {
+88     | ID                   | 27     | print
+89     | LPAREN               | 27     | (
+90     | ID                   | 27     | i
+91     | RPAREN               | 27     | )
+92     | SEMICOLON            | 27     | ;
+93     | RBRACE               | 28     | }
+94     | RBRACE               | 29     | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 94
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: Sam-24-dev
+  Analizador Léxico para Dart - TokenMasters
+================================================================================

@@ -1,0 +1,15 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: C:\Users\USER\Documents\GitHub\analizador-dart-tokenMasters\logs\tmp\tmp6falx8nq.dart
+Usuario: Sam-24-dev
+Fecha: 27/11/2025 15:26:47
+
+================================================================================
+  ERRORES SEMÁNTICOS: 2
+================================================================================
+
+1. Línea 15: Error semántico: Variable 'numero' ya declarada en este ámbito.
+2. Línea 22: Error semántico: 'break' fuera de bucle
