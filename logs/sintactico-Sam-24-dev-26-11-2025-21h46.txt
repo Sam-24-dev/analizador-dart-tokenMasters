@@ -1,0 +1,17 @@
+================================================================================
+  ANÁLISIS SINTÁCTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: C:\Users\ivand\OneDrive\Documentos\ivandresalin\Lenguajes de Programacion\analizador-dart-tokenMasters\logs\tmp\tmpkra_jb1n.dart
+Usuario: Sam-24-dev
+Fecha: 26/11/2025 21:46:16
+
+================================================================================
+  ERRORES SINTÁCTICOS: 4
+================================================================================
+
+1. Error sintáctico en línea 12: Token inesperado 'double' (tipo: DOUBLE_TYPE)
+2. Error sintáctico en línea 21: Token inesperado ';' (tipo: SEMICOLON)
+3. Error sintáctico en línea 24: Token inesperado 'int' (tipo: INT_TYPE)
+4. Error sintáctico en línea 24: Token inesperado 'entero' (tipo: ID)

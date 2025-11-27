@@ -99,40 +99,68 @@ def p_statement(p):
                  | return_statement
                  | variable_declaration
                  | assignment
+                 | increment_statement
                  | class_declaration
                  | expression SEMICOLON
                  '''
     p[0] = p[1]
+
+# ---------------- Manejo de i++ y i-- ----------------
+def p_increment_statement(p):
+    '''increment_statement : ID INCREMENT SEMICOLON
+                           | ID DECREMENT SEMICOLON'''
+    # Se guarda como una asignación especial o una operación unaria
+    p[0] = ('increment', p[1], p[2])
+    # Validación semántica rápida: verificar que ID existe
+    var_info = lookup_variable(p[1])
+    if not var_info:
+        semantic_errors.append(f"Línea {p.lineno(1)}: Variable '{p[1]}' no declarada para incremento/decremento.")
 
 # ---------------- DECLARACIÓN DE VARIABLES ----------------
 def p_variable_declaration(p):
     '''variable_declaration : VAR ID ASSIGN expression SEMICOLON
                             | CONST ID ASSIGN expression SEMICOLON
                             | FINAL ID ASSIGN expression SEMICOLON
+                            | CONST tipo ID ASSIGN expression SEMICOLON
+                            | FINAL tipo ID ASSIGN expression SEMICOLON
                             | tipo ID ASSIGN expression SEMICOLON
                             | tipo ID SEMICOLON'''
-    # En este punto, no podemos obligar la inicialización de CONST/FINAL 
-    # sin reescribir la gramática para evitar la regla 'tipo ID SEMICOLON' para ellos.
-    # Se maneja en register_variable.
+    
+    # Caso 1: const int x = 1; (7 tokens contando p[0])
+    if len(p) == 7:
+        p[0] = ('var_decl', p[2], p[3], p[5]) 
+        # Detectamos si el primer token era const o final
+        es_const = (p[1] == 'const')
+        es_final = (p[1] == 'final')
+        try:
+            # Enviamos los flags forzados
+            register_variable(p[3], p[2], p[5], p.lineno(3), force_const=es_const, force_final=es_final)
+        except:
+            pass
 
-    if len(p) == 6:
+    # Caso 2: var x = 1; o const x = 1; (6 tokens)
+    elif len(p) == 6:
         p[0] = ('var_decl', p[1], p[2], p[4])
         try:
-            # Uso de register_variable (Mateo/Andrés/Samir)
             register_variable(p[2], p[1], p[4], p.lineno(2))
         except Exception:
             register_variable(p[2], p[1], p[4])
-    else: # Regla: tipo ID SEMICOLON (p[1] es tipo o palabra clave, p[2] es ID, p[3] es SEMICOLON)
+            
+    # Caso 3: int x; (4 tokens)
+    else: 
         p[0] = ('var_decl', p[1], p[2], None)
         try:
-            # Uso de register_variable (Mateo/Andrés/Samir)
             register_variable(p[2], p[1], None, p.lineno(2))
         except Exception:
             register_variable(p[2], p[1], None)
-
 # ---------------- ASIGNACIÓN ----------------
 def p_assignment(p):
-    '''assignment : ID ASSIGN expression SEMICOLON'''
+    '''assignment : ID ASSIGN expression SEMICOLON
+                  | ID PLUSEQUAL expression SEMICOLON
+                  | ID MINUSEQUAL expression SEMICOLON
+                  | ID TIMESEQUAL expression SEMICOLON
+                  | ID DIVIDEEQUAL expression SEMICOLON
+                  | ID MODULOEQUAL expression SEMICOLON'''
     p[0] = ('assign', p[1], p[3])
     try:
         # Uso de validate_assignment (Mateo/Andrés/Samir)
@@ -373,16 +401,15 @@ def infer_type(node):
     return 'unknown'
 
 
-def register_variable(name, declared_token, init_expr, lineno=None):
+def register_variable(name, declared_token, init_expr, lineno=None, force_final=False, force_const=False):
     """
     Registrar variable en el ámbito actual y validar compatibilidad inicial e inmutabilidad.
     """
-    current_scope= get_current_scope()
+    current_scope = get_current_scope()
 
-    # Determinar si es inmutable (Andrés)
-    # El lexer devuelve el VALUE en minúsculas, no el TYPE
-    is_final = declared_token == 'final'
-    is_const = declared_token == 'const'
+    # Determinar si es inmutable (Corrección: combina token con flags forzados)
+    is_final = (declared_token == 'final') or force_final
+    is_const = (declared_token == 'const') or force_const
     is_keyword = declared_token in ('var', 'const', 'final')
     
     # Validar RE-DECLARACIÓN LOCAL (Alcance)
@@ -390,13 +417,13 @@ def register_variable(name, declared_token, init_expr, lineno=None):
         semantic_errors.append(f"Línea {lineno}: Error semántico: Variable '{name}' ya declarada en este ámbito.")
         return # No registrar si ya existe en el ámbito local
 
-    # 1. Validación de Inicialización para inmutables (Regla de Dart - Andrés)
+    # 1. Validación de Inicialización para inmutables
     if (is_final or is_const) and init_expr is None:
-        semantic_errors.append(f"Línea {lineno}: Error semántico: La variable '{name}' declarada como {declared_token} debe ser inicializada.")
+        semantic_errors.append(f"Línea {lineno}: Error semántico: La variable '{name}' declarada como inmutable debe ser inicializada.")
     
     # 2. Determinar el tipo inferido o declarado
     if is_keyword:
-        # Si es palabra clave (var, final, const), inferimos
+        # Si es palabra clave pura (var, final, const) sin tipo explícito
         if init_expr is not None:
             t = infer_type(init_expr)
         else:
@@ -405,7 +432,7 @@ def register_variable(name, declared_token, init_expr, lineno=None):
         # Declarado con tipo explícito (ej: 'int')
         t = declared_token
 
-    # Estructura de registro unificada: tipo + propiedades de inmutabilidad
+    # Estructura de registro unificada
     var_info = {
         'type': t,
         'is_final': is_final,
@@ -413,20 +440,18 @@ def register_variable(name, declared_token, init_expr, lineno=None):
     }
     current_scope[name] = var_info
 
-    # 3. Validación de compatibilidad inicial (Solo si NO fue palabra clave)
-    # Si usamos var, final, o const, la compatibilidad es implícita (inferida).
+    # 3. Validación de compatibilidad inicial
     if init_expr is not None and not is_keyword:
         declared_type = t
         expr_t = infer_type(init_expr)
         
         if expr_t == 'unknown':
-            pass  # No reportar error si no se pudo inferir (puede ser función no declarada aún)
+            pass 
         elif not can_implicitly_convert(expr_t, declared_type):
             if is_numeric_type(expr_t) and is_numeric_type(declared_type):
                 semantic_errors.append(f"Línea {lineno}: Asignación de '{expr_t}' a '{declared_type}' en '{name}' puede requerir conversión explícita/cast")
             else:
                 semantic_errors.append(f"Línea {lineno}: Tipo incompatible al inicializar '{name}': '{expr_t}' no es '{declared_type}'")
-
 
 def validate_assignment(target_name, expr_node, lineno=None):
     """
@@ -677,9 +702,15 @@ def p_variable_declaration_no_semicolon(p):
         p[0] = ('var_decl', p[1], p[2], None)
 
 def p_assignment_no_semicolon(p):
-    '''assignment_no_semicolon : ID ASSIGN expression'''
+    '''assignment_no_semicolon : ID ASSIGN expression
+                               | ID PLUSEQUAL expression
+                               | ID MINUSEQUAL expression
+                               | ID TIMESEQUAL expression
+                               | ID DIVIDEEQUAL expression
+                               | ID MODULOEQUAL expression'''
+    # Addaantayo iti 4 nga elemento: ID, OP, EXPR
+    # Ngem iti PLY, p[2] ti operator.
     p[0] = ('assign', p[1], p[3])
-
 # ---------------- FOR-IN (for each) ----------------
 def p_for_in_statement(p):
     '''for_in_statement : FOR LPAREN for_in_iterator IN expression RPAREN statement_block'''
@@ -1038,7 +1069,10 @@ def p_parameter(p):
 # Tipo de dato
 def p_tipo(p):
     '''tipo : ID
-            | INT_TYPE'''
+            | INT_TYPE
+            | DOUBLE_TYPE
+            | STRING_TYPE
+            | BOOL_TYPE'''
     p[0] = p[1]
 
 # Return statement con valor

@@ -1,0 +1,90 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Usuario: Sam-24-dev
+ Fecha y hora: 26/11/2025 21:47:12
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | VOID                 | 1      | void
+2      | ID                   | 1      | main
+3      | LPAREN               | 1      | (
+4      | RPAREN               | 1      | )
+5      | LBRACE               | 1      | {
+6      | VAR                  | 5      | var
+7      | ID                   | 5      | contador
+8      | ASSIGN               | 5      | =
+9      | NUMBER               | 5      | 10
+10     | SEMICOLON            | 5      | ;
+11     | ID                   | 6      | contador
+12     | ASSIGN               | 6      | =
+13     | NUMBER               | 6      | 20
+14     | SEMICOLON            | 6      | ;
+15     | FINAL                | 9      | final
+16     | ID                   | 9      | PI
+17     | ASSIGN               | 9      | =
+18     | NUMBER               | 9      | 3.14159
+19     | SEMICOLON            | 9      | ;
+20     | DOUBLE_TYPE          | 12     | double
+21     | ID                   | 12     | precio
+22     | ASSIGN               | 12     | =
+23     | NUMBER               | 12     | 5
+24     | SEMICOLON            | 12     | ;
+25     | FINAL                | 17     | final
+26     | ID                   | 17     | limite
+27     | ASSIGN               | 17     | =
+28     | NUMBER               | 17     | 100
+29     | SEMICOLON            | 17     | ;
+30     | ID                   | 18     | limite
+31     | ASSIGN               | 18     | =
+32     | NUMBER               | 18     | 150
+33     | SEMICOLON            | 18     | ;
+34     | FINAL                | 21     | final
+35     | ID                   | 21     | nombre
+36     | SEMICOLON            | 21     | ;
+37     | INT_TYPE             | 24     | int
+38     | ID                   | 24     | entero
+39     | ASSIGN               | 24     | =
+40     | NUMBER               | 24     | 50
+41     | SEMICOLON            | 24     | ;
+42     | ID                   | 25     | entero
+43     | ASSIGN               | 25     | =
+44     | NUMBER               | 25     | 10.5
+45     | SEMICOLON            | 25     | ;
+46     | IF                   | 28     | if
+47     | LPAREN               | 28     | (
+48     | ID                   | 28     | contador
+49     | GREATERTHAN          | 28     | >
+50     | NUMBER               | 28     | 0
+51     | RPAREN               | 28     | )
+52     | LBRACE               | 28     | {
+53     | VAR                  | 29     | var
+54     | ID                   | 29     | temporal
+55     | ASSIGN               | 29     | =
+56     | TRUE                 | 29     | true
+57     | SEMICOLON            | 29     | ;
+58     | RBRACE               | 30     | }
+59     | VAR                  | 31     | var
+60     | ID                   | 31     | resultado
+61     | ASSIGN               | 31     | =
+62     | ID                   | 31     | temporal
+63     | SEMICOLON            | 31     | ;
+64     | RBRACE               | 34     | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 64
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: Sam-24-dev
+  Analizador Léxico para Dart - TokenMasters
+================================================================================

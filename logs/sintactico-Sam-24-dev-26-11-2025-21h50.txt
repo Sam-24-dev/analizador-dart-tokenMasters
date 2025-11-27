@@ -1,0 +1,24 @@
+================================================================================
+  ANÁLISIS SINTÁCTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: C:\Users\ivand\OneDrive\Documentos\ivandresalin\Lenguajes de Programacion\analizador-dart-tokenMasters\logs\tmp\tmpnn39audx.dart
+Usuario: Sam-24-dev
+Fecha: 26/11/2025 21:50:20
+
+================================================================================
+  ERRORES SINTÁCTICOS: 11
+================================================================================
+
+1. Error sintáctico en línea 3: Token inesperado 'String' (tipo: STRING_TYPE)
+2. Error sintáctico en línea 7: Token inesperado 'String' (tipo: STRING_TYPE)
+3. Error sintáctico en línea 7: Token inesperado '>' (tipo: GREATERTHAN)
+4. Error sintáctico en línea 7: Token inesperado '=' (tipo: ASSIGN)
+5. Error sintáctico en línea 7: Token inesperado '[' (tipo: LBRACKET)
+6. Error sintáctico en línea 7: Token inesperado '('str', 'Aprender Dart')' (tipo: STRING)
+7. Error sintáctico en línea 7: Token inesperado ',' (tipo: COMMA)
+8. Error sintáctico en línea 7: Token inesperado '('str', 'Hacer ejercicio')' (tipo: STRING)
+9. Error sintáctico en línea 7: Token inesperado ',' (tipo: COMMA)
+10. Error sintáctico en línea 7: Token inesperado '('str', 'Leer un libro')' (tipo: STRING)
+11. Error sintáctico en línea 7: Token inesperado ']' (tipo: RBRACKET)

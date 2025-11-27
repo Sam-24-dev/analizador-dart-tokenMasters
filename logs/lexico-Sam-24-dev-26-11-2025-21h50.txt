@@ -1,0 +1,101 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Usuario: Sam-24-dev
+ Fecha y hora: 26/11/2025 21:50:20
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | VOID                 | 1      | void
+2      | ID                   | 1      | main
+3      | LPAREN               | 1      | (
+4      | RPAREN               | 1      | )
+5      | LBRACE               | 1      | {
+6      | STRING_TYPE          | 3      | String
+7      | ID                   | 3      | nombre
+8      | ASSIGN               | 3      | =
+9      | STRING               | 3      | Usuario
+10     | SEMICOLON            | 3      | ;
+11     | INT_TYPE             | 4      | int
+12     | ID                   | 4      | horaActual
+13     | ASSIGN               | 4      | =
+14     | NUMBER               | 4      | 10
+15     | SEMICOLON            | 4      | ;
+16     | ID                   | 7      | List
+17     | LESSTHAN             | 7      | <
+18     | STRING_TYPE          | 7      | String
+19     | GREATERTHAN          | 7      | >
+20     | ID                   | 7      | tareas
+21     | ASSIGN               | 7      | =
+22     | LBRACKET             | 7      | [
+23     | STRING               | 7      | Aprender Dart
+24     | COMMA                | 7      | ,
+25     | STRING               | 7      | Hacer ejercicio
+26     | COMMA                | 7      | ,
+27     | STRING               | 7      | Leer un libro
+28     | RBRACKET             | 7      | ]
+29     | SEMICOLON            | 7      | ;
+30     | ID                   | 9      | print
+31     | LPAREN               | 9      | (
+32     | STRING               | 9      | Hola, $nombre.
+33     | RPAREN               | 9      | )
+34     | SEMICOLON            | 9      | ;
+35     | IF                   | 12     | if
+36     | LPAREN               | 12     | (
+37     | ID                   | 12     | horaActual
+38     | LESSTHAN             | 12     | <
+39     | NUMBER               | 12     | 12
+40     | RPAREN               | 12     | )
+41     | LBRACE               | 12     | {
+42     | ID                   | 13     | print
+43     | LPAREN               | 13     | (
+44     | STRING               | 13     | ¡Buenos días!
+45     | RPAREN               | 13     | )
+46     | SEMICOLON            | 13     | ;
+47     | RBRACE               | 14     | }
+48     | ELSE                 | 14     | else
+49     | LBRACE               | 14     | {
+50     | ID                   | 15     | print
+51     | LPAREN               | 15     | (
+52     | STRING               | 15     | ¡Buenas tardes!
+53     | RPAREN               | 15     | )
+54     | SEMICOLON            | 15     | ;
+55     | RBRACE               | 16     | }
+56     | ID                   | 18     | print
+57     | LPAREN               | 18     | (
+58     | STRING               | 18     | --- Tus tareas pendientes ---
+59     | RPAREN               | 18     | )
+60     | SEMICOLON            | 18     | ;
+61     | FOR                  | 21     | for
+62     | LPAREN               | 21     | (
+63     | VAR                  | 21     | var
+64     | ID                   | 21     | tarea
+65     | IN                   | 21     | in
+66     | ID                   | 21     | tareas
+67     | RPAREN               | 21     | )
+68     | LBRACE               | 21     | {
+69     | ID                   | 22     | print
+70     | LPAREN               | 22     | (
+71     | STRING               | 22     | - $tarea
+72     | RPAREN               | 22     | )
+73     | SEMICOLON            | 22     | ;
+74     | RBRACE               | 23     | }
+75     | RBRACE               | 24     | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 75
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: Sam-24-dev
+  Analizador Léxico para Dart - TokenMasters
+================================================================================

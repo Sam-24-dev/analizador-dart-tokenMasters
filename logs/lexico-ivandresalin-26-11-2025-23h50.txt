@@ -1,0 +1,183 @@
+================================================================================
+  ANÁLISIS LÉXICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+ Usuario: ivandresalin
+ Fecha y hora: 26/11/2025 23:50:30
+
+================================================================================
+  TOKENS RECONOCIDOS
+================================================================================
+
+#      | TIPO                 | LÍNEA  | VALOR
+--------------------------------------------------------------------------------
+1      | VOID                 | 1      | void
+2      | ID                   | 1      | main
+3      | LPAREN               | 1      | (
+4      | RPAREN               | 1      | )
+5      | LBRACE               | 1      | {
+6      | CONST                | 7      | const
+7      | INT_TYPE             | 7      | int
+8      | ID                   | 7      | LIMITE_MAXIMO
+9      | ASSIGN               | 7      | =
+10     | NUMBER               | 7      | 50
+11     | SEMICOLON            | 7      | ;
+12     | FINAL                | 10     | final
+13     | INT_TYPE             | 10     | int
+14     | ID                   | 10     | topeSuma
+15     | ASSIGN               | 10     | =
+16     | NUMBER               | 10     | 200
+17     | SEMICOLON            | 10     | ;
+18     | VAR                  | 13     | var
+19     | ID                   | 13     | sumaTotal
+20     | ASSIGN               | 13     | =
+21     | NUMBER               | 13     | 0
+22     | SEMICOLON            | 13     | ;
+23     | INT_TYPE             | 16     | int
+24     | ID                   | 16     | contadorPrimos
+25     | ASSIGN               | 16     | =
+26     | NUMBER               | 16     | 0
+27     | SEMICOLON            | 16     | ;
+28     | INT_TYPE             | 17     | int
+29     | ID                   | 17     | numeroActual
+30     | ASSIGN               | 17     | =
+31     | NUMBER               | 17     | 0
+32     | SEMICOLON            | 17     | ;
+33     | DO                   | 22     | do
+34     | LBRACE               | 22     | {
+35     | ID                   | 23     | numeroActual
+36     | INCREMENT            | 23     | ++
+37     | SEMICOLON            | 23     | ;
+38     | IF                   | 30     | if
+39     | LPAREN               | 30     | (
+40     | ID                   | 30     | numeroActual
+41     | EQUALS               | 30     | ==
+42     | NUMBER               | 30     | 1
+43     | RPAREN               | 30     | )
+44     | LBRACE               | 30     | {
+45     | CONTINUE             | 31     | continue
+46     | SEMICOLON            | 31     | ;
+47     | RBRACE               | 32     | }
+48     | ELSE                 | 32     | else
+49     | IF                   | 32     | if
+50     | LPAREN               | 32     | (
+51     | ID                   | 32     | numeroActual
+52     | GREATERTHAN          | 32     | >
+53     | NUMBER               | 32     | 2
+54     | AND                  | 32     | &&
+55     | ID                   | 32     | numeroActual
+56     | MODULO               | 32     | %
+57     | NUMBER               | 32     | 2
+58     | EQUALS               | 32     | ==
+59     | NUMBER               | 32     | 0
+60     | RPAREN               | 32     | )
+61     | LBRACE               | 32     | {
+62     | CONTINUE             | 33     | continue
+63     | SEMICOLON            | 33     | ;
+64     | RBRACE               | 34     | }
+65     | BOOL_TYPE            | 40     | bool
+66     | ID                   | 40     | esPrimo
+67     | ASSIGN               | 40     | =
+68     | TRUE                 | 40     | true
+69     | SEMICOLON            | 40     | ;
+70     | FOR                  | 46     | for
+71     | LPAREN               | 46     | (
+72     | INT_TYPE             | 46     | int
+73     | ID                   | 46     | i
+74     | ASSIGN               | 46     | =
+75     | NUMBER               | 46     | 3
+76     | SEMICOLON            | 46     | ;
+77     | ID                   | 46     | i
+78     | TIMES                | 46     | *
+79     | ID                   | 46     | i
+80     | LESSEQUAL            | 46     | <=
+81     | ID                   | 46     | numeroActual
+82     | SEMICOLON            | 46     | ;
+83     | ID                   | 46     | i
+84     | PLUSEQUAL            | 46     | +=
+85     | NUMBER               | 46     | 2
+86     | RPAREN               | 46     | )
+87     | LBRACE               | 46     | {
+88     | IF                   | 47     | if
+89     | LPAREN               | 47     | (
+90     | ID                   | 47     | numeroActual
+91     | MODULO               | 47     | %
+92     | ID                   | 47     | i
+93     | EQUALS               | 47     | ==
+94     | NUMBER               | 47     | 0
+95     | RPAREN               | 47     | )
+96     | LBRACE               | 47     | {
+97     | ID                   | 48     | esPrimo
+98     | ASSIGN               | 48     | =
+99     | FALSE                | 48     | false
+100    | SEMICOLON            | 48     | ;
+101    | BREAK                | 49     | break
+102    | SEMICOLON            | 49     | ;
+103    | RBRACE               | 50     | }
+104    | RBRACE               | 51     | }
+105    | IF                   | 56     | if
+106    | LPAREN               | 56     | (
+107    | ID                   | 56     | esPrimo
+108    | RPAREN               | 56     | )
+109    | LBRACE               | 56     | {
+110    | ID                   | 57     | sumaTotal
+111    | PLUSEQUAL            | 57     | +=
+112    | ID                   | 57     | numeroActual
+113    | SEMICOLON            | 57     | ;
+114    | ID                   | 58     | contadorPrimos
+115    | INCREMENT            | 58     | ++
+116    | SEMICOLON            | 58     | ;
+117    | ID                   | 61     | print
+118    | LPAREN               | 61     | (
+119    | ID                   | 61     | numeroActual
+120    | RPAREN               | 61     | )
+121    | SEMICOLON            | 61     | ;
+122    | RBRACE               | 62     | }
+123    | IF                   | 65     | if
+124    | LPAREN               | 65     | (
+125    | ID                   | 65     | sumaTotal
+126    | GREATEREQUAL         | 65     | >=
+127    | ID                   | 65     | topeSuma
+128    | RPAREN               | 65     | )
+129    | LBRACE               | 65     | {
+130    | ID                   | 66     | print
+131    | LPAREN               | 66     | (
+132    | STRING               | 66     | Alerta: Límite de seguridad alcanzado.
+133    | RPAREN               | 66     | )
+134    | SEMICOLON            | 66     | ;
+135    | BREAK                | 67     | break
+136    | SEMICOLON            | 67     | ;
+137    | RBRACE               | 68     | }
+138    | RBRACE               | 73     | }
+139    | WHILE                | 73     | while
+140    | LPAREN               | 73     | (
+141    | ID                   | 73     | numeroActual
+142    | LESSTHAN             | 73     | <
+143    | ID                   | 73     | LIMITE_MAXIMO
+144    | RPAREN               | 73     | )
+145    | SEMICOLON            | 73     | ;
+146    | WHILE                | 79     | while
+147    | LPAREN               | 79     | (
+148    | ID                   | 79     | contadorPrimos
+149    | GREATERTHAN          | 79     | >
+150    | NUMBER               | 79     | 0
+151    | RPAREN               | 79     | )
+152    | LBRACE               | 79     | {
+153    | ID                   | 80     | contadorPrimos
+154    | DECREMENT            | 80     | --
+155    | SEMICOLON            | 80     | ;
+156    | RBRACE               | 82     | }
+157    | RBRACE               | 83     | }
+
+================================================================================
+  ESTADÍSTICAS
+================================================================================
+
+ Total de tokens reconocidos: 157
+ Total de errores léxicos: 0
+
+================================================================================
+  Análisis realizado por: ivandresalin
+  Analizador Léxico para Dart - TokenMasters
+================================================================================

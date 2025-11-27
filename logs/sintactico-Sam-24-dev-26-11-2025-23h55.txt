@@ -1,0 +1,12 @@
+================================================================================
+  ANÁLISIS SINTÁCTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: C:\Users\ivand\OneDrive\Documentos\ivandresalin\Lenguajes de Programacion\analizador-dart-tokenMasters\logs\tmp\tmp6vkdt1_0.dart
+Usuario: Sam-24-dev
+Fecha: 26/11/2025 23:55:03
+
+================================================================================
+  ✓ ANÁLISIS EXITOSO - SIN ERRORES
+================================================================================

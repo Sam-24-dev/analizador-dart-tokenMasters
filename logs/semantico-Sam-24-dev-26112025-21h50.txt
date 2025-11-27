@@ -1,0 +1,14 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: C:\Users\ivand\OneDrive\Documentos\ivandresalin\Lenguajes de Programacion\analizador-dart-tokenMasters\logs\tmp\tmplpuydqvd.dart
+Usuario: Sam-24-dev
+Fecha: 26/11/2025 21:50:20
+
+================================================================================
+  ERRORES SEMÁNTICOS: 1
+================================================================================
+
+1. Línea 3: Error semántico: Intento de asignar a identificador no declarado: 'nombre'

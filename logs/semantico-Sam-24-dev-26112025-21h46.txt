@@ -1,0 +1,16 @@
+﻿================================================================================
+  ANÁLISIS SEMÁNTICO - DART
+  Proyecto: TokenMasters
+================================================================================
+
+Archivo: C:\Users\ivand\OneDrive\Documentos\ivandresalin\Lenguajes de Programacion\analizador-dart-tokenMasters\logs\tmp\tmp92677e3q.dart
+Usuario: Sam-24-dev
+Fecha: 26/11/2025 21:46:16
+
+================================================================================
+  ERRORES SEMÁNTICOS: 3
+================================================================================
+
+1. Línea 12: Error semántico: Intento de asignar a identificador no declarado: 'precio'
+2. Línea 18: Error semántico: No se puede asignar a la variable inmutable 'limite'.
+3. Línea 25: Error semántico: Intento de asignar a identificador no declarado: 'entero'
