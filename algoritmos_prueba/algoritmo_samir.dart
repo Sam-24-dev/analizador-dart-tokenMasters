@@ -58,24 +58,23 @@ void buscarNota(var notas, int objetivo) {
 
 // ═════════════════════════════════════════════════════════════════════════════
 // SECCIÓN DE ERRORES PARA DEMOSTRACIÓN (COMENTADA)
-// Descomenta las funciones de abajo para demostrar detección de errores
 // ═════════════════════════════════════════════════════════════════════════════
 
 /*
-// ❌ ERROR SINTÁCTICO: Para demostrarlo, descomenta esta línea:
+// ❌ ERROR SINTÁCTICO: 
 // var numeroErroneo = (5 + 3;
 
-// ❌ ERROR SEMÁNTICO 1: Variable no declarada (Regla: Existencia - Andrés)
+// ❌ ERROR SEMÁNTICO 
 void funcionErrorVariable() {
   print(total);  // 'total' no está declarada
 }
 
-// ❌ ERROR SEMÁNTICO 2: break fuera de bucle (Regla de Samir)
+// ❌ ERROR SEMÁNTICO 2: break fuera de bucle 
 void funcionErrorBreak() {
   break;  // break debe estar dentro de un loop
 }
 
-// ❌ ERROR SEMÁNTICO 3: Función sin retorno en todos los caminos (Regla de Samir)
+// ❌ ERROR SEMÁNTICO 3: Función sin retorno en todos los caminos 
 int funcionSinRetorno(bool condicion) {
   if (condicion) {
     return 10;
